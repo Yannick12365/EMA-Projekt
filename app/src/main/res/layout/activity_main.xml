@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/standarthintergrund"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="103dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="WG Planer"
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.196"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.54" />
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="Profil"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.842"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.49" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="96dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableLayout
+                android:id="@+id/tableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/imageButton2"
+                        android:layout_width="150dp"
+                        android:layout_height="180dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/vorratskammer"
+                        android:contentDescription="T1" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton3"
+                        android:layout_width="150dp"
+                        android:layout_height="180dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/kalender"
+                        android:contentDescription="T2" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/imageButton4"
+                        android:layout_width="150dp"
+                        android:layout_height="180dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/putzplan"
+                        android:contentDescription="T3" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton5"
+                        android:layout_width="150dp"
+                        android:layout_height="180dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/einkaufsliste"
+                        android:contentDescription="T4" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="40dp"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/imageButton6"
+                        android:layout_width="150dp"
+                        android:layout_height="180dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/hottopics"
+                        android:contentDescription="T5" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton7"
+                        android:layout_width="150dp"
+                        android:layout_height="180dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/schuldenradar"
+                        android:contentDescription="T6" />
+                </TableRow>
+
+            </TableLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
