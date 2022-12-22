@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -120,7 +119,7 @@ class KalenderActivity : AppCompatActivity() {
                 }
 
                 val dateStr = day +"."+month+"."+yearShow
-                val event = KalenderEvent(day.toInt(),monthShow,yearShow,"",dateStr,KalenderEvent().getNewId())
+                val event = KalenderEventData(day.toInt(),monthShow,yearShow,"",dateStr,KalenderEvent().getNewId())
 
                 showEventAddPopUp(event)
             }else {
@@ -137,7 +136,7 @@ class KalenderActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEventAddPopUp(event: KalenderEvent){
+    private fun showEventAddPopUp(event: KalenderEventData){
         val eventPopUp = Dialog(this)
 
         eventPopUp.setContentView(R.layout.popup_add_kalender_event)
@@ -149,7 +148,7 @@ class KalenderActivity : AppCompatActivity() {
         val bestaetigen:Button = eventPopUp.findViewById(R.id.button_kalenderevent_bestaetigen)
         val eventText:EditText = eventPopUp.findViewById(R.id.editText_eventtext)
 
-        showDate.text = event.getDateStr()
+        showDate.text = event.dateStr
 
         zurueckAdd.setOnClickListener {
             zurueckAdd.setBackgroundResource(R.drawable.zurueckklick)
@@ -161,8 +160,8 @@ class KalenderActivity : AppCompatActivity() {
 
         bestaetigen.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
-                event.setText(eventText.text.toString())
-                event.addEvents(event)
+                event.text = eventText.text.toString()
+                KalenderEvent().addEvents(event)
                 markEvents()
                 eventPopUp.dismiss()
             } else{
@@ -203,7 +202,7 @@ class KalenderActivity : AppCompatActivity() {
         eventPopUpShow.show()
     }
 
-    private fun showEventEditPopUp(event: KalenderEvent){
+    private fun showEventEditPopUp(event: KalenderEventData){
         val eventPopUp = Dialog(this)
 
         eventPopUp.setContentView(R.layout.popup_edit_kalender_event)
@@ -216,9 +215,9 @@ class KalenderActivity : AppCompatActivity() {
         val loeschen:Button = eventPopUp.findViewById(R.id.button_kalender_edit_event_loeschen)
         val eventText:EditText = eventPopUp.findViewById(R.id.editText_kalender_edit_eventText)
 
-        showDate.text = event.getDateStr()
+        showDate.text = event.dateStr
 
-        eventText.setText(event.getText())
+        eventText.setText(event.text)
 
         zurueckEdit.setOnClickListener {
             zurueckEdit.setBackgroundResource(R.drawable.zurueckklick)
@@ -235,14 +234,14 @@ class KalenderActivity : AppCompatActivity() {
 
             var counter = 0
             for (eventCheck in KalenderEvent().getEvents()){
-                if (eventCheck.getDay() == event.getDay() && eventCheck.getYear() == event.getYear() && eventCheck.getMonth() == event.getMonth()){
+                if (eventCheck.day == event.day && eventCheck.year == event.year && eventCheck.month == event.month){
                     counter += 1;
                 }
             }
 
             if (counter < 1) {
                 for (textView in showMonatList){
-                    if (textView.text == event.getDay().toString()){
+                    if (textView.text == event.day.toString()){
                         textView.setBackgroundResource(R.drawable.calender_day_background)
                         break
                     }
@@ -255,7 +254,7 @@ class KalenderActivity : AppCompatActivity() {
 
         bestaetigen.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
-                event.setText(eventText.text.toString())
+                event.text = eventText.text.toString()
                 eventPopUp.dismiss()
                 eventPopUpShow.dismiss()
             }else{
@@ -391,8 +390,8 @@ class KalenderActivity : AppCompatActivity() {
         val events = KalenderEvent().getEvents()
 
         for (event in events){
-            if (event.getMonth() == monthShow && event.getYear() == yearShow){
-                showMonatList[event.getDay()-1].setBackgroundResource(R.drawable.calender_event_day_background)
+            if (event.month == monthShow && event.year == yearShow){
+                showMonatList[event.day-1].setBackgroundResource(R.drawable.calender_event_day_background)
             }
         }
     }
@@ -401,9 +400,9 @@ class KalenderActivity : AppCompatActivity() {
         val events = KalenderEvent().getEvents()
 
         for (event in events){
-            if (event.getMonth() == monthShow && event.getYear() == yearShow && event.getDay().toString() == textViewDayFocus.text){
+            if (event.month == monthShow && event.year == yearShow && event.day.toString() == textViewDayFocus.text){
                 val textView = TextView(this)
-                textView.text = "["+event.getDateStr()+"] "+event.getText()
+                textView.text = "["+event.dateStr+"] "+event.text
                 textView.textSize = 25F
                 textView.setPadding(30,20,30,20)
 
