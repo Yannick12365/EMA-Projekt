@@ -56,19 +56,7 @@ class EinkaufslisteJSON() {
     }
 
     fun deleteJSONItem(nr: Int, context: Context) {
-        val file = File("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
-        val fileReader = FileReader(file)
-        val bufferedReader = BufferedReader(fileReader)
-        val stringBuilder = StringBuilder()
-        var line = bufferedReader.readLine()
-
-        while (line != null) {
-            stringBuilder.append(line).append("\n")
-            line = bufferedReader.readLine()
-        }
-        bufferedReader.close()
-
-        val jsonArray = JSONArray(stringBuilder.toString())
+        val jsonArray = readJSON(context)
         val newJSONArray = JSONArray()
 
         for (i in 0 until jsonArray.length()) {

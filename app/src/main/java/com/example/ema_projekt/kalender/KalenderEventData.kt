@@ -1,6 +1,7 @@
 package com.example.ema_projekt.kalender
 
 import android.content.Context
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
@@ -58,20 +59,42 @@ class KalenderEventJSON(){
         }
     }
 
-    fun deleteJSONItem(nr: Int, context: Context) {
-        val file = File("/data/data/" + context.packageName + "/" + "kalenderevent.json")
-        val fileReader = FileReader(file)
-        val bufferedReader = BufferedReader(fileReader)
-        val stringBuilder = StringBuilder()
-        var line = bufferedReader.readLine()
+    fun editJSONItem(data: KalenderEventData, context: Context) {
+        val jsonArray = readJSON(context)
+        val newJSONArray = JSONArray()
 
-        while (line != null) {
-            stringBuilder.append(line).append("\n")
-            line = bufferedReader.readLine()
+        for (i in 0 until jsonArray.length()) {
+            if (jsonArray.getJSONObject(i).getInt("id") == data.id) {
+                val objJson = JSONObject()
+                objJson.put("day", data.day)
+                objJson.put("month", data.month)
+                objJson.put("year", data.year)
+                objJson.put("text", data.text)
+                objJson.put("datestr", data.dateStr)
+                objJson.put("id", data.id)
+
+                newJSONArray.put(objJson)
+            } else {
+                val objJson = JSONObject()
+                objJson.put("day", jsonArray.getJSONObject(i).get("day"))
+                objJson.put("month", jsonArray.getJSONObject(i).get("month"))
+                objJson.put("year", jsonArray.getJSONObject(i).get("year"))
+                objJson.put("text", jsonArray.getJSONObject(i).get("text"))
+                objJson.put("datestr", jsonArray.getJSONObject(i).get("datestr"))
+                objJson.put("id", jsonArray.getJSONObject(i).get("id"))
+
+                newJSONArray.put(objJson)
+            }
         }
-        bufferedReader.close()
+        val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "kalenderevent.json")
 
-        val jsonArray = JSONArray(stringBuilder.toString())
+        fileWrite.write(newJSONArray.toString())
+        fileWrite.flush()
+        fileWrite.close()
+    }
+
+    fun deleteJSONItem(nr: Int, context: Context) {
+        val jsonArray = readJSON(context)
         val newJSONArray = JSONArray()
 
         for (i in 0 until jsonArray.length()) {

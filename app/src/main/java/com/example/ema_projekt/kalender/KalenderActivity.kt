@@ -261,6 +261,7 @@ class KalenderActivity : AppCompatActivity() {
         bestaetigen.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
+                KalenderEventJSON().editJSONItem(event, applicationContext)
                 eventPopUp.dismiss()
                 eventPopUpShow.dismiss()
             }else{
