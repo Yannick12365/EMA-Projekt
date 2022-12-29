@@ -25,8 +25,8 @@ class EinkaufslisteJSON() {
         }
 
         val objJson = JSONObject()
-        objJson.put("itemId", data.itemId);
-        objJson.put("itemText", data.itemText);
+        objJson.put("itemId", data.itemId)
+        objJson.put("itemText", data.itemText)
 
         arrayJson.put(objJson)
         file.write(arrayJson.toString())

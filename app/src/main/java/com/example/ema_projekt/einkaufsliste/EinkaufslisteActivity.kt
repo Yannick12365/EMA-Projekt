@@ -15,7 +15,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileWriter
 
-
 class EinkaufslisteActivity : AppCompatActivity() {
     private lateinit var zurueck:ImageButton
     private lateinit var erstellen:Button
@@ -25,8 +24,6 @@ class EinkaufslisteActivity : AppCompatActivity() {
 
     private val produktListBox = mutableMapOf<Int,CheckBox>()
     private val produktListButton = mutableMapOf<Int,Button>()
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

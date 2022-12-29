@@ -162,6 +162,7 @@ class KalenderActivity : AppCompatActivity() {
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
                 KalenderEvent().addEvents(event)
+                KalenderEventJSON().writeJSON(event, applicationContext)
                 markEvents()
                 eventPopUp.dismiss()
             } else{
