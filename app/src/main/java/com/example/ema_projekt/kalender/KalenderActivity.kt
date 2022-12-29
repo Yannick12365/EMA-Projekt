@@ -57,6 +57,8 @@ class KalenderActivity : AppCompatActivity() {
 
         textViewDayFocus = TextView(this)
 
+        KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
+
         val c = Calendar.getInstance()
 
         yearShow = c.get(Calendar.YEAR)

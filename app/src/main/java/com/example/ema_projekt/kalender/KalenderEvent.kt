@@ -1,6 +1,7 @@
 package com.example.ema_projekt.kalender
 
 import android.widget.TextView
+import org.json.JSONArray
 
 class KalenderEvent {
     companion object {
@@ -32,5 +33,23 @@ class KalenderEvent {
             }
         }
         return false
+    }
+
+    fun fillEventList(array:JSONArray){
+        events.clear()
+        for (i in 0 until array.length()) {
+            val event = array.getJSONObject(i)
+            val eventData = KalenderEventData(event.getInt("day"),event.getInt("month"),event.getInt("year"),event.getString("text"),event.getString("datestr"),event.getInt("id"))
+            events.add(eventData)
+        }
+    }
+
+    fun deleteEventFromList(id:Int){
+        for (event in events){
+            if (event.id == id){
+                events.remove(event)
+                return
+            }
+        }
     }
 }

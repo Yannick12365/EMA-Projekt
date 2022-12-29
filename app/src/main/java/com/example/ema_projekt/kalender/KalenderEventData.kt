@@ -11,7 +11,7 @@ data class KalenderEventData(
     val year:Int,
     var text:String,
     val dateStr:String,
-    val id:Int)
+    var id:Int)
 
 class KalenderEventJSON(){
     fun writeJSON(data: KalenderEventData, context: Context) {
