@@ -251,6 +251,9 @@ class KalenderActivity : AppCompatActivity() {
                 }
             }
 
+            KalenderEventJSON().deleteJSONItem(event.id,applicationContext)
+            KalenderEvent().deleteEventFromList(event.id)
+
             eventPopUp.dismiss()
             eventPopUpShow.dismiss()
         }
