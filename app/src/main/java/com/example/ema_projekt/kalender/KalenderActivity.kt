@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -123,7 +124,13 @@ class KalenderActivity : AppCompatActivity() {
                 val dateStr = day +"."+month+"."+yearShow
                 val event = KalenderEventData(day.toInt(),monthShow,yearShow,"",dateStr,KalenderEvent().getNewId())
 
-                showEventAddPopUp(event)
+                if (!checkOneYearOld(event)) {
+                    showEventAddPopUp(event)
+                } else{
+                    val toast =
+                        Toast.makeText(applicationContext, "Der Tag liegt zu lange in der Vergangenheit!", Toast.LENGTH_SHORT)
+                    toast.show()
+                }
             }else {
                 val toast =
                     Toast.makeText(applicationContext, "Wähle einen Tag aus!", Toast.LENGTH_SHORT)
@@ -363,7 +370,7 @@ class KalenderActivity : AppCompatActivity() {
 
     private fun createMonth(nrStart:Int, nrEnde:Int){
         for (i in nrStart..nrEnde){
-            showMonatList.add(monatList.get(i))
+            showMonatList.add(monatList[i])
         }
 
         markCurrentDay()
@@ -381,14 +388,15 @@ class KalenderActivity : AppCompatActivity() {
             i.text = ""
             i.setBackgroundResource(R.drawable.calender_day_background)
             i.visibility = View.INVISIBLE
+            i.setTextColor(Color.parseColor("#000000"))
         }
-        showMonatList.get(aktuellerTag).setTextColor(Color.parseColor("#000000"))
+
         showMonatList.clear()
     }
 
     private fun markCurrentDay(){
         if (monthShow == aktuellerMonat && yearShow == aktuellesJahr){
-            val textviewAktuellerTag: TextView = showMonatList.get(aktuellerTag)
+            val textviewAktuellerTag: TextView = showMonatList[aktuellerTag]
             textviewAktuellerTag.setTextColor(Color.parseColor("#10fefe"))
         }
     }
@@ -428,5 +436,16 @@ class KalenderActivity : AppCompatActivity() {
                 linearLayoutEvents.addView(textView)
             }
         }
+    }
+
+    private fun checkOneYearOld(event: KalenderEventData): Boolean{
+        if (event.year <= aktuellesJahr-1){
+            if (event.month <= aktuellerMonat){
+                if (event.day <= aktuellerTag+1){
+                    return true
+                }
+            }
+        }
+        return false
     }
 }
