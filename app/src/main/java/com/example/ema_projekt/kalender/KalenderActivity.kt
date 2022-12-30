@@ -58,18 +58,19 @@ class KalenderActivity : AppCompatActivity() {
 
         textViewDayFocus = TextView(this)
 
-        KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
-
         val c = Calendar.getInstance()
 
         yearShow = c.get(Calendar.YEAR)
         monthShow = c.get(Calendar.MONTH)+1
 
-        createCalenderDays()
-
         aktuellerTag = SimpleDateFormat("d").format(Date()).toInt()-1
         aktuellerMonat = monthShow
         aktuellesJahr = yearShow
+
+        KalenderEventJSON().removeOneYearOldEvents(aktuellerTag, aktuellerMonat, aktuellesJahr, applicationContext)
+        KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
+
+        createCalenderDays()
 
         val tagStart = YearMonth.of( yearShow , monthShow ).atDay(1).dayOfWeek.value-1
         val yearMonth: YearMonth = YearMonth.of(yearShow, monthShow)
