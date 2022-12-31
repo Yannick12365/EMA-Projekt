@@ -122,21 +122,22 @@ class  KalenderEventJSON{
         val newJSONArray = JSONArray()
 
         for (i in 0 until jsonArray.length()) {
-            if (jsonArray.getJSONObject(i).getInt("year") >= year - 1) {
-                if (jsonArray.getJSONObject(i).getInt("month") >= month) {
-                    if (jsonArray.getJSONObject(i).getInt("day") >= day + 1) {
-                        val objJson = JSONObject()
-                        objJson.put("day", jsonArray.getJSONObject(i).get("day"))
-                        objJson.put("month", jsonArray.getJSONObject(i).get("month"))
-                        objJson.put("year", jsonArray.getJSONObject(i).get("year"))
-                        objJson.put("text", jsonArray.getJSONObject(i).get("text"))
-                        objJson.put("datestr", jsonArray.getJSONObject(i).get("datestr"))
-                        objJson.put("id", jsonArray.getJSONObject(i).get("id"))
-
-                        newJSONArray.put(objJson)
+            if (jsonArray.getJSONObject(i).getInt("year") <= year - 1) {
+                if (jsonArray.getJSONObject(i).getInt("month") <= month) {
+                    if (jsonArray.getJSONObject(i).getInt("day") <= day + 1) {
+                        continue
                     }
                 }
             }
+            val objJson = JSONObject()
+            objJson.put("day", jsonArray.getJSONObject(i).get("day"))
+            objJson.put("month", jsonArray.getJSONObject(i).get("month"))
+            objJson.put("year", jsonArray.getJSONObject(i).get("year"))
+            objJson.put("text", jsonArray.getJSONObject(i).get("text"))
+            objJson.put("datestr", jsonArray.getJSONObject(i).get("datestr"))
+            objJson.put("id", jsonArray.getJSONObject(i).get("id"))
+
+            newJSONArray.put(objJson)
         }
         val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "kalenderevent.json")
 

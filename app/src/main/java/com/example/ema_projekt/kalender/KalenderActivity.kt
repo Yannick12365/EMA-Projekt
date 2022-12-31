@@ -67,7 +67,7 @@ class KalenderActivity : AppCompatActivity() {
         aktuellerMonat = monthShow
         aktuellesJahr = yearShow
 
-        KalenderEventJSON().removeOneYearOldEvents(aktuellerTag, aktuellerMonat, aktuellesJahr, applicationContext)
+        KalenderEventJSON().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr, applicationContext)
         KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
 
         createCalenderDays()
