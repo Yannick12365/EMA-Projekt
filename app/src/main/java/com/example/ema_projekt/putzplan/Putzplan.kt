@@ -1,11 +1,12 @@
-package com.example.ema_projekt
+package com.example.ema_projekt.putzplan
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.ema_projekt.R
 
-class Vorratskammer : AppCompatActivity() {
+class Putzplan : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_vorratskammer)
+        setContentView(R.layout.activity_putzplan)
     }
 }
