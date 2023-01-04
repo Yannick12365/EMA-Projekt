@@ -2,14 +2,16 @@ package com.example.ema_projekt.vorratskammer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ema_projekt.R
 
-class MainActivity : AppCompatActivity() {
+class Vorratskammer : AppCompatActivity() {
     private val itemsList = ArrayList<String>()
     private lateinit var customAdapter: CustomAdapter
+    private lateinit var erstellen: com.google.android.material.floatingactionbutton.FloatingActionButton;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +24,13 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = customAdapter
         prepareItems()
+
+        erstellen = findViewById(R.id.add)
+
+        erstellen.setOnClickListener{
+           val neu = Toast.makeText(applicationContext, "Gebe einen Text ein!", Toast.LENGTH_SHORT).show()
+            itemsList.add (neu.toString())
+        }
     }
     private fun prepareItems() {
         itemsList.add("Item 1")
