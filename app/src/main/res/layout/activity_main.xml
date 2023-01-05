@@ -84,22 +84,22 @@
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
                 android:textAlignment="center"
-                android:text="Password" />
+                android:text="WG Token" />
 
             <EditText
-                android:id="@+id/wgpasswordinput"
+                android:id="@+id/wgtokeninput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/black"
                 android:ems="10"
-                android:hint="Password"
+                android:hint="WG Token"
                 android:maxLines="25"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:minHeight="48dp" />
 
             <Button
-                android:id="@+id/button_einlogen"
+                android:id="@+id/button_einloggen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -108,13 +108,13 @@
                 android:background="@drawable/standart_button_background"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:text="WG Einlogen" />
+                android:text="Einloggen" />
 
             <Button
                 android:id="@+id/button_erstellen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="60dp"
                 app:backgroundTint="@null"
                 android:fontFamily="sans-serif-black"
                 android:background="@drawable/standart_button_background"
