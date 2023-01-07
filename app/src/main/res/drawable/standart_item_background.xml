@@ -5,6 +5,6 @@
         />
 
     <solid
-        android:color="#c4fdfc"
+        android:color="@color/standartItem"
         />
 </shape>

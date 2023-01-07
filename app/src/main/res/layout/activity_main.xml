@@ -131,7 +131,7 @@
                 <TextView
                     android:id="@+id/textView_wgerstellen"
                     android:fontFamily="sans-serif-black"
-                    android:textColor="#2e2e2e"
+                    android:textColor="@color/loginWgerstellen"
                     android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

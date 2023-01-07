@@ -94,7 +94,7 @@
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-black"
                 android:textAlignment="center"
-                android:textColor="#c32222"
+                android:textColor="@color/errorRed"
                 android:text="" />
 
             <LinearLayout

@@ -3,13 +3,13 @@
 <item android:state_pressed="true" >
     <shape android:shape="rectangle"  >
         <corners android:radius="20dp" />
-        <solid android:color="#a361ff" />
+        <solid android:color="@color/einkaufsliste_loeschen_click" />
     </shape>
 </item>
 <item>
     <shape android:shape="rectangle"  >
         <corners android:radius="20dp" />
-        <solid android:color="#8833ff" />
+        <solid android:color="@color/einkaufsliste_loeschen" />
     </shape>
 </item>
 </selector>

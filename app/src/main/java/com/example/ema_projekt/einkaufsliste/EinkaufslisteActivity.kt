@@ -1,15 +1,11 @@
 package com.example.ema_projekt.einkaufsliste
 
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
-import androidx.core.view.get
 import com.example.ema_projekt.R
 import org.json.JSONArray
 

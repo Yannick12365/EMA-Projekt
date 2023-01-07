@@ -12,6 +12,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import com.example.ema_projekt.R
 import java.text.SimpleDateFormat
 import java.time.YearMonth
@@ -299,7 +300,7 @@ class KalenderActivity : AppCompatActivity() {
         for (i in 1..37) {
             val textView = TextView(this)
             textView.textSize = 20F
-            textView.setTextColor(Color.parseColor("#000000"))
+            textView.setTextColor(ContextCompat.getColor(this,R.color.black))
             textView.setBackgroundResource(R.drawable.calender_day_background)
             textView.gravity = Gravity.CENTER
             textView.width = 135
@@ -389,7 +390,7 @@ class KalenderActivity : AppCompatActivity() {
             i.text = ""
             i.setBackgroundResource(R.drawable.calender_day_background)
             i.visibility = View.INVISIBLE
-            i.setTextColor(Color.parseColor("#000000"))
+            i.setTextColor(ContextCompat.getColor(this,R.color.black))
         }
 
         showMonatList.clear()
@@ -398,7 +399,7 @@ class KalenderActivity : AppCompatActivity() {
     private fun markCurrentDay(){
         if (monthShow == aktuellerMonat && yearShow == aktuellesJahr){
             val textviewAktuellerTag: TextView = showMonatList[aktuellerTag]
-            textviewAktuellerTag.setTextColor(Color.parseColor("#10fefe"))
+            textviewAktuellerTag.setTextColor(ContextCompat.getColor(this,R.color.calenderToday))
         }
     }
 
@@ -429,7 +430,7 @@ class KalenderActivity : AppCompatActivity() {
 
                 textView.layoutParams = layoutParams
                 textView.setBackgroundResource(R.drawable.standart_item_background)
-                textView.setTextColor(Color.parseColor("#000000"))
+                textView.setTextColor(ContextCompat.getColor(this,R.color.black))
 
                 textView.setOnClickListener {
                     showEventEditPopUp(event)

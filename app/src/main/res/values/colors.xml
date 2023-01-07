@@ -8,4 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="antique_brass">#c89b7b</color>
+    <color name="calender_Today">#10fefe</color>
+    <color name="calender_switchmonth_click">#1Ae3e3e3</color>
+    <color name="einkaufsliste_loeschen">#8833ff</color>
+    <color name="einkaufsliste_loeschen_click">#a361ff</color>
+    <color name="transparent">#00000000</color>
+    <color name="standartButton">#FF6200EE</color>
+    <color name="standartButtonClick">#8833ff</color>
+    <color name="standartItem">#c4fdfc</color>
+    <color name="loginWgerstellen">#2e2e2e</color>
+    <color name="errorRed">#c32222</color>
 </resources>
