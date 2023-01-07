@@ -399,7 +399,7 @@ class KalenderActivity : AppCompatActivity() {
     private fun markCurrentDay(){
         if (monthShow == aktuellerMonat && yearShow == aktuellesJahr){
             val textviewAktuellerTag: TextView = showMonatList[aktuellerTag]
-            textviewAktuellerTag.setTextColor(ContextCompat.getColor(this,R.color.calenderToday))
+            textviewAktuellerTag.setTextColor(ContextCompat.getColor(this,R.color.calender_Today))
         }
     }
 

@@ -5,8 +5,7 @@
     android:layout_width="350dp"
     android:layout_height="600dp"
     android:layout_gravity="center"
-    android:background="@drawable/standarthintergrund"
-    >
+    android:background="@drawable/standarthintergrund">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -29,14 +28,14 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/zurueck"
-                android:contentDescription="zurueckbutton" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:text="WG Erstellen"
+                android:text="@string/main_wgerstellen"
                 android:textColor="@color/black"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -74,7 +73,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:fontFamily="sans-serif-black"
-                    android:hint="WG Name"
+                    android:hint="@string/main_wgname"
                     android:inputType="text"
                     android:maxLines="5"
                     android:minHeight="48dp"
@@ -116,7 +115,7 @@
                     android:textSize="18sp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="2dp"
-                    android:text="Abbrechen" />
+                    android:text="@string/abbrechen" />
 
                 <Button
                     android:id="@+id/button_wgerstellen_bestaetigen"
@@ -131,9 +130,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bestätigen" />
+                    android:text="@string/bestaetigen" />
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

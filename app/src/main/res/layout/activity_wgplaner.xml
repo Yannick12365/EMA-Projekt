@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:text="WG Planer"
+                android:text="@string/app_name"
                 android:textColor="@color/black"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -38,7 +38,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:contentDescription="Profil" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -79,7 +79,7 @@
                         android:layout_height="180dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/vorratskammer"
-                        android:contentDescription="Vorratskammer" />
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <ImageButton
                         android:id="@+id/imageButton3"
@@ -87,7 +87,7 @@
                         android:layout_height="180dp"
                         android:layout_marginStart="10dp"
                         android:background="@drawable/kalender"
-                        android:contentDescription="Kalender" />
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
                 </TableRow>
 
                 <TableRow
@@ -102,7 +102,7 @@
                         android:layout_height="180dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/putzplan"
-                        android:contentDescription="Putzplan" />
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <ImageButton
                         android:id="@+id/imageButton5"
@@ -110,7 +110,7 @@
                         android:layout_height="180dp"
                         android:layout_marginStart="10dp"
                         android:background="@drawable/einkaufsliste"
-                        android:contentDescription="Einkaufsliste" />
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
                 </TableRow>
 
                 <TableRow
@@ -125,7 +125,7 @@
                         android:layout_height="180dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/hottopics"
-                        android:contentDescription="HotTopics" />
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <ImageButton
                         android:id="@+id/imageButton7"
@@ -133,7 +133,7 @@
                         android:layout_height="180dp"
                         android:layout_marginStart="10dp"
                         android:background="@drawable/schuldenradar"
-                        android:contentDescription="Schuldenradar" />
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
                 </TableRow>
 
             </TableLayout>

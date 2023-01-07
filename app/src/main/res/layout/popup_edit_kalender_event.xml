@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="350dp"
     android:layout_height="600dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
-    android:background="@drawable/standarthintergrund"
-    >
+    android:background="@drawable/standarthintergrund">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -29,7 +29,7 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="50dp"
                 android:background="@drawable/zurueck"
-                android:contentDescription="zurueckbutton"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
                 />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:text="Event"
+                android:text="@string/kalender_event"
                 android:textColor="@color/black"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -69,7 +69,7 @@
                 android:gravity="center"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="07.12.2022"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
@@ -87,7 +87,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:fontFamily="sans-serif-black"
-                    android:hint="Kalender Eintrag"
+                    android:hint="@string/kalender_edittext_hint_popup"
                     android:inputType="textMultiLine"
                     android:maxLines="5"
                     android:minHeight="48dp"
@@ -121,7 +121,7 @@
                         android:fontFamily="sans-serif-black"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Abbrechen"
+                        android:text="@string/abbrechen"
                         android:textSize="18sp"
                         app:backgroundTint="@null" />
 
@@ -136,7 +136,7 @@
                         android:fontFamily="sans-serif-black"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="Bestätigen"
+                        android:text="@string/bestaetigen"
                         android:textSize="18sp"
                         app:backgroundTint="@null" />
                 </LinearLayout>
@@ -152,7 +152,7 @@
                     android:paddingTop="10dp"
                     android:layout_gravity="center"
                     android:paddingBottom="10dp"
-                    android:text="Löschen"
+                    android:text="@string/loeschen"
                     android:textSize="18sp"
                     app:backgroundTint="@null" />
 

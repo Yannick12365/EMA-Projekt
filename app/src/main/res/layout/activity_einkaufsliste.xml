@@ -29,14 +29,14 @@
                 android:layout_marginEnd="30dp"
                 android:layout_height="50dp"
                 android:background="@drawable/zurueck"
-                android:contentDescription="zurueckbutton" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:text="Einkaufsliste"
+                android:text="@string/einkaufsliste"
                 android:textColor="@color/black"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -84,7 +84,7 @@
                         android:layout_marginEnd="5dp"
                         android:ems="10"
                         android:fontFamily="sans-serif-black"
-                        android:hint="Einkauf Produkt"
+                        android:hint="@string/einkaufsliste_editText_hint"
                         android:inputType="text"
                         android:maxLength="15"
                         android:minHeight="48dp"
@@ -101,7 +101,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/standart_button_background"
                     android:fontFamily="sans-serif-black"
-                    android:text="Eintrag erstellen"
+                    android:text="@string/einkaufsliste_erstellen"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     app:backgroundTint="@null" />
@@ -119,7 +119,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/standart_button_background"
                     android:fontFamily="sans-serif-black"
-                    android:text="Einkauf beenden"
+                    android:text="@string/einkaufsliste_beenden"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     app:backgroundTint="@null" />

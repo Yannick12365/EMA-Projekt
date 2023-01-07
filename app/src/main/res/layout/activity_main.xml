@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
-            android:text="WG Planer"
+            android:text="@string/app_name"
             android:textColor="@color/black"
             android:textSize="40sp"
             android:textStyle="bold"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
                 android:textAlignment="center"
-                android:text="WG Name" />
+                android:text="@string/main_wgname" />
 
             <EditText
                 android:id="@+id/wgnameinput"
@@ -71,7 +71,7 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:ems="10"
-                android:hint="WG Name"
+                android:hint="@string/main_wgname"
                 android:inputType="text"
                 android:maxLength="25"
                 android:minHeight="48dp" />
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
                 android:textAlignment="center"
-                android:text="WG Token" />
+                android:text="@string/main_wgtoken" />
 
             <EditText
                 android:id="@+id/wgtokeninput"
@@ -93,7 +93,7 @@
                 android:textSize="20sp"
                 android:textColor="@color/black"
                 android:ems="10"
-                android:hint="WG Token"
+                android:hint="@string/main_wgtoken"
                 android:maxLines="25"
                 android:inputType="text"
                 android:minHeight="48dp" />
@@ -108,7 +108,7 @@
                 android:background="@drawable/standart_button_background"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:text="Einloggen" />
+                android:text="@string/main_einloggen" />
 
             <LinearLayout
                 android:layout_marginTop="30dp"
@@ -126,7 +126,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:layout_marginEnd="5dp"
-                    android:text="Noch keine WG erstellt ?" />
+                    android:text="@string/main_wgerstellen_text" />
 
                 <TextView
                     android:id="@+id/textView_wgerstellen"
@@ -137,13 +137,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="5dp"
-                    android:text="WG erstellen" />
+                    android:text="@string/main_wgerstellen" />
             </LinearLayout>
-
-
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,30 @@
 <resources>
-    <string name="app_name">EMA-Projekt</string>
+    <string name="app_name">WG Planer</string>
+    <string name="abbrechen">Abbrechen</string>
+    <string name="bestaetigen">Bestätigen</string>
+    <string name="loeschen">Löschen</string>
+
+    <string name="einkaufsliste">Einkaufsliste</string>
+    <string name="einkaufsliste_editText_hint">Einkauf Produkt</string>
+    <string name="einkaufsliste_erstellen">Eintrag erstellen</string>
+    <string name="einkaufsliste_beenden">Einkauf beenden</string>
+
+    <string name="kalender">Kalender</string>
+    <string name="kalender_switch_left">&lt;-</string>
+    <string name="kalender_switch_right">-&gt;</string>
+    <string name="kalender_m">M</string>
+    <string name="kalender_d">D</string>
+    <string name="kalender_f">F</string>
+    <string name="kalender_s">S</string>
+    <string name="kalender_event_erstellen">+</string>
+    <string name="kalender_show_events">Events anzeigen</string>
+    <string name="kalender_edittext_hint_popup">Kalender Eintrag</string>
+    <string name="kalender_event_erstellen_popup">+ Event"</string>
+    <string name="kalender_event">Event</string>
+
+    <string name="main_wgname">WG Name</string>
+    <string name="main_wgtoken">WG Token</string>
+    <string name="main_einloggen">Einloggen</string>
+    <string name="main_wgerstellen_text">Noch keine WG erstellt ?</string>
+    <string name="main_wgerstellen">WG Erstellen</string>
 </resources>

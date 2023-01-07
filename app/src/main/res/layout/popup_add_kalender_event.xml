@@ -30,14 +30,14 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="40dp"
                 android:background="@drawable/zurueck"
-                android:contentDescription="zurueckbutton" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:text="+ Event"
+                android:text="@string/kalender_event_erstellen_popup"
                 android:textColor="@color/black"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -65,7 +65,7 @@
                 android:id="@+id/textView_show_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="07.12.2022"
+                android:text=""
                 android:gravity="center"
                 android:fontFamily="sans-serif-black"
                 android:textColor="@color/black"
@@ -87,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-black"
-                    android:hint="Kalender Eintrag"
+                    android:hint="@string/kalender_edittext_hint_popup"
                     android:layout_marginStart="5dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
@@ -120,7 +120,7 @@
                     android:textSize="18sp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="2dp"
-                    android:text="Abbrechen" />
+                    android:text="@string/abbrechen" />
 
                 <Button
                     android:id="@+id/button_kalenderevent_bestaetigen"
@@ -135,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bestätigen" />
+                    android:text="@string/bestaetigen" />
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,14 +30,14 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="50dp"
                 android:background="@drawable/zurueck"
-                android:contentDescription="zurueckbutton" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:text="Event"
+                android:text="@string/kalender_event"
                 android:textColor="@color/black"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="showkalenderevents"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

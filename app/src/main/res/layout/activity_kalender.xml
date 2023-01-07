@@ -30,14 +30,14 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/zurueck"
-                android:contentDescription="zurueckbutton" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:text="Kalender"
+                android:text="@string/kalender"
                 android:textColor="@color/black"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -97,7 +97,7 @@
                                 android:backgroundTint="@null"
                                 android:fontFamily="sans-serif-black"
                                 android:paddingBottom="10dp"
-                                android:text="&lt;-"
+                                android:text="@string/kalender_switch_left"
                                 android:textColor="@color/black"
                                 android:textSize="20sp" />
 
@@ -108,7 +108,7 @@
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:fontFamily="sans-serif-black"
-                                android:text="September 2022"
+                                android:text=""
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
                                 android:textSize="20sp"
@@ -124,7 +124,7 @@
                                 android:backgroundTint="@null"
                                 android:fontFamily="sans-serif-black"
                                 android:paddingBottom="10dp"
-                                android:text="-&gt;"
+                                android:text="@string/kalender_switch_right"
                                 android:textColor="@color/black"
                                 android:textSize="20sp" />
                         </LinearLayout>
@@ -149,7 +149,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:paddingBottom="10dp"
-                                    android:text="M"
+                                    android:text="@string/kalender_m"
                                     android:textAlignment="center"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
@@ -161,7 +161,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:paddingBottom="10dp"
-                                    android:text="D"
+                                    android:text="@string/kalender_d"
                                     android:textAlignment="center"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
@@ -173,7 +173,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:paddingBottom="10dp"
-                                    android:text="M"
+                                    android:text="@string/kalender_m"
                                     android:textAlignment="center"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
@@ -185,7 +185,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:paddingBottom="10dp"
-                                    android:text="D"
+                                    android:text="@string/kalender_d"
                                     android:textAlignment="center"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
@@ -197,7 +197,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:paddingBottom="10dp"
-                                    android:text="F"
+                                    android:text="@string/kalender_f"
                                     android:textAlignment="center"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
@@ -209,7 +209,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:paddingBottom="10dp"
-                                    android:text="S"
+                                    android:text="@string/kalender_s"
                                     android:textAlignment="center"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
@@ -221,7 +221,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:paddingBottom="10dp"
-                                    android:text="S"
+                                    android:text="@string/kalender_s"
                                     android:textAlignment="center"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
@@ -246,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/standart_button_background"
-                        android:text="Show Events"
+                        android:text="@string/kalender_show_events"
                         android:textSize="20sp"
                         android:visibility="invisible"
                         app:backgroundTint="@null" />
@@ -257,7 +257,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:background="@drawable/calender_button_background"
-                        android:text="+"
+                        android:text="@string/kalender_event_erstellen"
                         android:textSize="30sp"
                         app:backgroundTint="@null" />
                 </LinearLayout>
