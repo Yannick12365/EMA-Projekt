@@ -63,7 +63,6 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:id="@+id/linearItemList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -71,22 +70,22 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:background="@drawable/standart_item_background"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/standart_item_background"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
                     <EditText
                         android:id="@+id/editText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
                         android:ems="10"
                         android:fontFamily="sans-serif-black"
                         android:hint="Einkauf Produkt"
                         android:inputType="text"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
                         android:maxLength="15"
                         android:minHeight="48dp"
                         android:textSize="25sp"
@@ -100,24 +99,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"
-                    app:backgroundTint="@null"
+                    android:background="@drawable/standart_button_background"
                     android:fontFamily="sans-serif-black"
                     android:text="Eintrag erstellen"
-                    android:background="@drawable/standart_button_background"
                     android:textAlignment="center"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    app:backgroundTint="@null" />
+
+                <LinearLayout
+                    android:id="@+id/einkaufItemLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"/>
 
                 <Button
                     android:id="@+id/button2"
-                    android:background="@drawable/standart_button_background"
                     android:layout_width="match_parent"
-                    app:backgroundTint="@null"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
+                    android:background="@drawable/standart_button_background"
                     android:fontFamily="sans-serif-black"
                     android:text="Einkauf beenden"
                     android:textAlignment="center"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    app:backgroundTint="@null" />
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

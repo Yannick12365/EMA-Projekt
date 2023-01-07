@@ -77,17 +77,17 @@
                         android:id="@+id/imageButton2"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/vorratskammer"
-                        android:contentDescription="T1" />
+                        android:contentDescription="Vorratskammer" />
 
                     <ImageButton
                         android:id="@+id/imageButton3"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:background="@drawable/kalender"
-                        android:contentDescription="T2" />
+                        android:contentDescription="Kalender" />
                 </TableRow>
 
                 <TableRow
@@ -100,17 +100,17 @@
                         android:id="@+id/imageButton4"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/putzplan"
-                        android:contentDescription="T3" />
+                        android:contentDescription="Putzplan" />
 
                     <ImageButton
                         android:id="@+id/imageButton5"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:background="@drawable/einkaufsliste"
-                        android:contentDescription="T4" />
+                        android:contentDescription="Einkaufsliste" />
                 </TableRow>
 
                 <TableRow
@@ -123,17 +123,17 @@
                         android:id="@+id/imageButton6"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/hottopics"
-                        android:contentDescription="T5" />
+                        android:contentDescription="HotTopics" />
 
                     <ImageButton
                         android:id="@+id/imageButton7"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:background="@drawable/schuldenradar"
-                        android:contentDescription="T6" />
+                        android:contentDescription="Schuldenradar" />
                 </TableRow>
 
             </TableLayout>

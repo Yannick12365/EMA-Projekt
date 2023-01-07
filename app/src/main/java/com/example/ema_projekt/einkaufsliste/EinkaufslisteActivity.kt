@@ -4,16 +4,14 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.children
+import androidx.core.view.get
 import com.example.ema_projekt.R
 import org.json.JSONArray
-import org.json.JSONObject
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileWriter
 
 class EinkaufslisteActivity : AppCompatActivity() {
     private lateinit var zurueck:ImageButton
@@ -22,8 +20,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private lateinit var layout:LinearLayout
     private lateinit var editText:EditText
 
-    private val produktListBox = mutableMapOf<Int,CheckBox>()
-    private val produktListButton = mutableMapOf<Int,Button>()
+    private val itemList = mutableMapOf<Int,View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +30,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
         zurueck = findViewById(R.id.imageButton_einkauf_zurueck)
         erstellen = findViewById(R.id.button)
         einkaufbeenden = findViewById(R.id.button2)
-        layout = findViewById(R.id.linearItemList)
+        layout = findViewById(R.id.einkaufItemLayout)
         editText = findViewById(R.id.editText)
 
         createExistingItems()
@@ -45,16 +42,11 @@ class EinkaufslisteActivity : AppCompatActivity() {
 
         erstellen.setOnClickListener {
             if (editText.text.isNotEmpty()) {
-                val checkbox = createCheckBox(editText.text.toString())
-                val buttonLoeschen = createButtonLoeschen()
-
-                layout.addView(checkbox, 2)
-                layout.addView(buttonLoeschen, 3)
-
                 val id = nextId()
+                val itemView = createEinkaufItem(editText.text.toString())
 
-                produktListBox.put(id,checkbox)
-                produktListButton.put(id,buttonLoeschen)
+                itemList[id] = itemView
+                layout.addView(itemView)
 
                 EinkaufslisteJSON().writeJSON(EinkaufslisteData(id, editText.text.toString()),applicationContext)
                 editText.setText("")
@@ -64,123 +56,69 @@ class EinkaufslisteActivity : AppCompatActivity() {
         }
 
         einkaufbeenden.setOnClickListener {
-            val tmpListBox = mutableListOf<CheckBox>()
-            val tmpListButton = mutableListOf<Button>()
-
             var counter = 0
-
-            for (id: Int in produktListBox.keys) {
-                if (produktListBox[id]?.isChecked == true) {
+            for (view:View in layout.children) {
+                val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItem)
+                if (checkbox.isChecked) {
                     counter += 1
-                    val button: Button? = produktListButton[id]
-
-                    val checkBox = produktListBox[id]
-                    if (checkBox != null) {
-                        tmpListBox.add(checkBox)
+                    var id: Int = -1
+                    for (i in itemList.keys) {
+                        if (itemList[i] == view) {
+                            id = i
+                            break
+                        }
                     }
-                    if (button != null) {
-                        tmpListButton.add(button)
-                    }
-
+                    layout.removeView(view)
+                    itemList.remove(id)
                     EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
-
-                    layout.removeView(checkBox)
-                    layout.removeView(button)
                 }
             }
-            if (counter == 0) {
-                Toast.makeText(applicationContext, "Wähle zuerst die eingekauften Artikel aus, bevor du den Einkauf beendest!", Toast.LENGTH_SHORT).show()
-            } else {
-
-                val ids = mutableSetOf<Int>()
-                ids.addAll(produktListBox.keys)
-
-                for (checkbox in tmpListBox) {
-                    for (id in ids) {
-                        if (produktListBox[id] == checkbox) {
-                            produktListBox.remove(id)
-                        }
-                    }
-                }
-
-                ids.addAll(produktListButton.keys)
-                for (button in tmpListButton) {
-                    for (id in ids) {
-                        if (produktListButton[id] == button) {
-                            produktListButton.remove(id)
-                        }
-                    }
-                }
+            if (counter == 0){
+                Toast.makeText(applicationContext, "Wähle zuerst die eingekauften Artikel aus, bevor du den Einkauf beendest!",
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun createExistingItems(){
-        val jsonData:JSONArray = EinkaufslisteJSON().readJSON(applicationContext)
+        val jsonData: JSONArray = EinkaufslisteJSON().readJSON(applicationContext)
 
         for (i in 0 until jsonData.length()){
-            val checkBox = createCheckBox(jsonData.getJSONObject(i).get("itemText").toString())
-            val button = createButtonLoeschen()
-
-            produktListBox.put(jsonData.getJSONObject(i).get("itemId").toString().toInt(),checkBox)
-            produktListButton.put(jsonData.getJSONObject(i).get("itemId").toString().toInt(),button)
-
-            layout.addView(checkBox, 2)
-            layout.addView(button, 3)
+            val viewItem = createEinkaufItem(jsonData.getJSONObject(i).get("itemText").toString())
+            itemList[jsonData.getJSONObject(i).get("itemId").toString().toInt()] = viewItem
+            layout.addView(viewItem)
         }
     }
 
-    private fun createCheckBox(text:String):CheckBox{
-        val checkbox = CheckBox(this)
-        checkbox.id = produktListBox.size
-        checkbox.textSize = 30F
-        checkbox.isChecked = false
-        checkbox.text = text
-        checkbox.buttonTintList = ColorStateList.valueOf(Color.parseColor("#FF6200EE"))
-        checkbox.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD)
+    private fun createEinkaufItem(text: String):View{
+        val viewItem = View.inflate(this, R.layout.item_einkaufsliste,null)
+        val checkBox:CheckBox = viewItem.findViewById(R.id.checkBoxEinkaufItem)
+        checkBox.text = text
 
-        return checkbox
-    }
-
-    private fun createButtonLoeschen():Button{
-        val buttonLoeschen = Button(this)
-        buttonLoeschen.id = produktListButton.size
-        buttonLoeschen.text = "Löschen"
-        buttonLoeschen.textSize = 18F
-        buttonLoeschen.setBackgroundResource(R.drawable.einkaufsliste_button_background_loeschen)
-        buttonLoeschen.setTextColor(Color.WHITE)
-        buttonLoeschen.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD)
-
-        val params = LinearLayout.LayoutParams(
-            400,
-            120
-        )
-        params.setMargins(0,0,0, 40)
-        buttonLoeschen.layoutParams = params
-
-        buttonLoeschen.setOnClickListener {
-            var idButton = -1
-            for (id in produktListButton.keys){
-                if (produktListButton[id] == buttonLoeschen){
-                    idButton = id
+        val button:ImageButton = viewItem.findViewById(R.id.buttonEinkaufItemLoeschen)
+        button.setOnClickListener {
+            for (view:View in layout.children){
+                val btnLoeschen:ImageButton = view.findViewById(R.id.buttonEinkaufItemLoeschen)
+                if (btnLoeschen == button){
+                    var id:Int = -1
+                    for (i in itemList.keys){
+                        if (itemList[i] == view){
+                            id = i
+                            break
+                        }
+                    }
+                    layout.removeView(view)
+                    itemList.remove(id)
+                    EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
                 }
             }
-
-            val checkbox: CheckBox? = produktListBox.get(idButton)
-            layout.removeView(checkbox)
-            layout.removeView(buttonLoeschen)
-
-            EinkaufslisteJSON().deleteJSONItem(idButton, applicationContext)
-
-            produktListButton.remove(idButton)
-            produktListBox.remove(idButton)
         }
-        return buttonLoeschen
+        return viewItem
     }
 
     private fun nextId():Int{
         var newId = 0
-        for (i in produktListBox.keys){
+        for (i in itemList.keys){
             if (i >= newId){
                 newId = i+1
             }
