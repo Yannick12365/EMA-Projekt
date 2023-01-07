@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         erstellenTextview.setOnClickListener {
             erstellenTextview.setTextColor(Color.parseColor("#5c5c5c"))
             showWGErstellPopUp()
-            erstellenTextview.setTextColor(Color.parseColor("#2e2e2es"))
+            erstellenTextview.setTextColor(Color.parseColor("#2e2e2e"))
         }
     }
 
