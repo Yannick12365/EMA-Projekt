@@ -102,7 +102,7 @@
                 android:id="@+id/button_einloggen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 app:backgroundTint="@null"
                 android:fontFamily="sans-serif-black"
                 android:background="@drawable/standart_button_background"
@@ -110,17 +110,37 @@
                 android:textSize="20sp"
                 android:text="Einloggen" />
 
-            <Button
-                android:id="@+id/button_erstellen"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                app:backgroundTint="@null"
-                android:fontFamily="sans-serif-black"
-                android:background="@drawable/standart_button_background"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:text="WG Erstellen" />
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:fontFamily="sans-serif-black"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="15sp"
+                    android:layout_marginEnd="5dp"
+                    android:text="Noch keine WG erstellt ?" />
+
+                <TextView
+                    android:id="@+id/textView_wgerstellen"
+                    android:fontFamily="sans-serif-black"
+                    android:textColor="#2e2e2e"
+                    android:textSize="17sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:text="WG erstellen" />
+            </LinearLayout>
+
+
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

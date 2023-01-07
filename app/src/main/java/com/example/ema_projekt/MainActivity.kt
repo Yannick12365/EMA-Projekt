@@ -14,6 +14,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.kalender.KalenderActivity
 import com.example.ema_projekt.wgplaner.WGPlanerActivity
 
+
+//https://youtu.be/kMEkP6f9_kE
+
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,13 +25,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val loginbutton:Button = findViewById(R.id.button_einloggen)
-        val erstellbutton:Button = findViewById(R.id.button_erstellen)
+        val erstellenTextview:TextView = findViewById(R.id.textView_wgerstellen)
 
         loginbutton.setOnClickListener {
             startActivity(Intent(this, WGPlanerActivity::class.java))
         }
 
-        erstellbutton.setOnClickListener {
+        erstellenTextview.setOnClickListener {
+            erstellenTextview.setTextColor(Color.parseColor("#5c5c5c"))
             showWGErstellPopUp()
         }
     }
