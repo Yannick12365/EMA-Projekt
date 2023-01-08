@@ -13,7 +13,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private lateinit var zurueck:ImageButton
     private lateinit var erstellen:Button
     private lateinit var einkaufbeenden:Button
-    private lateinit var layout:LinearLayout
+    private lateinit var einkaufItemLinearLayout:LinearLayout
     private lateinit var editText:EditText
 
     private val itemList = mutableMapOf<Int,View>()
@@ -26,7 +26,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
         zurueck = findViewById(R.id.imageButton_einkauf_zurueck)
         erstellen = findViewById(R.id.button)
         einkaufbeenden = findViewById(R.id.button2)
-        layout = findViewById(R.id.einkaufItemLayout)
+        einkaufItemLinearLayout = findViewById(R.id.einkaufItemLayout)
         editText = findViewById(R.id.editText)
 
         createExistingItems()
@@ -42,7 +42,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 val itemView = createEinkaufItem(editText.text.toString())
 
                 itemList[id] = itemView
-                layout.addView(itemView)
+                einkaufItemLinearLayout.addView(itemView)
 
                 EinkaufslisteJSON().writeJSON(EinkaufslisteData(id, editText.text.toString()),applicationContext)
                 editText.setText("")
@@ -53,7 +53,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
 
         einkaufbeenden.setOnClickListener {
             var counter = 0
-            for (view:View in layout.children) {
+            for (view:View in einkaufItemLinearLayout.children) {
                 val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItem)
                 if (checkbox.isChecked) {
                     counter += 1
@@ -64,7 +64,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                             break
                         }
                     }
-                    layout.removeView(view)
+                    einkaufItemLinearLayout.removeView(view)
                     itemList.remove(id)
                     EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
                 }
@@ -82,18 +82,18 @@ class EinkaufslisteActivity : AppCompatActivity() {
         for (i in 0 until jsonData.length()){
             val viewItem = createEinkaufItem(jsonData.getJSONObject(i).get("itemText").toString())
             itemList[jsonData.getJSONObject(i).get("itemId").toString().toInt()] = viewItem
-            layout.addView(viewItem)
+            einkaufItemLinearLayout.addView(viewItem)
         }
     }
 
     private fun createEinkaufItem(text: String):View{
-        val viewItem = View.inflate(this, R.layout.item_einkaufsliste,null)
+        val viewItem:View = View.inflate(this, R.layout.item_einkaufsliste,null)
         val checkBox:CheckBox = viewItem.findViewById(R.id.checkBoxEinkaufItem)
         checkBox.text = text
 
         val button:ImageButton = viewItem.findViewById(R.id.buttonEinkaufItemLoeschen)
         button.setOnClickListener {
-            for (view:View in layout.children){
+            for (view:View in einkaufItemLinearLayout.children){
                 val btnLoeschen:ImageButton = view.findViewById(R.id.buttonEinkaufItemLoeschen)
                 if (btnLoeschen == button){
                     var id:Int = -1
@@ -103,7 +103,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                             break
                         }
                     }
-                    layout.removeView(view)
+                    einkaufItemLinearLayout.removeView(view)
                     itemList.remove(id)
                     EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
                 }
