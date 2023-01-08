@@ -93,21 +93,16 @@ class EinkaufslisteActivity : AppCompatActivity() {
 
         val button:ImageButton = viewItem.findViewById(R.id.buttonEinkaufItemLoeschen)
         button.setOnClickListener {
-            for (view:View in einkaufItemLinearLayout.children){
-                val btnLoeschen:ImageButton = view.findViewById(R.id.buttonEinkaufItemLoeschen)
-                if (btnLoeschen == button){
-                    var id:Int = -1
-                    for (i in itemList.keys){
-                        if (itemList[i] == view){
-                            id = i
-                            break
-                        }
-                    }
-                    einkaufItemLinearLayout.removeView(view)
-                    itemList.remove(id)
-                    EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
+            var id: Int = -1
+            for (i in itemList.keys) {
+                if (itemList[i] == viewItem) {
+                    id = i
+                    break
                 }
             }
+            einkaufItemLinearLayout.removeView(viewItem)
+            itemList.remove(id)
+            EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
         }
         return viewItem
     }
