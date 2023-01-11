@@ -88,8 +88,8 @@
                             android:layout_marginEnd="5dp"
                             android:fontFamily="sans-serif-black"
                             android:hint="@string/main_wgname"
+                            android:maxLength="19"
                             android:inputType="text"
-                            android:maxLines="5"
                             android:minHeight="48dp"
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
@@ -99,16 +99,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <TextView
-                        android:id="@+id/textView_error"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-black"
-                        android:text=""
-                        android:textAlignment="center"
-                        android:textColor="@color/errorRed"
-                        android:textSize="15sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
