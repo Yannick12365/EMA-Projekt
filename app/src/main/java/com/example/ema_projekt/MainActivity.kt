@@ -12,6 +12,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.ema_projekt.wgplaner.LoginData
+import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.example.ema_projekt.wgplaner.WGPlanerActivity
 import com.google.firebase.database.*
 
@@ -35,11 +37,19 @@ class MainActivity : AppCompatActivity() {
         editTextName = findViewById(R.id.wgnameinput)
         editTextToken = findViewById(R.id.wgtokeninput)
 
+        existingLogin()
+
         loginbutton.setOnClickListener {
+            val wgName:String = editTextName.text.toString()
+            val wgToken:String = editTextToken.text.toString()
+
             database.addListenerForSingleValueEvent(object : ValueEventListener{
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.hasChild(editTextName.text.toString())){
-                        if (dataSnapshot.child(editTextName.text.toString()).child("token").value.toString() == editTextToken.text.toString()){
+                    if (dataSnapshot.hasChild(wgName)){
+                        if (dataSnapshot.child(wgName).child("token").value.toString() == wgToken){
+                            editTextName.setText("")
+                            editTextToken.setText("")
+                            LoginDataSettingsJSON().writeLoginDataJSON(LoginData(wgName, wgToken),applicationContext)
                             startActivity(Intent(this@MainActivity, WGPlanerActivity::class.java))
                         } else {
                             Toast.makeText(applicationContext, "Angegebener Token ist falsch!",
@@ -126,5 +136,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         popup.show()
+    }
+
+    private fun existingLogin(){
+        val loginData = LoginDataSettingsJSON().readLoginDataJSON(applicationContext)
+        if (loginData.wgName.isNotEmpty() && loginData.wgToken.isNotEmpty()){
+            startActivity(Intent(this, WGPlanerActivity::class.java))
+        }
     }
 }

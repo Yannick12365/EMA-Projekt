@@ -34,7 +34,7 @@
                 android:textStyle="bold" />
 
             <ImageButton
-                android:id="@+id/imageButton1"
+                android:id="@+id/imageButtonProfil"
                 android:layout_marginStart="30dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

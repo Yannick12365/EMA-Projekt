@@ -20,6 +20,7 @@ class WGPlanerActivity : AppCompatActivity() {
     private lateinit var einkaufsliste:ImageButton
     private lateinit var hottopics:ImageButton
     private lateinit var schuldenradar:ImageButton
+    private lateinit var profilButton:ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,7 @@ class WGPlanerActivity : AppCompatActivity() {
         einkaufsliste = findViewById(R.id.imageButton5)
         hottopics = findViewById(R.id.imageButton6)
         schuldenradar = findViewById(R.id.imageButton7)
+        profilButton = findViewById(R.id.imageButtonProfil)
 
         vorratskammer.setOnClickListener{
             vorratskammer.setBackgroundResource(R.drawable.vorratskammerklick)
@@ -61,6 +63,11 @@ class WGPlanerActivity : AppCompatActivity() {
         schuldenradar.setOnClickListener{
             schuldenradar.setBackgroundResource(R.drawable.schuldenradarklick)
             startActivity(Intent(this, Schuldenradar::class.java))
+        }
+
+        profilButton.setOnClickListener {
+            LoginDataSettingsJSON().writeLoginDataJSON(LoginData("",""),applicationContext)
+            finish()
         }
     }
 
