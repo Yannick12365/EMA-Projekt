@@ -6,17 +6,14 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.ema_projekt.kalender.KalenderActivity
 import com.example.ema_projekt.wgplaner.WGPlanerActivity
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.childEvents
 
 
 //https://youtu.be/kMEkP6f9_kE
