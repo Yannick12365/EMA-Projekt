@@ -43,4 +43,16 @@ class LoginDataSettingsJSON() {
             return LoginData("","")
         }
     }
+
+    fun removeLoginDataJSON(context:Context) {
+        val file = FileWriter("/data/data/" + context.packageName + "/" + "settings.json")
+
+        val objJson = JSONObject()
+        objJson.put("wgName", "")
+        objJson.put("wgToken", "")
+
+        file.write(objJson.toString())
+        file.flush()
+        file.close()
+    }
 }
