@@ -10,8 +10,8 @@ import com.example.ema_projekt.einkaufsliste.EinkaufslisteActivity
 import com.example.ema_projekt.hottopics.HotTopics
 import com.example.ema_projekt.kalender.KalenderActivity
 import com.example.ema_projekt.putzplan.Putzplan
-import com.example.ema_projekt.schuldenradar.Schuldenradar
 import com.example.ema_projekt.vorratskammer.Vorratskammer
+import com.example.ema_projekt.wginfo.WGInfoActivity
 
 class WGPlanerActivity : AppCompatActivity() {
     private lateinit var vorratskammer:ImageButton
@@ -19,8 +19,7 @@ class WGPlanerActivity : AppCompatActivity() {
     private lateinit var putzplan:ImageButton
     private lateinit var einkaufsliste:ImageButton
     private lateinit var hottopics:ImageButton
-    private lateinit var schuldenradar:ImageButton
-    private lateinit var profilButton:ImageButton
+    private lateinit var wgInfo: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +31,7 @@ class WGPlanerActivity : AppCompatActivity() {
         putzplan = findViewById(R.id.imageButton4)
         einkaufsliste = findViewById(R.id.imageButton5)
         hottopics = findViewById(R.id.imageButton6)
-        schuldenradar = findViewById(R.id.imageButton7)
-        profilButton = findViewById(R.id.imageButtonProfil)
+        wgInfo = findViewById(R.id.imageButton7)
 
         vorratskammer.setOnClickListener{
             vorratskammer.setBackgroundResource(R.drawable.vorratskammerklick)
@@ -60,14 +58,9 @@ class WGPlanerActivity : AppCompatActivity() {
             startActivity(Intent(this, HotTopics::class.java))
         }
 
-        schuldenradar.setOnClickListener{
-            schuldenradar.setBackgroundResource(R.drawable.schuldenradarklick)
-            startActivity(Intent(this, Schuldenradar::class.java))
-        }
-
-        profilButton.setOnClickListener {
-            LoginDataSettingsJSON().writeLoginDataJSON(LoginData("",""),applicationContext)
-            finish()
+        wgInfo.setOnClickListener {
+            wgInfo.setBackgroundResource(R.drawable.wginfoklick)
+            startActivity(Intent(this, WGInfoActivity::class.java))
         }
     }
 
@@ -78,6 +71,6 @@ class WGPlanerActivity : AppCompatActivity() {
         putzplan.setBackgroundResource(R.drawable.putzplan)
         einkaufsliste.setBackgroundResource(R.drawable.einkaufsliste)
         hottopics.setBackgroundResource(R.drawable.hottopics)
-        schuldenradar.setBackgroundResource(R.drawable.schuldenradar)
+        wgInfo.setBackgroundResource(R.drawable.wginfo)
     }
 }

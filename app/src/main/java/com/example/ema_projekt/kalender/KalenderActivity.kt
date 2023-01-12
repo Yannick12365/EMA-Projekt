@@ -48,7 +48,7 @@ class KalenderActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_kalender)
 
-        zurueck = findViewById(R.id.imageButton_einkauf_zurueck)
+        zurueck = findViewById(R.id.imageButton_kalender_zurueck)
         eintragErstellen = findViewById(R.id.button_erstellen)
         gridLayout = findViewById(R.id.dayGrid)
         textViewMonth = findViewById(R.id.textViewShowMonth)

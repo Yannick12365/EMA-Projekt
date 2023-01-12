@@ -3,6 +3,8 @@
     <string name="abbrechen">Abbrechen</string>
     <string name="bestaetigen">Bestätigen</string>
     <string name="loeschen">Löschen</string>
+    <string name="hinzufuegen">Hinzufügen</string>
+    <string name="bearbeiten">Bearbeiten</string>
 
     <string name="einkaufsliste">Einkaufsliste</string>
     <string name="einkaufsliste_editText_hint">Einkauf Produkt</string>
@@ -27,4 +29,8 @@
     <string name="main_einloggen">Einloggen</string>
     <string name="main_wgerstellen_text">Noch keine WG erstellt ?</string>
     <string name="main_wgerstellen">WG Erstellen</string>
+
+    <string name="wg_info">WG Info</string>
+    <string name="wg_info_verlassen">WG verlassen</string>
+    <string name="wg_info_text">WG Info Text</string>
 </resources>
