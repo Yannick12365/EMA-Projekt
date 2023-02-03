@@ -34,7 +34,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".hottopics.HotTopics"
+            android:name=".hottopics.HotTopicsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

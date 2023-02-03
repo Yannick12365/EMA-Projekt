@@ -25,7 +25,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/imageButton_kalender_zurueck"
+                android:id="@+id/imageButton_hot_topics_zurueck"
                 android:layout_marginEnd="60dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

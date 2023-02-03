@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.R
 import com.example.ema_projekt.einkaufsliste.EinkaufslisteActivity
-import com.example.ema_projekt.hottopics.HotTopics
+import com.example.ema_projekt.hottopics.HotTopicsActivity
 import com.example.ema_projekt.kalender.KalenderActivity
 import com.example.ema_projekt.putzplan.Putzplan
 import com.example.ema_projekt.vorratskammer.Vorratskammer
@@ -55,7 +55,7 @@ class WGPlanerActivity : AppCompatActivity() {
 
         hottopics.setOnClickListener{
             hottopics.setBackgroundResource(R.drawable.hottopicsklick)
-            startActivity(Intent(this, HotTopics::class.java))
+            startActivity(Intent(this, HotTopicsActivity::class.java))
         }
 
         wgInfo.setOnClickListener {

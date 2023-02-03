@@ -31,16 +31,16 @@
                 android:id="@+id/checkBoxEinkaufItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="20dp"
-                android:textSize="25sp"
-                android:fontFamily="sans-serif-medium"
+                android:layout_weight="1"
                 android:buttonTint="@color/purple_500"
-                android:text="" />
+                android:fontFamily="sans-serif-medium"
+                android:text=""
+                android:textSize="25sp" />
 
             <ImageButton
-                android:id="@+id/buttonEinkaufItemLoeschen"
+                android:id="@+id/hot_topic_loeschen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
