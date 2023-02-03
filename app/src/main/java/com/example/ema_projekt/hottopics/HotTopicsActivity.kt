@@ -11,7 +11,7 @@ import org.json.JSONArray
 
 class HotTopicsActivity : AppCompatActivity() {
     private lateinit var zurueck: ImageButton
-    private lateinit var hinzufuegen: ImageButton
+    private lateinit var hinzufuegen: Button
     private lateinit var input: EditText
     private lateinit var itemLayout: LinearLayout
 
