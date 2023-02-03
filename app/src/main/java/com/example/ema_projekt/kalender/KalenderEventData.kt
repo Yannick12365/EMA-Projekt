@@ -2,6 +2,9 @@ package com.example.ema_projekt.kalender
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
+import com.google.firebase.database.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
@@ -13,6 +16,48 @@ data class KalenderEventData(
     var text:String,
     val dateStr:String,
     var id:Int)
+
+class KalenderEventDatabase{
+    private val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
+    fun writeDatabase(data:KalenderEventData, context: Context){
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                database.child(wgName).child("Kalender").child(data.id.toString()).child("Day").setValue(data.day)
+                database.child(wgName).child("Kalender").child(data.id.toString()).child("Month").setValue(data.month)
+                database.child(wgName).child("Kalender").child(data.id.toString()).child("Year").setValue(data.year)
+                database.child(wgName).child("Kalender").child(data.id.toString()).child("Text").setValue(data.text)
+                database.child(wgName).child("Kalender").child(data.id.toString()).child("DateStr").setValue(data.dateStr)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, "Ups, da ist etwas schief gelaufen!",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun deleteDatabaseItem(id: Int, context: Context) {
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).child("Kalender").child(id.toString()).removeValue()
+    }
+
+    fun removeOneYearOldEvents(day: Int, month: Int, year: Int ,context: Context){
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.hasChild("Kalender")) {
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, "Ups, da ist etwas schief gelaufen!",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+}
 
 class  KalenderEventJSON{
     fun writeJSON(data: KalenderEventData, context: Context) {

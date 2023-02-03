@@ -12,6 +12,9 @@ import com.example.ema_projekt.R
 import com.example.ema_projekt.wgplaner.LoginData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 
@@ -44,19 +47,10 @@ class WGInfoActivity : AppCompatActivity() {
         textViewToken.text = "WG Token = " + LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgToken
 
         //textViewwginfo.text = WGInfoJSON().readJSON(applicationContext)
-        val wgName = LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgName
-        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.hasChild("WGInfo")) {
-                    textViewwginfo.text = snapshot.child("WGInfo").value.toString()
-                }
-            }
+        GlobalScope.launch(Dispatchers.Main) {
+            textViewwginfo.text = WGInfoJSON().readDatabase(applicationContext)
+        }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(applicationContext, "Ups, da ist etwas schief gelaufen!",
-                    Toast.LENGTH_SHORT).show()
-            }
-        })
 
         wgverlassenButton.setOnClickListener {
             LoginDataSettingsJSON().writeLoginDataJSON(LoginData("", ""), applicationContext)

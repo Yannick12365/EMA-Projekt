@@ -11,6 +11,9 @@ import androidx.core.view.size
 import com.example.ema_projekt.R
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 
 class EinkaufslisteActivity : AppCompatActivity() {
@@ -34,31 +37,21 @@ class EinkaufslisteActivity : AppCompatActivity() {
         editText = findViewById(R.id.editText)
 
         //val t = EinkauflisteDataBase().readDatabase(applicationContext)
+        GlobalScope.launch(Dispatchers.Main) {
+            val list = EinkauflisteDataBase().readDatabase(applicationContext)
+            for(data in list){
+                val id = data.itemId
+                val text = data.itemText
 
-        val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
-
-        val wgName = LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgName
-        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.hasChild("Einkaufsliste")) {
-                    for (data in snapshot.child("Einkaufsliste").children) {
-                        val id = data.key
-                        val text = data.value.toString()
-
-                        if (id != null) {
-                            val viewItem = createEinkaufItem(text)
-                            itemList[id.toInt()] = viewItem
-                            einkaufItemLinearLayout.addView(viewItem)
-                        }
-                    }
+                if (id != null) {
+                    val viewItem = createEinkaufItem(text)
+                    itemList[id.toInt()] = viewItem
+                    einkaufItemLinearLayout.addView(viewItem)
                 }
             }
+        }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(applicationContext, "Ups, da ist etwas schief gelaufen!",
-                    Toast.LENGTH_SHORT).show()
-            }
-        })
+
 
         //createExistingItems()
 

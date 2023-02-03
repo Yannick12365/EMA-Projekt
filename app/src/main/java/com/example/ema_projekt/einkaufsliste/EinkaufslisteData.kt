@@ -8,6 +8,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
 import java.util.concurrent.CountDownLatch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 data class EinkaufslisteData(
@@ -34,6 +36,30 @@ class EinkauflisteDataBase {
                 ).show()
             }
         })
+    }
+
+    suspend fun readDatabase(context: Context):List<EinkaufslisteData>{
+        return suspendCoroutine { value ->
+            val list = mutableListOf<EinkaufslisteData>()
+            val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+            database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.hasChild("Einkaufsliste")) {
+                        for (data in snapshot.child("Einkaufsliste").children) {
+                            list.add(EinkaufslisteData(data.key?.toInt(), data.value.toString()))
+                        }
+                        value.resume(list)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        context, "Ups, da ist etwas schief gelaufen!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+        }
     }
 
     fun deleteDatabaseItem(id: Int, context: Context) {
