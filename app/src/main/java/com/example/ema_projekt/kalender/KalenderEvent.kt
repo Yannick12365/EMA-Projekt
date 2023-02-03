@@ -35,13 +35,8 @@ class KalenderEvent {
         return false
     }
 
-    fun fillEventList(array:JSONArray){
-        events.clear()
-        for (i in 0 until array.length()) {
-            val event = array.getJSONObject(i)
-            val eventData = KalenderEventData(event.getInt("day"),event.getInt("month"),event.getInt("year"),event.getString("text"),event.getString("datestr"),event.getInt("id"))
-            events.add(eventData)
-        }
+    fun fillEventList(list:List<KalenderEventData>){
+        events = list as ArrayList<KalenderEventData>
     }
 
     fun deleteEventFromList(id:Int){

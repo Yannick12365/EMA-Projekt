@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.example.ema_projekt.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.util.*
@@ -67,10 +70,6 @@ class KalenderActivity : AppCompatActivity() {
         aktuellerMonat = monthShow
         aktuellesJahr = yearShow
 
-        KalenderEventDatabase().removeOneYearOldEvents(1,1,1,applicationContext)
-        //KalenderEventJSON().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr, applicationContext)
-        //KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
-
         createCalenderDays()
 
         val tagStart = YearMonth.of( yearShow , monthShow ).atDay(1).dayOfWeek.value-1
@@ -80,7 +79,13 @@ class KalenderActivity : AppCompatActivity() {
 
         textViewMonth.text = getMonthByInt(monthShow) + yearShow
 
-        markEvents()
+        GlobalScope.launch(Dispatchers.Main) {
+            KalenderEventDatabase().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr,applicationContext)
+            KalenderEvent().fillEventList(KalenderEventDatabase().readDatabase(applicationContext))
+            markEvents()
+        }
+        //KalenderEventJSON().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr, applicationContext)
+        //KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
 
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)
@@ -272,6 +277,7 @@ class KalenderActivity : AppCompatActivity() {
         bestaetigen.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
+                KalenderEventDatabase().editDatabaseEvent(event,applicationContext)
                 //KalenderEventJSON().editJSONItem(event, applicationContext)
                 eventPopUp.dismiss()
                 eventPopUpShow.dismiss()
