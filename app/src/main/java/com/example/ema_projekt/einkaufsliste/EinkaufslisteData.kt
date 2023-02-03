@@ -15,91 +15,95 @@ data class EinkaufslisteData(
     var itemText: String,
 )
 
-class EinkauflisteDataBase{
-    private val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
+class EinkauflisteDataBase {
+    private val database: DatabaseReference =
+        FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
 
-    fun writeDatabase(data: EinkaufslisteData, context: Context){
+    fun writeDatabase(data: EinkaufslisteData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
-        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener{
+        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.hasChild(wgName)) {
-                    database.child(wgName).child("Einkaufsliste")
-                        .child(data.itemId.toString()).setValue(data.itemText)
-                }
+                database.child(wgName).child("Einkaufsliste")
+                    .child(data.itemId.toString()).setValue(data.itemText)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, "Ups, da ist etwas schief gelaufen!",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context, "Ups, da ist etwas schief gelaufen!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
 
-    fun readDatabase(context: Context) {
-
+    fun deleteDatabaseItem(id: Int, context: Context) {
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).child("Einkaufsliste").child(id.toString()).removeValue()
     }
 }
 
-class EinkaufslisteJSON() {
-    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
-    fun writeJSON(data: EinkaufslisteData, context: Context) {
-        val existingJson = readJSON(context)
-        val file = FileWriter("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
+    class EinkaufslisteJSON() {
+        //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+        fun writeJSON(data: EinkaufslisteData, context: Context) {
+            val existingJson = readJSON(context)
+            val file = FileWriter("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
 
-        val arrayJson = JSONArray()
+            val arrayJson = JSONArray()
 
-        for (i in 0 until existingJson.length()) {
-            arrayJson.put(existingJson[i])
-        }
-
-        val objJson = JSONObject()
-        objJson.put("itemId", data.itemId)
-        objJson.put("itemText", data.itemText)
-
-        arrayJson.put(objJson)
-        file.write(arrayJson.toString())
-        file.flush()
-        file.close()
-    }
-
-    //https://medium.com/@nayantala259/android-how-to-read-and-write-parse-data-from-json-file-226f821e957a
-    fun readJSON(context: Context): JSONArray {
-        val file = File("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
-        try {
-            val fileReader = FileReader(file)
-            val bufferedReader = BufferedReader(fileReader)
-            val stringBuilder = StringBuilder()
-            var line = bufferedReader.readLine()
-
-            while (line != null) {
-                stringBuilder.append(line).append("\n")
-                line = bufferedReader.readLine()
+            for (i in 0 until existingJson.length()) {
+                arrayJson.put(existingJson[i])
             }
-            bufferedReader.close()
 
-            return JSONArray(stringBuilder.toString())
-        } catch (e: FileNotFoundException) {
-            return JSONArray()
+            val objJson = JSONObject()
+            objJson.put("itemId", data.itemId)
+            objJson.put("itemText", data.itemText)
+
+            arrayJson.put(objJson)
+            file.write(arrayJson.toString())
+            file.flush()
+            file.close()
         }
-    }
 
-    fun deleteJSONItem(nr: Int, context: Context) {
-        val jsonArray = readJSON(context)
-        val newJSONArray = JSONArray()
+        //https://medium.com/@nayantala259/android-how-to-read-and-write-parse-data-from-json-file-226f821e957a
+        fun readJSON(context: Context): JSONArray {
+            val file = File("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
+            try {
+                val fileReader = FileReader(file)
+                val bufferedReader = BufferedReader(fileReader)
+                val stringBuilder = StringBuilder()
+                var line = bufferedReader.readLine()
 
-        for (i in 0 until jsonArray.length()) {
-            if (jsonArray.getJSONObject(i).get("itemId") != nr){
-                val objJson = JSONObject()
-                objJson.put("itemId", jsonArray.getJSONObject(i).get("itemId"));
-                objJson.put("itemText", jsonArray.getJSONObject(i).get("itemText"));
+                while (line != null) {
+                    stringBuilder.append(line).append("\n")
+                    line = bufferedReader.readLine()
+                }
+                bufferedReader.close()
 
-                newJSONArray.put(objJson)
+                return JSONArray(stringBuilder.toString())
+            } catch (e: FileNotFoundException) {
+                return JSONArray()
             }
         }
-        val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
 
-        fileWrite.write(newJSONArray.toString())
-        fileWrite.flush()
-        fileWrite.close()
+
+        fun deleteJSONItem(nr: Int, context: Context) {
+            val jsonArray = readJSON(context)
+            val newJSONArray = JSONArray()
+
+            for (i in 0 until jsonArray.length()) {
+                if (jsonArray.getJSONObject(i).get("itemId") != nr) {
+                    val objJson = JSONObject()
+                    objJson.put("itemId", jsonArray.getJSONObject(i).get("itemId"));
+                    objJson.put("itemText", jsonArray.getJSONObject(i).get("itemText"));
+
+                    newJSONArray.put(objJson)
+                }
+            }
+            val fileWrite =
+                FileWriter("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
+
+            fileWrite.write(newJSONArray.toString())
+            fileWrite.flush()
+            fileWrite.close()
+        }
     }
-}

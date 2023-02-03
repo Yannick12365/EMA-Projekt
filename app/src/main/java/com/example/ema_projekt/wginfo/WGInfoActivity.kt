@@ -5,17 +5,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ema_projekt.MainActivity
 import com.example.ema_projekt.R
 import com.example.ema_projekt.wgplaner.LoginData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import org.json.JSONObject
 
 
@@ -48,6 +44,19 @@ class WGInfoActivity : AppCompatActivity() {
         textViewToken.text = "WG Token = " + LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgToken
 
         //textViewwginfo.text = WGInfoJSON().readJSON(applicationContext)
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgName
+        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.hasChild("WGInfo")) {
+                    textViewwginfo.text = snapshot.child("WGInfo").value.toString()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(applicationContext, "Ups, da ist etwas schief gelaufen!",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
 
         wgverlassenButton.setOnClickListener {
             LoginDataSettingsJSON().writeLoginDataJSON(LoginData("", ""), applicationContext)
@@ -90,6 +99,7 @@ class WGInfoActivity : AppCompatActivity() {
         bestaetigen.setOnClickListener {
             textViewwginfo.text = editText.text
             //WGInfoJSON().writeJSON(editText.text.toString(),applicationContext)
+            WGInfoJSON().writeDatabase(editText.text.toString(),applicationContext)
             popup.dismiss()
         }
 

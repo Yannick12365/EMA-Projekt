@@ -7,6 +7,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
+import androidx.core.view.size
 import com.example.ema_projekt.R
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.*
@@ -84,7 +85,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
 
         einkaufbeenden.setOnClickListener {
             var counter = 0
-            for (view:View in einkaufItemLinearLayout.children) {
+            for (view:View in einkaufItemLinearLayout.children.toList()) {
                 val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItem)
                 if (checkbox.isChecked) {
                     counter += 1
@@ -97,7 +98,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                     }
                     einkaufItemLinearLayout.removeView(view)
                     itemList.remove(id)
-                    //EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
+                    EinkauflisteDataBase().deleteDatabaseItem(id,applicationContext)
                 }
             }
             if (counter == 0){
@@ -133,6 +134,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
             }
             einkaufItemLinearLayout.removeView(viewItem)
             itemList.remove(id)
+            EinkauflisteDataBase().deleteDatabaseItem(id, applicationContext)
             //EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
         }
         return viewItem

@@ -1,12 +1,35 @@
 package com.example.ema_projekt.wginfo
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import com.example.ema_projekt.einkaufsliste.EinkaufslisteData
 import com.example.ema_projekt.wgplaner.LoginData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
+import com.google.firebase.database.*
 import org.json.JSONObject
 import java.io.*
 
 class WGInfoJSON {
+    private val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
+
+    fun writeDatabase(text: String, context: Context){
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                database.child(wgName).child("WGInfo").setValue(text)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("DEBUG", error.message)
+                Toast.makeText(context, "Ups, da ist etwas schief gelaufen!",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+
     fun writeJSON(text:String, context: Context) {
         val objJson = JSONObject()
         val loginData = LoginDataSettingsJSON().readLoginDataJSON(context)
