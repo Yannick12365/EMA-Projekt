@@ -1,16 +1,44 @@
 package com.example.ema_projekt.einkaufsliste
 
 import android.content.Context
-import android.util.Log
+import android.widget.Toast
+import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
+import com.google.firebase.database.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
+import java.util.concurrent.CountDownLatch
 
 
 data class EinkaufslisteData(
-    var itemId: Int,
+    var itemId: Int?,
     var itemText: String,
 )
+
+class EinkauflisteDataBase{
+    private val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
+
+    fun writeDatabase(data: EinkaufslisteData, context: Context){
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.hasChild(wgName)) {
+                    database.child(wgName).child("Einkaufsliste")
+                        .child(data.itemId.toString()).setValue(data.itemText)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, "Ups, da ist etwas schief gelaufen!",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun readDatabase(context: Context) {
+
+    }
+}
 
 class EinkaufslisteJSON() {
     //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android

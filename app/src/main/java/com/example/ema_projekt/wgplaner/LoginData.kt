@@ -17,7 +17,7 @@ class LoginDataSettingsJSON() {
         val objJson = JSONObject()
         objJson.put("wgName", data.wgName)
         objJson.put("wgToken", data.wgToken)
-        objJson.put("wgInfo", "")
+        //objJson.put("wgInfo", "")
 
         file.write(objJson.toString())
         file.flush()

@@ -21,6 +21,10 @@ import com.google.firebase.database.*
 //https://youtu.be/kMEkP6f9_kE
 
 
+//Offline
+//https://youtu.be/Et8njU58OTs
+
+
 class MainActivity : AppCompatActivity() {
     val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
 
@@ -34,38 +38,47 @@ class MainActivity : AppCompatActivity() {
 
         val loginbutton:Button = findViewById(R.id.button_einloggen)
         val erstellenTextview:TextView = findViewById(R.id.textView_wgerstellen)
+
         editTextName = findViewById(R.id.wgnameinput)
         editTextToken = findViewById(R.id.wgtokeninput)
 
         existingLogin()
 
         loginbutton.setOnClickListener {
-            val wgName:String = editTextName.text.toString()
-            val wgToken:String = editTextToken.text.toString()
+            var wgName: String = editTextName.text.toString()
+            var wgToken: String = editTextToken.text.toString()
 
-            database.addListenerForSingleValueEvent(object : ValueEventListener{
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.hasChild(wgName)){
-                        if (dataSnapshot.child(wgName).child("token").value.toString() == wgToken){
-                            editTextName.setText("")
-                            editTextToken.setText("")
-                            LoginDataSettingsJSON().writeLoginDataJSON(LoginData(wgName, wgToken),applicationContext)
-                            startActivity(Intent(this@MainActivity, WGPlanerActivity::class.java))
+            wgName = wgName.replace(" ","")
+            wgToken = wgToken.replace(" ","")
+
+            if (editTextName.text.isNotEmpty() && editTextToken.text.isNotEmpty()) {
+                database.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.hasChild(wgName)) {
+                            if (dataSnapshot.child(wgName).child("token").value.toString() == wgToken) {
+                                editTextName.setText("")
+                                editTextToken.setText("")
+                                LoginDataSettingsJSON().writeLoginDataJSON(LoginData(wgName,
+                                    wgToken),
+                                    applicationContext)
+                                startActivity(Intent(this@MainActivity,
+                                    WGPlanerActivity::class.java))
+                            } else {
+                                Toast.makeText(applicationContext, "Angegebener Token ist falsch!",
+                                    Toast.LENGTH_SHORT).show()
+                            }
                         } else {
-                            Toast.makeText(applicationContext, "Angegebener Token ist falsch!",
+                            Toast.makeText(applicationContext, "Diese WG existiert nicht!",
                                 Toast.LENGTH_SHORT).show()
                         }
-                    } else {
-                        Toast.makeText(applicationContext, "Diese WG existiert nicht!",
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(applicationContext, "Ups, da ist etwas schief gelaufen!",
                             Toast.LENGTH_SHORT).show()
                     }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(applicationContext, "Ups, da ist etwas schief gelaufen!",
-                        Toast.LENGTH_SHORT).show()
-                }
-            })
+                })
+            }
         }
 
         erstellenTextview.setOnClickListener {
@@ -107,16 +120,14 @@ class MainActivity : AppCompatActivity() {
                                     token += zeichen.random()
                                 }
                                 database.child(wgname).child("token").setValue(token)
-                                Toast.makeText(applicationContext,
-                                    "WG erfolgreich erstellt!",
+                                Toast.makeText(applicationContext, "WG erfolgreich erstellt!",
                                     Toast.LENGTH_SHORT).show()
 
                                 editTextName.setText(wgname)
                                 editTextToken.setText(token)
                                 popup.dismiss()
                             } else {
-                                Toast.makeText(applicationContext,
-                                    "Der angegebene WG Name existiert schon!",
+                                Toast.makeText(applicationContext, "Der angegebene WG Name existiert schon!",
                                     Toast.LENGTH_SHORT).show()
                             }
                         }

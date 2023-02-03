@@ -14,6 +14,8 @@ import com.example.ema_projekt.MainActivity
 import com.example.ema_projekt.R
 import com.example.ema_projekt.wgplaner.LoginData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import org.json.JSONObject
 
 
@@ -24,6 +26,8 @@ class WGInfoActivity : AppCompatActivity() {
     private lateinit var textViewwginfo:TextView
     private lateinit var buttonhinzufuegen:Button
     private lateinit var buttonbearbeiten:Button
+
+    val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +47,7 @@ class WGInfoActivity : AppCompatActivity() {
 
         textViewToken.text = "WG Token = " + LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgToken
 
-        textViewwginfo.text = WGInfoJSON().readJSON(applicationContext)
+        //textViewwginfo.text = WGInfoJSON().readJSON(applicationContext)
 
         wgverlassenButton.setOnClickListener {
             LoginDataSettingsJSON().writeLoginDataJSON(LoginData("", ""), applicationContext)
@@ -85,7 +89,7 @@ class WGInfoActivity : AppCompatActivity() {
 
         bestaetigen.setOnClickListener {
             textViewwginfo.text = editText.text
-            WGInfoJSON().writeJSON(editText.text.toString(),applicationContext)
+            //WGInfoJSON().writeJSON(editText.text.toString(),applicationContext)
             popup.dismiss()
         }
 

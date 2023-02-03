@@ -68,8 +68,8 @@ class KalenderActivity : AppCompatActivity() {
         aktuellerMonat = monthShow
         aktuellesJahr = yearShow
 
-        KalenderEventJSON().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr, applicationContext)
-        KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
+        //KalenderEventJSON().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr, applicationContext)
+        //KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
 
         createCalenderDays()
 
@@ -173,7 +173,7 @@ class KalenderActivity : AppCompatActivity() {
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
                 KalenderEvent().addEvents(event)
-                KalenderEventJSON().writeJSON(event, applicationContext)
+                //KalenderEventJSON().writeJSON(event, applicationContext)
                 markEvents()
                 eventPopUp.dismiss()
             } else{
@@ -260,7 +260,7 @@ class KalenderActivity : AppCompatActivity() {
                 }
             }
 
-            KalenderEventJSON().deleteJSONItem(event.id,applicationContext)
+            //KalenderEventJSON().deleteJSONItem(event.id,applicationContext)
             KalenderEvent().deleteEventFromList(event.id)
 
             eventPopUp.dismiss()
@@ -270,7 +270,7 @@ class KalenderActivity : AppCompatActivity() {
         bestaetigen.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
-                KalenderEventJSON().editJSONItem(event, applicationContext)
+                //KalenderEventJSON().editJSONItem(event, applicationContext)
                 eventPopUp.dismiss()
                 eventPopUpShow.dismiss()
             }else{

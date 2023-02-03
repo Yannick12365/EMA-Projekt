@@ -1,12 +1,15 @@
 package com.example.ema_projekt.einkaufsliste
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
 import com.example.ema_projekt.R
+import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
+import com.google.firebase.database.*
 import org.json.JSONArray
 
 class EinkaufslisteActivity : AppCompatActivity() {
@@ -29,7 +32,34 @@ class EinkaufslisteActivity : AppCompatActivity() {
         einkaufItemLinearLayout = findViewById(R.id.einkaufItemLayout)
         editText = findViewById(R.id.editText)
 
-        createExistingItems()
+        //val t = EinkauflisteDataBase().readDatabase(applicationContext)
+
+        val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
+
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgName
+        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.hasChild("Einkaufsliste")) {
+                    for (data in snapshot.child("Einkaufsliste").children) {
+                        val id = data.key
+                        val text = data.value.toString()
+
+                        if (id != null) {
+                            val viewItem = createEinkaufItem(text)
+                            itemList[id.toInt()] = viewItem
+                            einkaufItemLinearLayout.addView(viewItem)
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(applicationContext, "Ups, da ist etwas schief gelaufen!",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        //createExistingItems()
 
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)
@@ -44,7 +74,8 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 itemList[id] = itemView
                 einkaufItemLinearLayout.addView(itemView)
 
-                EinkaufslisteJSON().writeJSON(EinkaufslisteData(id, editText.text.toString()),applicationContext)
+                EinkauflisteDataBase().writeDatabase(EinkaufslisteData(id, editText.text.toString()),applicationContext)
+                //EinkaufslisteJSON().writeJSON(EinkaufslisteData(id, editText.text.toString()),applicationContext)
                 editText.setText("")
             } else{
                 Toast.makeText(applicationContext, "Gebe einen Text ein!", Toast.LENGTH_SHORT).show()
@@ -66,7 +97,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                     }
                     einkaufItemLinearLayout.removeView(view)
                     itemList.remove(id)
-                    EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
+                    //EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
                 }
             }
             if (counter == 0){
@@ -102,7 +133,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
             }
             einkaufItemLinearLayout.removeView(viewItem)
             itemList.remove(id)
-            EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
+            //EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
         }
         return viewItem
     }
