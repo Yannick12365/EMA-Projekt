@@ -37,4 +37,15 @@
     <string name="wg_info">WG Info</string>
     <string name="wg_info_verlassen">WG verlassen</string>
     <string name="wg_info_text">WG Info Text</string>
+    <string-array name="putzplan_spinner_strings">
+        <item>Montags</item>
+        <item>Dienstags</item>
+        <item>Mittwochs</item>
+        <item>Donnerstags</item>
+        <item>Freitags</item>
+        <item>Samstags</item>
+        <item>Sonntags</item>
+        <item>Zweiwöchig</item>
+        <item>Monatlich</item>
+    </string-array>
 </resources>
