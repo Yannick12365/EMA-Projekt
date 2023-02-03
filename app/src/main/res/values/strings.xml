@@ -24,6 +24,10 @@
     <string name="kalender_event_erstellen_popup">+ Event"</string>
     <string name="kalender_event">Event</string>
 
+    <string name="hot_topics">Hot Topics</string>
+    <string name="hot_topics_text_placeholder">Was steht an?</string>
+    <string name="hot_topics_input_button">Hot Topic hinzufügen</string>
+
     <string name="main_wgname">WG Name</string>
     <string name="main_wgtoken">WG Token</string>
     <string name="main_einloggen">Einloggen</string>

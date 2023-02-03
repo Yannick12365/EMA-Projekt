@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
@@ -48,7 +47,7 @@ class KalenderActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_kalender)
 
-        zurueck = findViewById(R.id.imageButton_kalender_zurueck)
+        zurueck = findViewById(R.id.imageButton_hot_topics_zurueck)
         eintragErstellen = findViewById(R.id.button_erstellen)
         gridLayout = findViewById(R.id.dayGrid)
         textViewMonth = findViewById(R.id.textViewShowMonth)
