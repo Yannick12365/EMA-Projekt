@@ -20,6 +20,7 @@ class Vorratskammer : AppCompatActivity() {
 
     private lateinit var erstellen: FloatingActionButton
     private lateinit var layout:LinearLayout
+    private lateinit var zurueck:ImageButton
 
     private val itemList = mutableListOf<Int>()
 
@@ -28,11 +29,17 @@ class Vorratskammer : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vorratskammer)
 
+        zurueck = findViewById(R.id.imageButton_vorratskammer_zurueck)
         layout = findViewById(R.id.vorratskammerItemLayout)
         erstellen = findViewById(R.id.add_vorratskammer_new_item)
 
         erstellen.setOnClickListener{
            showEventAddPopUp()
+        }
+
+        zurueck.setOnClickListener {
+            zurueck.setBackgroundResource(R.drawable.zurueckklick)
+            this.finish()
         }
 
         GlobalScope.launch(Dispatchers.Main){

@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
@@ -13,7 +15,8 @@ import com.example.ema_projekt.R
 class Putzplan : AppCompatActivity() {
 
     private lateinit var erstellen: com.google.android.material.floatingactionbutton.FloatingActionButton;
-    private lateinit var layout:LinearLayout
+    private lateinit var layout: LinearLayout
+    private lateinit var zurueck:ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,39 +24,47 @@ class Putzplan : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_putzplan)
 
+        zurueck = findViewById(R.id.imageButton_putzplan_zurueck)
         layout = findViewById(R.id.putzplan_layout)
         erstellen = findViewById(R.id.putzplan_add)
 
-        erstellen.setOnClickListener{
-            showEventAddPopUp()
+        erstellen.setOnClickListener {
+            showEventAddPopUpPerson()
+        }
+
+        zurueck.setOnClickListener {
+            zurueck.setBackgroundResource(R.drawable.zurueckklick)
+            this.finish()
         }
 
     }
 
-    private fun showEventAddPopUp(){
-        val eventPopUp = Dialog(this)
+    private fun showEventAddPopUpPerson() {
+        val eventPopUpPerson1 = Dialog(this)
 
 
-        eventPopUp.setContentView(R.layout.popup_vorratskammer_add)
-        eventPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        eventPopUpPerson1.setContentView(R.layout.popup_putzplan_neue_person)
+        eventPopUpPerson1.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
-
-        val abbrechen: Button = eventPopUp.findViewById(R.id.button_vorratskammer_abbrechen)
-        val hinzufuegen: Button = eventPopUp.findViewById(R.id.button_vorratskammer_hinzufuegen)
-        val eventText: EditText = eventPopUp.findViewById(R.id.editText_Neuer_Eintrag)
+        val abbrechen: Button = eventPopUpPerson1.findViewById(R.id.button_vorratskammer_abbrechen)
+        val hinzufuegen: Button =
+            eventPopUpPerson1.findViewById(R.id.button_vorratskammer_hinzufuegen)
+        val eventText: EditText = eventPopUpPerson1.findViewById(R.id.editText_Neuer_Eintrag)
 
 
         abbrechen.setOnClickListener {
-            eventPopUp.dismiss()
+            eventPopUpPerson1.dismiss()
         }
 
         hinzufuegen.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
-                val viewItem = View.inflate(this, R.layout.item_putzplan,null)
-                val textViewPerson:TextView = viewItem.findViewById(R.id.putzplan_person)
+                val viewItem = View.inflate(this, R.layout.item_putzplan, null)
+                val textViewPerson: TextView = viewItem.findViewById(R.id.putzplan_person)
                 textViewPerson.text = eventText.text
-                val spinner:Spinner = viewItem.findViewById(R.id.putzplan_spinner)      //from https://developer.android.com/develop/ui/views/components/spinner
+                val textViewAufgabe: TextView = viewItem.findViewById(R.id.putzplan_aufgabe)
+                val spinner: Spinner =
+                    viewItem.findViewById(R.id.putzplan_spinner)      //from https://developer.android.com/develop/ui/views/components/spinner
                 // Create an ArrayAdapter using the string array and a default spinner layout
                 ArrayAdapter.createFromResource(
                     this,
@@ -66,14 +77,21 @@ class Putzplan : AppCompatActivity() {
                     spinner.adapter = adapter
                 }
 
+                textViewAufgabe.setOnClickListener {
+                    showEventAddPopUpAufgabe(textViewAufgabe)
+
+                }
+
 
                 layout.addView(viewItem)
 
 
 
-                eventPopUp.dismiss()
-            } else{
-                val toast = Toast.makeText(applicationContext, "Gebe zuerst etwas ein!", Toast.LENGTH_SHORT)
+
+                eventPopUpPerson1.dismiss()
+            } else {
+                val toast =
+                    Toast.makeText(applicationContext, "Gebe zuerst etwas ein!", Toast.LENGTH_SHORT)
                 toast.show()
             }
         }
@@ -81,6 +99,43 @@ class Putzplan : AppCompatActivity() {
 
 
 
-        eventPopUp.show()
+        eventPopUpPerson1.show()
+    }
+
+    private fun showEventAddPopUpAufgabe(view: TextView){
+
+        val eventPopUpAufgabe = Dialog(this)
+
+        eventPopUpAufgabe.setContentView(R.layout.popup_putzplan_neue_aufgabe)
+        eventPopUpAufgabe.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val abbrechen: Button = eventPopUpAufgabe.findViewById(R.id.button_vorratskammer_abbrechen)
+        val hinzufuegen: Button =
+            eventPopUpAufgabe.findViewById(R.id.button_vorratskammer_hinzufuegen)
+        val eventText: EditText = eventPopUpAufgabe.findViewById(R.id.editText_Neuer_Eintrag)
+
+        abbrechen.setOnClickListener {
+            eventPopUpAufgabe.dismiss()
+        }
+
+        eventPopUpAufgabe.show()
+
+        hinzufuegen.setOnClickListener {
+            if (eventText.text.isNotEmpty()) {
+
+                view.text = eventText.text
+
+                eventPopUpAufgabe.dismiss()
+
+            } else {
+                val toast =
+                    Toast.makeText(applicationContext, "Gebe zuerst etwas ein!", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+
+
+        }
+
+
     }
 }

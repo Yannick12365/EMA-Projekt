@@ -7,6 +7,8 @@
     <string name="bearbeiten">Bearbeiten</string>
 
     <string name="einkaufsliste">Einkaufsliste</string>
+    <string name="vorratskammer">Vorratskammer</string>
+    <string name="putzplan">Putzplan</string>
     <string name="einkaufsliste_editText_hint">Einkauf Produkt</string>
     <string name="einkaufsliste_erstellen">Eintrag erstellen</string>
     <string name="einkaufsliste_beenden">Einkauf beenden</string>
@@ -45,6 +47,7 @@
         <item>Freitags</item>
         <item>Samstags</item>
         <item>Sonntags</item>
+        <item>Wöchentlich</item>
         <item>Zweiwöchig</item>
         <item>Monatlich</item>
     </string-array>
