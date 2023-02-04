@@ -40,7 +40,7 @@
                 android:textSize="25sp" />
 
             <ImageButton
-                android:id="@+id/hot_topic_loeschen"
+                android:id="@+id/einkaufItem_loeschen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"

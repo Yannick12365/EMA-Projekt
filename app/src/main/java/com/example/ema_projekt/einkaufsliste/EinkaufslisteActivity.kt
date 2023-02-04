@@ -116,7 +116,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
         val checkBox:CheckBox = viewItem.findViewById(R.id.checkBoxEinkaufItem)
         checkBox.text = text
 
-        val button:ImageButton = viewItem.findViewById(R.id.hot_topic_loeschen)
+        val button:ImageButton = viewItem.findViewById(R.id.einkaufItem_loeschen)
         button.setOnClickListener {
             var id: Int = -1
             for (i in itemList.keys) {
