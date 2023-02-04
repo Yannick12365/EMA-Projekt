@@ -13,7 +13,7 @@ import kotlin.coroutines.suspendCoroutine
 
 
 data class EinkaufslisteData(
-    var itemId: Int?,
+    var itemId: Int,
     var itemText: String,
 )
 
@@ -46,7 +46,7 @@ class EinkauflisteDataBase {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.hasChild("Einkaufsliste")) {
                         for (data in snapshot.child("Einkaufsliste").children) {
-                            list.add(EinkaufslisteData(data.key?.toInt(), data.value.toString()))
+                            list.add(EinkaufslisteData(data.key.toString().toInt(), data.value.toString()))
                         }
                         value.resume(list)
                     }
@@ -62,7 +62,7 @@ class EinkauflisteDataBase {
         }
     }
 
-    fun deleteDatabaseItem(id: Int, context: Context) {
+    fun deleteDatabaseItem(id: Int?, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("Einkaufsliste").child(id.toString()).removeValue()
     }

@@ -1,5 +1,8 @@
 package com.example.ema_projekt.einkaufsliste
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,6 +12,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
 import androidx.core.view.size
 import com.example.ema_projekt.R
+import com.example.ema_projekt.vorratskammer.Vorratskammer
+import com.example.ema_projekt.vorratskammer.VorratskammerData
+import com.example.ema_projekt.vorratskammer.VorratskammerDatabase
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +30,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private lateinit var editText:EditText
 
     private val itemList = mutableMapOf<Int,View>()
+    private var vorratList = mutableListOf<VorratskammerData>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,24 +43,18 @@ class EinkaufslisteActivity : AppCompatActivity() {
         einkaufItemLinearLayout = findViewById(R.id.einkaufItemLayout)
         editText = findViewById(R.id.editText)
 
-        //val t = EinkauflisteDataBase().readDatabase(applicationContext)
         GlobalScope.launch(Dispatchers.Main) {
             val list = EinkauflisteDataBase().readDatabase(applicationContext)
             for(data in list){
                 val id = data.itemId
                 val text = data.itemText
 
-                if (id != null) {
-                    val viewItem = createEinkaufItem(text)
-                    itemList[id.toInt()] = viewItem
-                    einkaufItemLinearLayout.addView(viewItem)
-                }
+                val viewItem = createEinkaufItem(text)
+                itemList[id] = viewItem
+                einkaufItemLinearLayout.addView(viewItem)
             }
+            vorratList = VorratskammerDatabase().readDatabase(applicationContext).toMutableList()
         }
-
-
-
-        //createExistingItems()
 
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)
@@ -69,7 +70,6 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 einkaufItemLinearLayout.addView(itemView)
 
                 EinkauflisteDataBase().writeDatabase(EinkaufslisteData(id, editText.text.toString()),applicationContext)
-                //EinkaufslisteJSON().writeJSON(EinkaufslisteData(id, editText.text.toString()),applicationContext)
                 editText.setText("")
             } else{
                 Toast.makeText(applicationContext, "Gebe einen Text ein!", Toast.LENGTH_SHORT).show()
@@ -78,6 +78,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
 
         einkaufbeenden.setOnClickListener {
             var counter = 0
+            val itemEingekauft = mutableListOf<EinkaufslisteData>()
             for (view:View in einkaufItemLinearLayout.children.toList()) {
                 val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItem)
                 if (checkbox.isChecked) {
@@ -89,26 +90,81 @@ class EinkaufslisteActivity : AppCompatActivity() {
                             break
                         }
                     }
-                    einkaufItemLinearLayout.removeView(view)
-                    itemList.remove(id)
-                    EinkauflisteDataBase().deleteDatabaseItem(id,applicationContext)
+                    itemEingekauft.add(EinkaufslisteData(id,checkbox.text.toString()))
                 }
             }
             if (counter == 0){
                 Toast.makeText(applicationContext, "Wähle zuerst die eingekauften Artikel aus, bevor du den Einkauf beendest!",
                     Toast.LENGTH_SHORT).show()
+            } else {
+                einkaufBeendenPopup(itemEingekauft)
             }
         }
     }
 
-    private fun createExistingItems(){
-        val jsonData: JSONArray = EinkaufslisteJSON().readJSON(applicationContext)
+    private fun einkaufBeendenPopup(items:List<EinkaufslisteData>){
+        val einkaufPopUp = Dialog(this)
 
-        for (i in 0 until jsonData.length()){
-            val viewItem = createEinkaufItem(jsonData.getJSONObject(i).get("itemText").toString())
-            itemList[jsonData.getJSONObject(i).get("itemId").toString().toInt()] = viewItem
-            einkaufItemLinearLayout.addView(viewItem)
+        einkaufPopUp.setContentView(R.layout.popup_einkaufbeendet)
+        einkaufPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val abbrechen: Button = einkaufPopUp.findViewById(R.id.button_einkaufbeenden_abbrechen)
+        val bestaetigen: Button = einkaufPopUp.findViewById(R.id.button_einkaufbeenden_bestaetigen)
+        val layoutEinkaufItems: LinearLayout = einkaufPopUp.findViewById(R.id.linearLayoutItems)
+        val zurueck: ImageButton = einkaufPopUp.findViewById(R.id.imageButton_einkaufbeenden_zurueck)
+
+        for (i in items){
+            val viewItem:View = View.inflate(this, R.layout.item_einkaufsliste_beendet,null)
+            val checkBox:CheckBox = viewItem.findViewById(R.id.checkBoxEinkaufItemBeendet)
+            checkBox.text = i.itemText
+
+            layoutEinkaufItems.addView(viewItem)
         }
+
+        abbrechen.setOnClickListener {
+            einkaufPopUp.dismiss()
+        }
+
+        bestaetigen.setOnClickListener{
+            for(i in items) {
+                itemList.remove(i.itemId)
+                EinkauflisteDataBase().deleteDatabaseItem(i.itemId, applicationContext)
+            }
+
+            for(view in layoutEinkaufItems.children.toList()){
+                val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItemBeendet)
+                if (checkbox.isChecked) {
+
+                    var newId = 0
+                    for (i in vorratList){
+                        if (i.id >= newId){
+                            newId = i.id+1
+                        }
+                    }
+                    val vorratItem = VorratskammerData(checkbox.text.toString(), newId)
+                    VorratskammerDatabase().writeDatabase(vorratItem,applicationContext)
+                    vorratList.add(vorratItem)
+                }
+            }
+
+            for (view:View in einkaufItemLinearLayout.children.toList()) {
+                for(view2:View in layoutEinkaufItems.children.toList()){
+                    val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItem)
+                    val checkbox2: CheckBox = view2.findViewById(R.id.checkBoxEinkaufItemBeendet)
+
+                    if (checkbox.text.toString() == checkbox2.text.toString()){
+                        einkaufItemLinearLayout.removeView(view)
+                    }
+                }
+            }
+            einkaufPopUp.dismiss()
+        }
+
+        zurueck.setOnClickListener {
+            einkaufPopUp.dismiss()
+        }
+
+        einkaufPopUp.show()
     }
 
     private fun createEinkaufItem(text: String):View{
@@ -128,7 +184,6 @@ class EinkaufslisteActivity : AppCompatActivity() {
             einkaufItemLinearLayout.removeView(viewItem)
             itemList.remove(id)
             EinkauflisteDataBase().deleteDatabaseItem(id, applicationContext)
-            //EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
         }
         return viewItem
     }
