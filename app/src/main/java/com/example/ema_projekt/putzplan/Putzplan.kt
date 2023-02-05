@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.view.menu.MenuView.ItemView
 import com.example.ema_projekt.R
 
 class Putzplan : AppCompatActivity() {
@@ -82,6 +83,10 @@ class Putzplan : AppCompatActivity() {
 
                 }
 
+                textViewPerson.setOnClickListener{
+                    showEventAddPopUpLoeschen(viewItem)
+                }
+
 
                 layout.addView(viewItem)
 
@@ -102,6 +107,29 @@ class Putzplan : AppCompatActivity() {
         eventPopUpPerson1.show()
     }
 
+    private fun showEventAddPopUpLoeschen(item: View) {
+
+        val eventPopUpLoeschen = Dialog(this)
+
+        eventPopUpLoeschen.setContentView(R.layout.popup_putzplan_person_loeschen)
+        eventPopUpLoeschen.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val nein: Button = eventPopUpLoeschen.findViewById(R.id.button_putzplan_loeschen_nein)
+        val ja: Button =
+            eventPopUpLoeschen.findViewById(R.id.button_putzplan_loeschen_ja)
+
+        nein.setOnClickListener {
+            eventPopUpLoeschen.dismiss()
+        }
+
+        ja.setOnClickListener{
+            eventPopUpLoeschen.dismiss()
+            layout.removeView(item)
+        }
+
+        eventPopUpLoeschen.show()
+    }
+
     private fun showEventAddPopUpAufgabe(view: TextView){
 
         val eventPopUpAufgabe = Dialog(this)
@@ -118,8 +146,6 @@ class Putzplan : AppCompatActivity() {
             eventPopUpAufgabe.dismiss()
         }
 
-        eventPopUpAufgabe.show()
-
         hinzufuegen.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
 
@@ -135,7 +161,7 @@ class Putzplan : AppCompatActivity() {
 
 
         }
-
+        eventPopUpAufgabe.show()
 
     }
 }
