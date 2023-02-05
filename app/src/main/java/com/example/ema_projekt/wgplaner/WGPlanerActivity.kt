@@ -1,9 +1,13 @@
 package com.example.ema_projekt.wgplaner
 
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.ConnectionManager
@@ -23,6 +27,8 @@ class WGPlanerActivity : AppCompatActivity() {
     private lateinit var hottopics:ImageButton
     private lateinit var wgInfo: ImageButton
 
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -34,6 +40,11 @@ class WGPlanerActivity : AppCompatActivity() {
         einkaufsliste = findViewById(R.id.imageButton5)
         hottopics = findViewById(R.id.imageButton6)
         wgInfo = findViewById(R.id.imageButton7)
+
+        val conManager = ConnectionManager()
+        conManager.setOjects(this, false)
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(conManager, filter)
 
         vorratskammer.setOnClickListener{
             vorratskammer.setBackgroundResource(R.drawable.vorratskammerklick)
@@ -66,6 +77,7 @@ class WGPlanerActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onResume() {
         super.onResume()
         vorratskammer.setBackgroundResource(R.drawable.vorratskammer)
@@ -74,5 +86,8 @@ class WGPlanerActivity : AppCompatActivity() {
         einkaufsliste.setBackgroundResource(R.drawable.einkaufsliste)
         hottopics.setBackgroundResource(R.drawable.hottopics)
         wgInfo.setBackgroundResource(R.drawable.wginfo)
+
+        val conManager = ConnectionManager()
+        conManager.setOjects(this, false)
     }
 }

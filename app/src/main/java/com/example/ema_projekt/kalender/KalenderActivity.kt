@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -58,6 +59,9 @@ class KalenderActivity : AppCompatActivity() {
         buttonMonthRight = findViewById(R.id.buttonChangeMonthRight)
         showEvents = findViewById(R.id.button_ShowEvent)
         linearlayout = findViewById(R.id.linearlayout)
+
+        val conManager = ConnectionManager()
+        conManager.setOjects(this, false)
 
         textViewDayFocus = TextView(this)
 

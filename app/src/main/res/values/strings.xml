@@ -5,6 +5,8 @@
     <string name="loeschen">Löschen</string>
     <string name="hinzufuegen">Hinzufügen</string>
     <string name="bearbeiten">Bearbeiten</string>
+    <string name="einkauf">Einkauf</string>
+    <string name="verstanden">Verstanden</string>
 
     <string name="einkaufsliste">Einkaufsliste</string>
     <string name="vorratskammer">Vorratskammer</string>
@@ -40,7 +42,8 @@
     <string name="wg_info_verlassen">WG verlassen</string>
     <string name="wg_info_text">WG Info Text</string>
 
-    <string name="einkauf">Einkauf</string>
+    <string name="internet_error_text">ACHTUNG!\n\nDu hast keine Internetverbindung mehr. Alle Änderungen die jetzt gemacht werden, werden nicht gespeichert wenn die App geschlossen wird!</string>
+    <string name="internet_login_error_text">ACHTUNG!\n\nDu hast keine Internetverbindung. Um eine WG zu erstellen oder einer beizutreten benötigst du eine!</string>
 
     <string-array name="putzplan_spinner_strings">
         <item>Montags</item>

@@ -4,9 +4,12 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.MainActivity
 import com.example.ema_projekt.R
 import com.example.ema_projekt.wgplaner.LoginData
@@ -28,6 +31,7 @@ class WGInfoActivity : AppCompatActivity() {
 
     val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wginfo)
@@ -38,6 +42,9 @@ class WGInfoActivity : AppCompatActivity() {
         textViewwginfo = findViewById(R.id.textView_wginfotext)
         buttonhinzufuegen = findViewById(R.id.button_hinzufuegen)
         buttonbearbeiten = findViewById(R.id.button_bearbeiten)
+
+        val conManager = ConnectionManager()
+        conManager.setOjects(this, false)
 
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)

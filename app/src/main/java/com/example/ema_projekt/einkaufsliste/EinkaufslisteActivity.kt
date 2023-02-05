@@ -3,10 +3,12 @@ package com.example.ema_projekt.einkaufsliste
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
@@ -33,6 +35,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private val itemList = mutableMapOf<Int,View>()
     private var vorratList = mutableListOf<VorratskammerData>()
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -43,6 +46,9 @@ class EinkaufslisteActivity : AppCompatActivity() {
         einkaufbeenden = findViewById(R.id.button2)
         einkaufItemLinearLayout = findViewById(R.id.einkaufItemLayout)
         editText = findViewById(R.id.editText)
+
+        val conManager = ConnectionManager()
+        conManager.setOjects(this, false)
 
         GlobalScope.launch(Dispatchers.Main) {
             val list = EinkauflisteDataBase().readDatabase(applicationContext)

@@ -4,11 +4,14 @@ package com.example.ema_projekt.vorratskammer
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +27,7 @@ class Vorratskammer : AppCompatActivity() {
 
     private val itemList = mutableListOf<Int>()
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
@@ -32,6 +36,9 @@ class Vorratskammer : AppCompatActivity() {
         zurueck = findViewById(R.id.imageButton_vorratskammer_zurueck)
         layout = findViewById(R.id.vorratskammerItemLayout)
         erstellen = findViewById(R.id.add_vorratskammer_new_item)
+
+        val conManager = ConnectionManager()
+        conManager.setOjects(this, false)
 
         erstellen.setOnClickListener{
            showEventAddPopUp()

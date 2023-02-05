@@ -19,4 +19,5 @@
     <color name="standartItem">#c4fdfc</color>
     <color name="loginWgerstellen">#2e2e2e</color>
     <color name="errorRed">#c32222</color>
+    <color name="internetErrorBackground">#f58e8e</color>
 </resources>

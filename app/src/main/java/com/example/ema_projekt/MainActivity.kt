@@ -1,11 +1,13 @@
 package com.example.ema_projekt
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -13,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.wgplaner.LoginData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
@@ -22,16 +25,20 @@ import com.google.firebase.database.*
 //Offline
 //https://youtu.be/Et8njU58OTs
 
-
+@RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var editTextName:EditText
     private lateinit var editTextToken:EditText
 
+    private lateinit var conManager:ConnectionManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main)
+
+        conManager = ConnectionManager()
 
         val dbManager = DatabaseManager()
         dbManager.setUpDatabase()
@@ -62,6 +69,7 @@ class MainActivity : AppCompatActivity() {
                                 LoginDataSettingsJSON().writeLoginDataJSON(LoginData(wgName,
                                     wgToken),
                                     applicationContext)
+                                unregisterReceiver(conManager)
                                 startActivity(Intent(this@MainActivity,
                                     WGPlanerActivity::class.java))
                             } else {
@@ -85,14 +93,6 @@ class MainActivity : AppCompatActivity() {
         erstellenTextview.setOnClickListener {
             showWGErstellPopUp()
         }
-    }
-
-    private val networkChangeListener = NetworkChangeListener()
-    @Override
-    override fun onStart() {
-        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        registerReceiver(networkChangeListener, filter)
-        super.onStart()
     }
 
     private fun showWGErstellPopUp(){
@@ -162,6 +162,10 @@ class MainActivity : AppCompatActivity() {
         val loginData = LoginDataSettingsJSON().readLoginDataJSON(applicationContext)
         if (loginData.wgName.isNotEmpty() && loginData.wgToken.isNotEmpty()){
             startActivity(Intent(this, WGPlanerActivity::class.java))
+        } else {
+            conManager.setOjects(this, true)
+            val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+            registerReceiver(conManager, filter)
         }
     }
 }
