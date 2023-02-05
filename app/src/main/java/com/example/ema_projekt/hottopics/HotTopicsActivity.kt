@@ -7,13 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
 import com.example.ema_projekt.R
-import org.json.JSONArray
 
 class HotTopicsActivity : AppCompatActivity() {
     private lateinit var zurueck: ImageButton
     private lateinit var hinzufuegen: Button
     private lateinit var input: EditText
     private lateinit var itemLayout: LinearLayout
+    lateinit var imageView: ImageView
 
     private val itemList = mutableMapOf<Int, View>()
 
@@ -39,7 +39,6 @@ class HotTopicsActivity : AppCompatActivity() {
                 itemList[id] = itemView
                 itemLayout.addView(itemView)
 
-                HotTopicsJSON().writeJSON(HotTopicsData(id, input.text.toString()),applicationContext)
                 input.setText("")
             } else{
                 Toast.makeText(applicationContext, "Gebe einen Text ein!", Toast.LENGTH_SHORT).show()
@@ -47,20 +46,10 @@ class HotTopicsActivity : AppCompatActivity() {
         }
     }
 
-    private fun createExistingItems(){
-        val jsonData: JSONArray = HotTopicsJSON().readJSON(applicationContext)
-
-        for (i in 0 until jsonData.length()){
-            val viewItem = createHotTopic(jsonData.getJSONObject(i).get("itemText").toString())
-            itemList[jsonData.getJSONObject(i).get("itemId").toString().toInt()] = viewItem
-            itemLayout.addView(viewItem)
-        }
-    }
-
     private fun createHotTopic(text: String):View {
         val viewItem: View = View.inflate(this, R.layout.item_hot_topics, null)
-        val checkBox: CheckBox = viewItem.findViewById(R.id.hot_topic_text)
-        checkBox.text = text
+        val textBox: TextView = viewItem.findViewById(R.id.hot_topic_text)
+        textBox.text = text
 
         val button: ImageButton = viewItem.findViewById(R.id.hot_topic_loeschen)
         button.setOnClickListener {
@@ -73,7 +62,6 @@ class HotTopicsActivity : AppCompatActivity() {
             }
             itemLayout.removeView(viewItem)
             itemList.remove(id)
-            HotTopicsJSON().deleteJSONItem(id, applicationContext)
         }
         return viewItem
     }
