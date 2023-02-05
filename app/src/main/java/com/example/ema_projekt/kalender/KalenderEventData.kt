@@ -3,6 +3,7 @@ package com.example.ema_projekt.kalender
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.example.ema_projekt.DatabaseManager
 import com.example.ema_projekt.einkaufsliste.EinkaufslisteData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.*
@@ -21,8 +22,7 @@ data class KalenderEventData(
     var id:Int)
 
 class KalenderEventDatabase {
-    private val database: DatabaseReference =
-        FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
+    private val database: DatabaseReference = DatabaseManager().getDatabaseReference()
 
     fun writeDatabase(data: KalenderEventData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName

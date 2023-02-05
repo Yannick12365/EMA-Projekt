@@ -3,8 +3,10 @@ package com.example.ema_projekt.wgplaner
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
 import com.example.ema_projekt.einkaufsliste.EinkaufslisteActivity
 import com.example.ema_projekt.hottopics.HotTopicsActivity

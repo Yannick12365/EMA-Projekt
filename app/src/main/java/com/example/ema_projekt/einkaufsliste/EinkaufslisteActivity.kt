@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
 import androidx.core.view.size
+import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
 import com.example.ema_projekt.vorratskammer.Vorratskammer
 import com.example.ema_projekt.vorratskammer.VorratskammerData

@@ -2,8 +2,10 @@ package com.example.ema_projekt
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -17,17 +19,12 @@ import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.example.ema_projekt.wgplaner.WGPlanerActivity
 import com.google.firebase.database.*
 
-
-//https://youtu.be/kMEkP6f9_kE
-
-
 //Offline
 //https://youtu.be/Et8njU58OTs
 
 
 class MainActivity : AppCompatActivity() {
-    val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
-
+    private lateinit var database: DatabaseReference
     private lateinit var editTextName:EditText
     private lateinit var editTextToken:EditText
 
@@ -35,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main)
+
+        val dbManager = DatabaseManager()
+        dbManager.setUpDatabase()
+        database = dbManager.getDatabaseReference()
 
         val loginbutton:Button = findViewById(R.id.button_einloggen)
         val erstellenTextview:TextView = findViewById(R.id.textView_wgerstellen)
@@ -84,6 +85,14 @@ class MainActivity : AppCompatActivity() {
         erstellenTextview.setOnClickListener {
             showWGErstellPopUp()
         }
+    }
+
+    private val networkChangeListener = NetworkChangeListener()
+    @Override
+    override fun onStart() {
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(networkChangeListener, filter)
+        super.onStart()
     }
 
     private fun showWGErstellPopUp(){
