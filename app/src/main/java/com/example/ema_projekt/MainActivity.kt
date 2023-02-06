@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var conManager:ConnectionManager
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
