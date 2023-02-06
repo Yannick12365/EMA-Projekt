@@ -1,5 +1,8 @@
 package com.example.ema_projekt.hottopics
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -72,6 +75,61 @@ class HotTopicsActivity : AppCompatActivity() {
             itemList.remove(data.id)
             HotTopicDatabase().deleteDatabaseItem(data.id,applicationContext)
         }
+
+        viewItem.setOnClickListener {
+            popUpKommentare(data)
+        }
+
+        return viewItem
+    }
+
+    private fun popUpKommentare(data:HotTopicsData){
+        val kommentarPopUp = Dialog(this)
+
+        kommentarPopUp.setContentView(R.layout.popup_hottopickommentar)
+        kommentarPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val linearLayoutKommentare: LinearLayout = kommentarPopUp.findViewById(R.id.linearlayout_kommentare)
+        val popupzurueck: ImageButton = kommentarPopUp.findViewById(R.id.imageButton_hottopic_kommentar_zurueck)
+        val popupabbrechen: Button = kommentarPopUp.findViewById(R.id.button_hottopickommentare_abbrechen)
+        val popuphinzufuegen: Button = kommentarPopUp.findViewById(R.id.button_hottopickommentare_hinzufuegen)
+        val editTextKommentar: EditText = kommentarPopUp.findViewById(R.id.editText_kommentar)
+
+        popupzurueck.setOnClickListener {
+            kommentarPopUp.dismiss()
+        }
+        popupabbrechen.setOnClickListener {
+            kommentarPopUp.dismiss()
+        }
+
+        popuphinzufuegen.setOnClickListener {
+            val id:Int = nextIdKommentar(data)
+            val kommentar = HotTopicKommentarData(id,editTextKommentar.text.toString())
+            data.kommentare.add(kommentar)
+            HotTopicDatabase().writeKommentar(data.id,kommentar,applicationContext)
+            linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,editTextKommentar.text.toString(),id,data.id))
+            editTextKommentar.setText("")
+        }
+
+        for (i in data.kommentare){
+            linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,i.text,i.id,data.id))
+        }
+
+        kommentarPopUp.show()
+    }
+
+    private fun createKommentar(linearLayout:LinearLayout, text:String, id:Int, topicId:Int):View{
+        val viewItem: View = View.inflate(this, R.layout.item_hottopic_kommentar, null)
+        val loeschen:ImageButton = viewItem.findViewById(R.id.button_loeschen_hottopickommentar)
+        val kommentartext: TextView = viewItem.findViewById(R.id.itemTextView_hottopic_kommentar)
+
+        kommentartext.text = text
+
+        loeschen.setOnClickListener {
+            HotTopicDatabase().deleteDatabaseItemKommentar(topicId,id,applicationContext)
+            linearLayout.removeView(viewItem)
+        }
+
         return viewItem
     }
 
@@ -80,6 +138,15 @@ class HotTopicsActivity : AppCompatActivity() {
         for (i in itemList.keys){
             if (i >= newId){
                 newId = i+1
+            }
+        }
+        return newId
+    }
+    private fun nextIdKommentar(data: HotTopicsData):Int{
+        var newId = 0
+        for (i in data.kommentare){
+            if (i.id >= newId){
+                newId = i.id+1
             }
         }
         return newId

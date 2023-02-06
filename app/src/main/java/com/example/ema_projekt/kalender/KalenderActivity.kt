@@ -425,24 +425,14 @@ class KalenderActivity : AppCompatActivity() {
 
         for (event in events){
             if (event.month == monthShow && event.year == yearShow && event.day.toString() == textViewDayFocus.text){
-                val textView = TextView(this)
+                val viewItem: View = View.inflate(this, R.layout.item_kalender_event, null)
+                val textView:TextView = viewItem.findViewById(R.id.kalender_event_text)
                 textView.text = "["+event.dateStr+"] "+event.text
-                textView.textSize = 25F
-                textView.setPadding(30,20,30,20)
-
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT)
-                layoutParams.setMargins(20, 0, 20, 20)
-
-                textView.layoutParams = layoutParams
-                textView.setBackgroundResource(R.drawable.standart_item_background)
-                textView.setTextColor(ContextCompat.getColor(this,R.color.black))
 
                 textView.setOnClickListener {
                     showEventEditPopUp(event)
                 }
-                linearLayoutEvents.addView(textView)
+                linearLayoutEvents.addView(viewItem)
             }
         }
     }

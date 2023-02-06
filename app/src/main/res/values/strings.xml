@@ -47,6 +47,7 @@
     <string name="putzplan_nameperson">Name der Person</string>
     <string name="nein">Nein</string>
     <string name="ja">Ja</string>
+    <string name="kommentar_schreiben">Kommentar schreiben</string>
 
     <string-array name="putzplan_spinner_strings">
         <item>Montags</item>

@@ -44,10 +44,24 @@ class HotTopicDatabase{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.hasChild("HotTopic")) {
                         for (data in snapshot.child("HotTopic").children) {
+                            val kommentarListe = mutableListOf<HotTopicKommentarData>()
+
+                            if (snapshot.child("HotTopic").child(data.key.toString()).hasChild("Kommentare")) {
+                                for (kommentar in snapshot.child("HotTopic")
+                                    .child(data.key.toString()).child("Kommentare").children) {
+                                    kommentarListe.add(
+                                        HotTopicKommentarData(
+                                            kommentar.key.toString().toInt(),
+                                            kommentar.value.toString()
+                                        )
+                                    )
+                                }
+                            }
+
                             list.add(HotTopicsData(
                                 data.key.toString().toInt(),
                                 data.child("Text").value.toString(),
-                                mutableListOf()))
+                                kommentarListe))
                         }
                         value.resume(list)
                     }
@@ -66,5 +80,17 @@ class HotTopicDatabase{
     fun deleteDatabaseItem(id: Int, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("HotTopic").child(id.toString()).removeValue()
+    }
+
+    fun writeKommentar(idTopic:Int, data:HotTopicKommentarData, context: Context){
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).child("HotTopic").child(idTopic.toString()).child("Kommentare").child(data.id.toString()).setValue(data.text)
+    }
+
+    fun deleteDatabaseItemKommentar(idTopic:Int,id: Int, context: Context) {
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        Log.d("DEBUG",idTopic.toString())
+        Log.d("DEBUG",id.toString())
+        database.child(wgName).child("HotTopic").child(idTopic.toString()).child("Kommentare").child(id.toString()).removeValue()
     }
 }
