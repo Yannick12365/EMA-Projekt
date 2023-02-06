@@ -31,7 +31,6 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private val itemList = mutableMapOf<Int,View>()
     private var vorratList = mutableListOf<VorratskammerData>()
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -44,7 +43,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
         editText = findViewById(R.id.editText)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
+        conManager.setOjects(this, false, findViewById(R.id.textViewInternetErrorEinkaufsliste))
 
         GlobalScope.launch(Dispatchers.Main) {
             val list = EinkauflisteDataBase().readDatabase(applicationContext)

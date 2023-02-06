@@ -22,7 +22,6 @@ import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.example.ema_projekt.wgplaner.WGPlanerActivity
 import com.google.firebase.database.*
 
-@RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var editTextName:EditText

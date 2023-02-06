@@ -27,7 +27,6 @@ class HotTopicsActivity : AppCompatActivity() {
 
     private val itemList = mutableMapOf<Int, View>()
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)

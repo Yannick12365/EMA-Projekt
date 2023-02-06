@@ -28,7 +28,6 @@ class WGInfoActivity : AppCompatActivity() {
     private lateinit var buttonhinzufuegen:Button
     private lateinit var buttonbearbeiten:Button
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wginfo)

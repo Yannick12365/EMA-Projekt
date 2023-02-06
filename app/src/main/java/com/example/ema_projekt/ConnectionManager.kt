@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -15,18 +16,15 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 
 //https://youtu.be/BoiBuRwZ6RE
-@RequiresApi(Build.VERSION_CODES.M)
 class ConnectionManager : BroadcastReceiver() {
     companion object {
         private lateinit var appContext: Context
         private var loginScreen: Boolean = false
     }
-    private lateinit var errorTextView: TextView
 
     fun setOjects(context: Context, login:Boolean, textView: TextView){
         appContext = context
         loginScreen = login
-        errorTextView = textView
     }
     override fun onReceive(context: Context?, intent: Intent?) {
         if (!checkConnection(context)){
@@ -35,20 +33,18 @@ class ConnectionManager : BroadcastReceiver() {
             } else{
                 createLoginErrorPopUp(appContext)
             }
-            errorTextView.visibility = View.VISIBLE
             Log.d("DEBUG","Connection Lost")
         } else {
-            errorTextView.visibility = View.GONE
             Log.d("DEBUG","Connection")
         }
     }
 
     private fun checkConnection(context: Context?):Boolean{
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        val activeNetwork = connectivityManager.activeNetworkInfo
 
-        if (networkInfo != null){
-            return true
+        if (activeNetwork != null) {
+            return activeNetwork.isConnectedOrConnecting
         }
         return false
     }
@@ -59,7 +55,6 @@ class ConnectionManager : BroadcastReceiver() {
         errorPopUp.setContentView(R.layout.popup_internet_error)
         val button:Button = errorPopUp.findViewById(R.id.button_verstanden)
         button.setOnClickListener {
-            Log.d("DEBUG","COUNTER KLICK")
             errorPopUp.dismiss()
         }
         errorPopUp.show()

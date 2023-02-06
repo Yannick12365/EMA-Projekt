@@ -26,7 +26,6 @@ class VorratskammerActivity : AppCompatActivity() {
 
     private val itemList = mutableListOf<Int>()
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)

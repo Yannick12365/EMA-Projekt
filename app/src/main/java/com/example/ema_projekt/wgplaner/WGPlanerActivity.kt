@@ -27,7 +27,6 @@ class WGPlanerActivity : AppCompatActivity() {
     private lateinit var wgInfo: ImageButton
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
