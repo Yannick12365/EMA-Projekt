@@ -64,6 +64,11 @@ class Vorratskammer : AppCompatActivity() {
         val abbrechen: Button = eventPopUp.findViewById(R.id.button_vorratskammer_abbrechen)
         val hinzufuegen: Button = eventPopUp.findViewById(R.id.button_vorratskammer_hinzufuegen)
         val eventText: EditText = eventPopUp.findViewById(R.id.editText_Neuer_Eintrag)
+       val popupzurueck: ImageButton = eventPopUp.findViewById(R.id.imageButton_vorratskammer_eintrag_zurueck)
+
+       popupzurueck.setOnClickListener {
+           eventPopUp.dismiss()
+       }
 
         abbrechen.setOnClickListener {
             eventPopUp.dismiss()

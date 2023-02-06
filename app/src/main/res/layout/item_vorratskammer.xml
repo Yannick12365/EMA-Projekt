@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="25dp"
-        app:cardBackgroundColor="@color/items">
+        app:cardBackgroundColor="@color/created_items">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -40,11 +40,13 @@
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 android:id="@+id/itemTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Item"
-                android:textSize="20sp"
+                android:text=""
+                android:fontFamily="sans-serif-medium"
                 android:maxLines="1"
                 android:maxLength="20"
                 app:layout_constraintBottom_toBottomOf="parent"

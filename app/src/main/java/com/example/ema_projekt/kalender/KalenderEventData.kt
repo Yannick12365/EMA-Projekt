@@ -24,27 +24,16 @@ class KalenderEventDatabase {
 
     fun writeDatabase(data: KalenderEventData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
-        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                database.child(wgName).child("Kalender").child(data.id.toString()).child("Day")
-                    .setValue(data.day)
-                database.child(wgName).child("Kalender").child(data.id.toString()).child("Month")
-                    .setValue(data.month)
-                database.child(wgName).child("Kalender").child(data.id.toString()).child("Year")
-                    .setValue(data.year)
-                database.child(wgName).child("Kalender").child(data.id.toString()).child("Text")
-                    .setValue(data.text)
-                database.child(wgName).child("Kalender").child(data.id.toString()).child("DateStr")
-                    .setValue(data.dateStr)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(
-                    context, "Ups, da ist etwas schief gelaufen!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+        database.child(wgName).child("Kalender").child(data.id.toString()).child("Day")
+            .setValue(data.day)
+        database.child(wgName).child("Kalender").child(data.id.toString()).child("Month")
+            .setValue(data.month)
+        database.child(wgName).child("Kalender").child(data.id.toString()).child("Year")
+            .setValue(data.year)
+        database.child(wgName).child("Kalender").child(data.id.toString()).child("Text")
+            .setValue(data.text)
+        database.child(wgName).child("Kalender").child(data.id.toString()).child("DateStr")
+            .setValue(data.dateStr)
     }
 
     fun deleteDatabaseItem(id: Int, context: Context) {

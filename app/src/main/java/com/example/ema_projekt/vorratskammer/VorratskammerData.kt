@@ -18,19 +18,8 @@ class VorratskammerDatabase(){
 
     fun writeDatabase(data: VorratskammerData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
-        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                database.child(wgName).child("Vorratskammer")
-                    .child(data.id.toString()).setValue(data.text)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(
-                    context, "Ups, da ist etwas schief gelaufen!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+        database.child(wgName).child("Vorratskammer")
+            .child(data.id.toString()).setValue(data.text)
     }
 
     suspend fun readDatabase(context: Context):List<VorratskammerData>{

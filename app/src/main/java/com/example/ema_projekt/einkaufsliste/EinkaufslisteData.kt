@@ -19,19 +19,7 @@ class EinkauflisteDataBase {
 
     fun writeDatabase(data: EinkaufslisteData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
-        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                database.child(wgName).child("Einkaufsliste")
-                    .child(data.itemId.toString()).setValue(data.itemText)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(
-                    context, "Ups, da ist etwas schief gelaufen!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+        database.child(wgName).child("Einkaufsliste").child(data.itemId.toString()).setValue(data.itemText)
     }
 
     suspend fun readDatabase(context: Context):List<EinkaufslisteData>{

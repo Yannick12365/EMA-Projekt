@@ -12,16 +12,7 @@ class WGInfoData {
     private val database: DatabaseReference = DatabaseManager().getDatabaseReference()
     fun writeDatabase(text: String, context: Context){
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
-        database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                database.child(wgName).child("WGInfo").setValue(text)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, "Ups, da ist etwas schief gelaufen!",
-                    Toast.LENGTH_SHORT).show()
-            }
-        })
+        database.child(wgName).child("WGInfo").setValue(text)
     }
 
     suspend fun readDatabase(context: Context):String{

@@ -3,6 +3,7 @@ package com.example.ema_projekt.putzplan
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.Image
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -59,8 +60,14 @@ class Putzplan : AppCompatActivity() {
         val abbrechen: Button = eventPopUpPerson1.findViewById(R.id.button_vorratskammer_abbrechen)
         val hinzufuegen: Button = eventPopUpPerson1.findViewById(R.id.button_vorratskammer_hinzufuegen)
         val eventText: EditText = eventPopUpPerson1.findViewById(R.id.editText_Neuer_Eintrag)
+        val popupzureuck: ImageButton = eventPopUpPerson1.findViewById(R.id.imageButton_putzplanperson_zurueck)
+
 
         abbrechen.setOnClickListener {
+            eventPopUpPerson1.dismiss()
+        }
+
+        popupzureuck.setOnClickListener {
             eventPopUpPerson1.dismiss()
         }
 
@@ -86,6 +93,7 @@ class Putzplan : AppCompatActivity() {
     private fun createPutzPlanEintrag(data:PutzPlanData){
         val viewItem = View.inflate(this, R.layout.item_putzplan, null)
         val textViewPerson: TextView = viewItem.findViewById(R.id.putzplan_person)
+
         textViewPerson.text = data.person
 
         val textViewAufgabe: TextView = viewItem.findViewById(R.id.putzplan_aufgabe)
@@ -122,6 +130,7 @@ class Putzplan : AppCompatActivity() {
         viewItem.setOnClickListener{
             showEventAddPopUpLoeschen(viewItem,data.id)
         }
+
         itemList[data.id] = viewItem
         layout.addView(viewItem)
     }
@@ -135,6 +144,11 @@ class Putzplan : AppCompatActivity() {
 
         val nein: Button = popUpLoeschen.findViewById(R.id.button_putzplan_loeschen_nein)
         val ja: Button = popUpLoeschen.findViewById(R.id.button_putzplan_loeschen_ja)
+        val popupzurucke: ImageButton = popUpLoeschen.findViewById(R.id.imageButton_putzplan_loeschen_zurueck)
+
+        popupzurucke.setOnClickListener {
+            popUpLoeschen.dismiss()
+        }
 
         nein.setOnClickListener {
             popUpLoeschen.dismiss()
@@ -160,8 +174,13 @@ class Putzplan : AppCompatActivity() {
         val abbrechen: Button = popUpAufgabe.findViewById(R.id.button_vorratskammer_abbrechen)
         val hinzufuegen: Button = popUpAufgabe.findViewById(R.id.button_vorratskammer_hinzufuegen)
         val eventText: EditText = popUpAufgabe.findViewById(R.id.editText_Neuer_Eintrag)
+        val popupzurueck: ImageButton = popUpAufgabe.findViewById(R.id.imageButton_putzplanaufgabe_neu_zurueck)
 
         abbrechen.setOnClickListener {
+            popUpAufgabe.dismiss()
+        }
+
+        popupzurueck.setOnClickListener {
             popUpAufgabe.dismiss()
         }
 

@@ -44,6 +44,9 @@
 
     <string name="internet_error_text">ACHTUNG!\n\nDu hast keine Internetverbindung mehr. Alle Änderungen die jetzt gemacht werden, werden nicht gespeichert wenn die App geschlossen wird!</string>
     <string name="internet_login_error_text">ACHTUNG!\n\nDu hast keine Internetverbindung. Um eine WG zu erstellen oder einer beizutreten benötigst du eine!</string>
+    <string name="putzplan_nameperson">Name der Person</string>
+    <string name="nein">Nein</string>
+    <string name="ja">Ja</string>
 
     <string-array name="putzplan_spinner_strings">
         <item>Montags</item>

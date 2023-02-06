@@ -2,76 +2,69 @@ package com.example.ema_projekt.hottopics
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import com.example.ema_projekt.DatabaseManager
+import com.example.ema_projekt.vorratskammer.VorratskammerData
+import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 data class HotTopicsData(
-    var itemId: Int,
-    var itemText: String,
+    var id: Int,
+    var text: String,
+    var kommentare: MutableList<HotTopicKommentarData>
 )
 
-class HotTopicsJSON() {
-    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
-    fun writeJSON(data: HotTopicsData, context: Context) {
-        val existingJson = readJSON(context)
-        val file = FileWriter("/data/data/" + context.packageName + "/" + "hottopics.json")
+data class HotTopicKommentarData(
+    var id:Int,
+    var text:String
+)
 
-        val arrayJson = JSONArray()
+class HotTopicDatabase{
+    private val database: DatabaseReference = DatabaseManager().getDatabaseReference()
 
-        for (i in 0 until existingJson.length()) {
-            arrayJson.put(existingJson[i])
-        }
-
-        val objJson = JSONObject()
-        objJson.put("itemId", data.itemId)
-        objJson.put("itemText", data.itemText)
-
-        arrayJson.put(objJson)
-        file.write(arrayJson.toString())
-        file.flush()
-        file.close()
+    fun writeDatabase(data: HotTopicsData, context: Context) {
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).child("HotTopic").child(data.id.toString()).child("Text").setValue(data.text)
     }
 
-    //https://medium.com/@nayantala259/android-how-to-read-and-write-parse-data-from-json-file-226f821e957a
-    fun readJSON(context: Context): JSONArray {
-        val file = File("/data/data/" + context.packageName + "/" + "hottopics.json")
-        try {
-            val fileReader = FileReader(file)
-            val bufferedReader = BufferedReader(fileReader)
-            val stringBuilder = StringBuilder()
-            var line = bufferedReader.readLine()
+    suspend fun readDatabase(context: Context):List<HotTopicsData>{
+        return suspendCoroutine { value ->
+            val list = mutableListOf<HotTopicsData>()
+            val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+            database.child(wgName).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.hasChild("HotTopic")) {
+                        for (data in snapshot.child("HotTopic").children) {
+                            list.add(HotTopicsData(
+                                data.key.toString().toInt(),
+                                data.child("Text").value.toString(),
+                                mutableListOf()))
+                        }
+                        value.resume(list)
+                    }
+                }
 
-            while (line != null) {
-                stringBuilder.append(line).append("\n")
-                line = bufferedReader.readLine()
-            }
-            bufferedReader.close()
-
-            return JSONArray(stringBuilder.toString())
-        } catch (e: FileNotFoundException) {
-            return JSONArray()
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        context, "Ups, da ist etwas schief gelaufen!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
         }
     }
 
-    fun deleteJSONItem(nr: Int, context: Context) {
-        val jsonArray = readJSON(context)
-        val newJSONArray = JSONArray()
-
-        for (i in 0 until jsonArray.length()) {
-            if (jsonArray.getJSONObject(i).get("itemId") != nr){
-                val objJson = JSONObject()
-                objJson.put("itemId", jsonArray.getJSONObject(i).get("itemId"));
-                objJson.put("itemText", jsonArray.getJSONObject(i).get("itemText"));
-
-                newJSONArray.put(objJson)
-            }
-        }
-        val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "hottopics.json")
-
-        fileWrite.write(newJSONArray.toString())
-        fileWrite.flush()
-        fileWrite.close()
+    fun deleteDatabaseItem(id: Int, context: Context) {
+        val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
+        database.child(wgName).child("HotTopic").child(id.toString()).removeValue()
     }
 }
