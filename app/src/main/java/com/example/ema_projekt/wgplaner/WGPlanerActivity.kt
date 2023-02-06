@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -17,6 +18,7 @@ import com.example.ema_projekt.kalender.KalenderActivity
 import com.example.ema_projekt.putzplan.Putzplan
 import com.example.ema_projekt.vorratskammer.Vorratskammer
 import com.example.ema_projekt.wginfo.WGInfoActivity
+import org.w3c.dom.Text
 
 class WGPlanerActivity : AppCompatActivity() {
     private lateinit var vorratskammer:ImageButton
@@ -41,7 +43,7 @@ class WGPlanerActivity : AppCompatActivity() {
         wgInfo = findViewById(R.id.imageButton7)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false)
+        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(conManager, filter)
 
@@ -87,6 +89,6 @@ class WGPlanerActivity : AppCompatActivity() {
         wgInfo.setBackgroundResource(R.drawable.wginfo)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false)
+        conManager.setOjects(this, false,findViewById(R.id.textViewInternetError))
     }
 }

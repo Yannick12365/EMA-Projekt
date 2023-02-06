@@ -9,7 +9,9 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.os.Build
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 
 //https://youtu.be/BoiBuRwZ6RE
@@ -19,10 +21,12 @@ class ConnectionManager : BroadcastReceiver() {
         private lateinit var appContext: Context
         private var loginScreen: Boolean = false
     }
+    private lateinit var errorTextView: TextView
 
-    fun setOjects(context: Context, login:Boolean){
+    fun setOjects(context: Context, login:Boolean, textView: TextView){
         appContext = context
         loginScreen = login
+        errorTextView = textView
     }
     override fun onReceive(context: Context?, intent: Intent?) {
         if (!checkConnection(context)){
@@ -31,8 +35,10 @@ class ConnectionManager : BroadcastReceiver() {
             } else{
                 createLoginErrorPopUp(appContext)
             }
+            errorTextView.visibility = View.VISIBLE
             Log.d("DEBUG","Connection Lost")
         } else {
+            errorTextView.visibility = View.GONE
             Log.d("DEBUG","Connection")
         }
     }

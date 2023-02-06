@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var conManager:ConnectionManager
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -160,7 +159,7 @@ class MainActivity : AppCompatActivity() {
         if (loginData.wgName.isNotEmpty() && loginData.wgToken.isNotEmpty()){
             startActivity(Intent(this, WGPlanerActivity::class.java))
         } else {
-            conManager.setOjects(this, true)
+            conManager.setOjects(this, true, findViewById(R.id.textViewInternetError))
             val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
             registerReceiver(conManager, filter)
         }

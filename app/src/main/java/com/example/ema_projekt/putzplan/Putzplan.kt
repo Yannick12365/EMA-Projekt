@@ -4,11 +4,14 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.Image
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,6 +26,7 @@ class Putzplan : AppCompatActivity() {
     private var itemList = mutableMapOf<Int,View>()
     private var dataList = mutableListOf<PutzPlanData>()
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_putzplan)
@@ -32,6 +36,9 @@ class Putzplan : AppCompatActivity() {
         zurueck = findViewById(R.id.imageButton_putzplan_zurueck)
         layout = findViewById(R.id.putzplan_layout)
         erstellen = findViewById(R.id.putzplan_add)
+
+        val conManager = ConnectionManager()
+        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
 
         GlobalScope.launch(Dispatchers.Main) {
             val list = PutzPlanDatabase().readDatabase(applicationContext)

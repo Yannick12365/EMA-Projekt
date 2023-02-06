@@ -37,7 +37,7 @@ class Vorratskammer : AppCompatActivity() {
         erstellen = findViewById(R.id.add_vorratskammer_new_item)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false)
+        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
 
         erstellen.setOnClickListener{
            showEventAddPopUp()

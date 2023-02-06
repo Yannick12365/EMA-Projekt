@@ -41,7 +41,7 @@ class WGInfoActivity : AppCompatActivity() {
         buttonbearbeiten = findViewById(R.id.button_bearbeiten)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false)
+        conManager.setOjects(this, false,findViewById(R.id.textViewInternetError))
 
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)

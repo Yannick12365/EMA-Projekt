@@ -17,6 +17,7 @@ import com.example.ema_projekt.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.util.*
@@ -61,7 +62,7 @@ class KalenderActivity : AppCompatActivity() {
         linearlayout = findViewById(R.id.linearlayout)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false)
+        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
 
         textViewDayFocus = TextView(this)
 

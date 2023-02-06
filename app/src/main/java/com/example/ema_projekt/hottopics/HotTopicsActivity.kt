@@ -3,12 +3,15 @@ package com.example.ema_projekt.hottopics
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
+import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
 import com.example.ema_projekt.einkaufsliste.EinkauflisteDataBase
 import com.example.ema_projekt.vorratskammer.VorratskammerDatabase
@@ -24,6 +27,7 @@ class HotTopicsActivity : AppCompatActivity() {
 
     private val itemList = mutableMapOf<Int, View>()
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -33,6 +37,9 @@ class HotTopicsActivity : AppCompatActivity() {
         hinzufuegen = findViewById(R.id.button)
         input = findViewById(R.id.editText)
         itemLayout = findViewById(R.id.hotTopicItemLayout)
+
+        val conManager = ConnectionManager()
+        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
 
         GlobalScope.launch(Dispatchers.Main) {
             val list = HotTopicDatabase().readDatabase(applicationContext)

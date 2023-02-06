@@ -48,6 +48,7 @@
     <string name="nein">Nein</string>
     <string name="ja">Ja</string>
     <string name="kommentar_schreiben">Kommentar schreiben</string>
+    <string name="keine_internetverbindung">Keine Internetverbindung!</string>
 
     <string-array name="putzplan_spinner_strings">
         <item>Montags</item>

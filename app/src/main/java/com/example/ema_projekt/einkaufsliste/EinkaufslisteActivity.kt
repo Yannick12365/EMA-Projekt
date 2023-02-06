@@ -44,7 +44,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
         editText = findViewById(R.id.editText)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false)
+        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
 
         GlobalScope.launch(Dispatchers.Main) {
             val list = EinkauflisteDataBase().readDatabase(applicationContext)
