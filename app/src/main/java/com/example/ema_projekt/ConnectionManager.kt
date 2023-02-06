@@ -13,7 +13,6 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 
 //https://youtu.be/BoiBuRwZ6RE
-
 @RequiresApi(Build.VERSION_CODES.M)
 class ConnectionManager : BroadcastReceiver() {
     companion object {

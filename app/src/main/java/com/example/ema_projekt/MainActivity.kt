@@ -22,9 +22,6 @@ import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.example.ema_projekt.wgplaner.WGPlanerActivity
 import com.google.firebase.database.*
 
-//Offline
-//https://youtu.be/Et8njU58OTs
-
 @RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference

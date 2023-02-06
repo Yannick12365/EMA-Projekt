@@ -10,6 +10,7 @@ data class LoginData(
 )
 
 class LoginDataSettingsJSON() {
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
     fun writeLoginDataJSON(data:LoginData, context:Context) {
         val file = FileWriter("/data/data/" + context.packageName + "/" + "settings.json")
 
@@ -22,6 +23,7 @@ class LoginDataSettingsJSON() {
         file.close()
     }
 
+    //https://medium.com/@nayantala259/android-how-to-read-and-write-parse-data-from-json-file-226f821e957a
     fun readLoginDataJSON(context:Context):LoginData {
         val file = File("/data/data/" + context.packageName + "/" + "settings.json")
         try {
