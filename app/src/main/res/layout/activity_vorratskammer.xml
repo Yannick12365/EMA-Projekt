@@ -17,52 +17,32 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:layout_marginStart="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageButton
+                android:id="@+id/imageButton_vorratskammer_zurueck"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/zurueck"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
             <TextView
-                android:id="@+id/textViewInternetError"
-                android:layout_width="match_parent"
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/internetErrorBackground"
-                android:fontFamily="sans-serif-medium"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="@string/keine_internetverbindung"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:visibility="gone" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/imageButton_vorratskammer_zurueck"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/zurueck"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
-                    android:text="@string/vorratskammer"
-                    android:textColor="@color/black"
-                    android:textSize="40sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:fontFamily="sans-serif-black"
+                android:text="@string/vorratskammer"
+                android:textColor="@color/black"
+                android:textSize="40sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -79,21 +59,20 @@
 
         <ScrollView
             android:id="@+id/scrollView2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="396dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewInternetError"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
-        app:layout_constraintVertical_bias="0.0">
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck">
 
             <LinearLayout
                 android:id="@+id/vorratskammerItemLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
             </LinearLayout>
         </ScrollView>
@@ -111,6 +90,22 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
         app:srcCompat="@android:drawable/ic_menu_add" />
+
+        <TextView
+            android:id="@+id/textViewInternetError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/internetErrorBackground"
+            android:fontFamily="sans-serif-medium"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/keine_internetverbindung"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

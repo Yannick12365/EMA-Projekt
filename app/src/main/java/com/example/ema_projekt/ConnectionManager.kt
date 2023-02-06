@@ -43,7 +43,7 @@ class ConnectionManager : BroadcastReceiver() {
         }
     }
 
-    fun checkConnection(context: Context?):Boolean{
+    private fun checkConnection(context: Context?):Boolean{
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
 
@@ -59,12 +59,13 @@ class ConnectionManager : BroadcastReceiver() {
         errorPopUp.setContentView(R.layout.popup_internet_error)
         val button:Button = errorPopUp.findViewById(R.id.button_verstanden)
         button.setOnClickListener {
+            Log.d("DEBUG","COUNTER KLICK")
             errorPopUp.dismiss()
         }
         errorPopUp.show()
     }
 
-     fun createLoginErrorPopUp(context: Context){
+     private fun createLoginErrorPopUp(context: Context){
         val errorPopUp = Dialog(context)
         errorPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         errorPopUp.setContentView(R.layout.popup_login_error)

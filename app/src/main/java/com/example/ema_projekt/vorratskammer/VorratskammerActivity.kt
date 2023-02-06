@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class Vorratskammer : AppCompatActivity() {
+class VorratskammerActivity : AppCompatActivity() {
 
     private lateinit var erstellen: FloatingActionButton
     private lateinit var layout:LinearLayout

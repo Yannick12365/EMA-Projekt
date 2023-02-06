@@ -51,14 +51,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".putzplan.Putzplan"
+            android:name=".putzplan.PutzplanActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".vorratskammer.Vorratskammer"
+            android:name=".vorratskammer.VorratskammerActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

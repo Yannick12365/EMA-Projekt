@@ -6,7 +6,6 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,10 +14,9 @@ import com.example.ema_projekt.R
 import com.example.ema_projekt.einkaufsliste.EinkaufslisteActivity
 import com.example.ema_projekt.hottopics.HotTopicsActivity
 import com.example.ema_projekt.kalender.KalenderActivity
-import com.example.ema_projekt.putzplan.Putzplan
-import com.example.ema_projekt.vorratskammer.Vorratskammer
+import com.example.ema_projekt.putzplan.PutzplanActivity
+import com.example.ema_projekt.vorratskammer.VorratskammerActivity
 import com.example.ema_projekt.wginfo.WGInfoActivity
-import org.w3c.dom.Text
 
 class WGPlanerActivity : AppCompatActivity() {
     private lateinit var vorratskammer:ImageButton
@@ -49,7 +47,7 @@ class WGPlanerActivity : AppCompatActivity() {
 
         vorratskammer.setOnClickListener{
             vorratskammer.setBackgroundResource(R.drawable.vorratskammerklick)
-            startActivity(Intent(this, Vorratskammer::class.java))
+            startActivity(Intent(this, VorratskammerActivity::class.java))
         }
 
         kalender.setOnClickListener{
@@ -59,7 +57,7 @@ class WGPlanerActivity : AppCompatActivity() {
 
         putzplan.setOnClickListener{
             putzplan.setBackgroundResource(R.drawable.putzplanklick)
-            startActivity(Intent(this, Putzplan::class.java))
+            startActivity(Intent(this, PutzplanActivity::class.java))
         }
 
         einkaufsliste.setOnClickListener{

@@ -3,7 +3,6 @@ package com.example.ema_projekt.putzplan
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -18,7 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class Putzplan : AppCompatActivity() {
+class PutzplanActivity : AppCompatActivity() {
     private lateinit var erstellen: com.google.android.material.floatingactionbutton.FloatingActionButton;
     private lateinit var layout: LinearLayout
     private lateinit var zurueck:ImageButton
