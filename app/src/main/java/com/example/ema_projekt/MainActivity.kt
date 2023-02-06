@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
                                 LoginDataSettingsJSON().writeLoginDataJSON(LoginData(wgName,
                                     wgToken),
                                     applicationContext)
-                                unregisterReceiver(conManager)
                                 startActivity(Intent(this@MainActivity,
                                     WGPlanerActivity::class.java))
                             } else {
