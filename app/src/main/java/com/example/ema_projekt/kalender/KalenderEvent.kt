@@ -1,7 +1,6 @@
 package com.example.ema_projekt.kalender
 
 import android.widget.TextView
-import org.json.JSONArray
 
 class KalenderEvent {
     companion object {

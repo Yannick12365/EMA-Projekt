@@ -88,8 +88,6 @@ class KalenderActivity : AppCompatActivity() {
             KalenderEvent().fillEventList(KalenderEventDatabase().readDatabase(applicationContext))
             markEvents()
         }
-        //KalenderEventJSON().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr, applicationContext)
-        //KalenderEvent().fillEventList(KalenderEventJSON().readJSON(applicationContext))
 
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)
@@ -183,7 +181,6 @@ class KalenderActivity : AppCompatActivity() {
                 event.text = eventText.text.toString()
                 KalenderEvent().addEvents(event)
                 KalenderEventDatabase().writeDatabase(event,applicationContext)
-                //KalenderEventJSON().writeJSON(event, applicationContext)
                 markEvents()
                 eventPopUp.dismiss()
             } else{
@@ -271,7 +268,6 @@ class KalenderActivity : AppCompatActivity() {
             }
 
             KalenderEventDatabase().deleteDatabaseItem(event.id,applicationContext)
-            //KalenderEventJSON().deleteJSONItem(event.id,applicationContext)
             KalenderEvent().deleteEventFromList(event.id)
 
             eventPopUp.dismiss()
@@ -282,7 +278,6 @@ class KalenderActivity : AppCompatActivity() {
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
                 KalenderEventDatabase().editDatabaseEvent(event,applicationContext)
-                //KalenderEventJSON().editJSONItem(event, applicationContext)
                 eventPopUp.dismiss()
                 eventPopUpShow.dismiss()
             }else{

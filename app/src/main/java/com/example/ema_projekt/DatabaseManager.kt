@@ -1,6 +1,5 @@
 package com.example.ema_projekt
 
-import android.provider.ContactsContract.Data
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database

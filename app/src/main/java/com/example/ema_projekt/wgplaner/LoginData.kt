@@ -1,7 +1,6 @@
 package com.example.ema_projekt.wgplaner
 
 import android.content.Context
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
 
@@ -17,7 +16,6 @@ class LoginDataSettingsJSON() {
         val objJson = JSONObject()
         objJson.put("wgName", data.wgName)
         objJson.put("wgToken", data.wgToken)
-        //objJson.put("wgInfo", "")
 
         file.write(objJson.toString())
         file.flush()

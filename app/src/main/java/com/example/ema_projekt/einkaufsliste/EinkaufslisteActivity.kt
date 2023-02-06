@@ -12,18 +12,14 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
-import androidx.core.view.size
 import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
-import com.example.ema_projekt.vorratskammer.Vorratskammer
 import com.example.ema_projekt.vorratskammer.VorratskammerData
 import com.example.ema_projekt.vorratskammer.VorratskammerDatabase
-import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.json.JSONArray
 
 class EinkaufslisteActivity : AppCompatActivity() {
     private lateinit var zurueck:ImageButton

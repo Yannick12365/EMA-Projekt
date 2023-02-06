@@ -18,7 +18,6 @@ import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 
 class WGInfoActivity : AppCompatActivity() {
@@ -28,8 +27,6 @@ class WGInfoActivity : AppCompatActivity() {
     private lateinit var textViewwginfo:TextView
     private lateinit var buttonhinzufuegen:Button
     private lateinit var buttonbearbeiten:Button
-
-    val database: DatabaseReference = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +50,8 @@ class WGInfoActivity : AppCompatActivity() {
 
         textViewToken.text = "WG Token = " + LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgToken
 
-        //textViewwginfo.text = WGInfoJSON().readJSON(applicationContext)
         GlobalScope.launch(Dispatchers.Main) {
-            textViewwginfo.text = WGInfoJSON().readDatabase(applicationContext)
+            textViewwginfo.text = WGInfoData().readDatabase(applicationContext)
         }
 
 
@@ -99,8 +95,7 @@ class WGInfoActivity : AppCompatActivity() {
 
         bestaetigen.setOnClickListener {
             textViewwginfo.text = editText.text
-            //WGInfoJSON().writeJSON(editText.text.toString(),applicationContext)
-            WGInfoJSON().writeDatabase(editText.text.toString(),applicationContext)
+            WGInfoData().writeDatabase(editText.text.toString(),applicationContext)
             popup.dismiss()
         }
 
