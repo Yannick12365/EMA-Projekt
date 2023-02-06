@@ -145,6 +145,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                         }
                     }
                     val vorratItem = VorratskammerData(checkbox.text.toString(), newId)
+
                     VorratskammerDatabase().writeDatabase(vorratItem,applicationContext)
                     vorratList.add(vorratItem)
                 }

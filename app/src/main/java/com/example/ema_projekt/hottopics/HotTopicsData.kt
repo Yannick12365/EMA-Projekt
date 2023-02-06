@@ -89,8 +89,6 @@ class HotTopicDatabase{
 
     fun deleteDatabaseItemKommentar(idTopic:Int,id: Int, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
-        Log.d("DEBUG",idTopic.toString())
-        Log.d("DEBUG",id.toString())
         database.child(wgName).child("HotTopic").child(idTopic.toString()).child("Kommentare").child(id.toString()).removeValue()
     }
 }

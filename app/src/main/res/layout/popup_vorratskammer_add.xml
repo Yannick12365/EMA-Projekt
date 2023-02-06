@@ -32,7 +32,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="20dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -40,7 +40,7 @@
                         android:id="@+id/imageButton_vorratskammer_eintrag_zurueck"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_marginEnd="5dp"
+                        android:layout_marginEnd="45dp"
                         android:background="@drawable/zurueck"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
@@ -49,7 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
-                        android:text="@string/vorratskammer"
+                        android:text="Vorrat"
                         android:textColor="@color/black"
                         android:textSize="40sp"
                         android:textStyle="bold" />
