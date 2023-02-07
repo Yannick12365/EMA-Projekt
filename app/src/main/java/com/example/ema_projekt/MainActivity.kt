@@ -10,6 +10,7 @@ import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
                                 LoginDataSettingsJSON().writeLoginDataJSON(LoginData(wgName,
                                     wgToken),
                                     applicationContext)
+                                unregisterReceiver(conManager)
                                 startActivity(Intent(this@MainActivity,
                                     WGPlanerActivity::class.java))
                             } else {
@@ -156,9 +158,10 @@ class MainActivity : AppCompatActivity() {
     private fun existingLogin(){
         val loginData = LoginDataSettingsJSON().readLoginDataJSON(applicationContext)
         if (loginData.wgName.isNotEmpty() && loginData.wgToken.isNotEmpty()){
+            unregisterReceiver(conManager)
             startActivity(Intent(this, WGPlanerActivity::class.java))
         } else {
-            conManager.setOjects(this, true, findViewById(R.id.textViewInternetError))
+            conManager.setOjects(true, this)
             val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
             registerReceiver(conManager, filter)
         }

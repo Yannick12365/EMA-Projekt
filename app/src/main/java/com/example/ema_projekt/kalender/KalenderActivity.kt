@@ -62,7 +62,8 @@ class KalenderActivity : AppCompatActivity() {
         linearlayout = findViewById(R.id.linearlayout)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
+        conManager.setOjects(false, this)
+        conManager.switchScreen(this)
 
         textViewDayFocus = TextView(this)
 

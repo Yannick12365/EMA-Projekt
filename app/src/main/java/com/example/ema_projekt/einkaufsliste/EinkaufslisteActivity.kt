@@ -1,8 +1,10 @@
 package com.example.ema_projekt.einkaufsliste
 
 import android.app.Dialog
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +33,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private val itemList = mutableMapOf<Int,View>()
     private var vorratList = mutableListOf<VorratskammerData>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -42,8 +45,10 @@ class EinkaufslisteActivity : AppCompatActivity() {
         einkaufItemLinearLayout = findViewById(R.id.einkaufItemLayout)
         editText = findViewById(R.id.editText)
 
+
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false, findViewById(R.id.textViewInternetErrorEinkaufsliste))
+        conManager.setOjects(false, this)
+        conManager.switchScreen(this)
 
         GlobalScope.launch(Dispatchers.Main) {
             val list = EinkauflisteDataBase().readDatabase(applicationContext)

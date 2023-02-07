@@ -36,7 +36,8 @@ class PutzplanActivity : AppCompatActivity() {
         erstellen = findViewById(R.id.putzplan_add)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
+        conManager.setOjects(false, this)
+        conManager.switchScreen(this)
 
         GlobalScope.launch(Dispatchers.Main) {
             val list = PutzPlanDatabase().readDatabase(applicationContext)

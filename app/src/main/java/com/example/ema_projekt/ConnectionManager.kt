@@ -1,5 +1,6 @@
 package com.example.ema_projekt
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,44 +8,56 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 
-//https://youtu.be/BoiBuRwZ6RE
 class ConnectionManager : BroadcastReceiver() {
     companion object {
-        private lateinit var appContext: Context
         private var loginScreen: Boolean = false
+        private lateinit var appContext: Context
     }
 
-    fun setOjects(context: Context, login:Boolean, textView: TextView){
-        appContext = context
-        loginScreen = login
-    }
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (!checkConnection(context)){
+        val appContextView:View = (appContext as Activity).findViewById(android.R.id.content)
+        val textView:TextView = appContextView.findViewById(R.id.textViewInternetError)
+
+        if (!checkConnection(appContext)){
             if (!loginScreen) {
                 createInternetErrorPopUp(appContext)
             } else{
                 createLoginErrorPopUp(appContext)
             }
-            Log.d("DEBUG","Connection Lost")
+            textView.visibility = View.VISIBLE
         } else {
-            Log.d("DEBUG","Connection")
+            textView.visibility = View.INVISIBLE
         }
     }
 
+    fun setOjects(login:Boolean, context: Context){
+        loginScreen = login
+        appContext = context
+    }
+
+    fun switchScreen(context: Context){
+        val appContext:View = (context as Activity).findViewById(android.R.id.content)
+        val textView:TextView = appContext.findViewById(R.id.textViewInternetError)
+
+        if (!checkConnection(context)){
+            textView.visibility = View.VISIBLE
+        } else {
+            textView.visibility = View.INVISIBLE
+        }
+    }
+
+    //https://stackoverflow.com/questions/5474089/how-to-check-currently-internet-connection-is-available-or-not-in-android
     private fun checkConnection(context: Context?):Boolean{
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = connectivityManager.activeNetworkInfo
+        val networkInfo = connectivityManager.activeNetworkInfo
 
-        if (activeNetwork != null) {
-            return activeNetwork.isConnectedOrConnecting
+        if (networkInfo != null && networkInfo.isConnected){
+            return true
         }
         return false
     }

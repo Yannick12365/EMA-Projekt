@@ -131,7 +131,7 @@
         </ScrollView>
 
         <TextView
-            android:id="@+id/textViewInternetErrorEinkaufsliste"
+            android:id="@+id/textViewInternetError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/internetErrorBackground"

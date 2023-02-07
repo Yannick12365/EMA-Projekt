@@ -5,6 +5,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +27,9 @@ class WGPlanerActivity : AppCompatActivity() {
     private lateinit var hottopics:ImageButton
     private lateinit var wgInfo: ImageButton
 
-
+    companion object {
+        private lateinit var conManager: ConnectionManager
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -39,8 +42,9 @@ class WGPlanerActivity : AppCompatActivity() {
         hottopics = findViewById(R.id.imageButton6)
         wgInfo = findViewById(R.id.imageButton7)
 
-        val conManager = ConnectionManager()
-        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
+        conManager = ConnectionManager()
+        conManager.setOjects(false, this)
+        conManager.switchScreen(this)
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(conManager, filter)
 
@@ -75,7 +79,6 @@ class WGPlanerActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onResume() {
         super.onResume()
         vorratskammer.setBackgroundResource(R.drawable.vorratskammer)
@@ -85,7 +88,13 @@ class WGPlanerActivity : AppCompatActivity() {
         hottopics.setBackgroundResource(R.drawable.hottopics)
         wgInfo.setBackgroundResource(R.drawable.wginfo)
 
-        val conManager = ConnectionManager()
-        conManager.setOjects(this, false,findViewById(R.id.textViewInternetError))
+        conManager.setOjects(false, this)
+        conManager.switchScreen(this)
+    }
+
+    override fun onDestroy() {
+        Log.d("DEBUG","TESTTEST")
+        unregisterReceiver(conManager)
+        super.onDestroy()
     }
 }

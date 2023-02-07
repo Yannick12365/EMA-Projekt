@@ -38,7 +38,8 @@ class HotTopicsActivity : AppCompatActivity() {
         itemLayout = findViewById(R.id.hotTopicItemLayout)
 
         val conManager = ConnectionManager()
-        conManager.setOjects(this, false, findViewById(R.id.textViewInternetError))
+        conManager.setOjects(false, this)
+        conManager.switchScreen(this)
 
         GlobalScope.launch(Dispatchers.Main) {
             val list = HotTopicDatabase().readDatabase(applicationContext)
