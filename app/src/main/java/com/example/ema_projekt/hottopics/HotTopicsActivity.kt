@@ -1,29 +1,18 @@
 package com.example.ema_projekt.hottopics
 
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.children
 import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
-import com.example.ema_projekt.einkaufsliste.EinkauflisteDataBase
-import com.example.ema_projekt.einkaufsliste.EinkaufslisteData
-import com.example.ema_projekt.vorratskammer.VorratskammerDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.*
 
 class HotTopicsActivity : AppCompatActivity() {
     private lateinit var zurueck: ImageButton
@@ -38,19 +27,22 @@ class HotTopicsActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_hot_topics)
 
+        //Activity Felder holen
         zurueck = findViewById(R.id.imageButton_hot_topics_zurueck)
         hinzufuegen = findViewById(R.id.button)
         input = findViewById(R.id.editText)
         itemLayout = findViewById(R.id.hotTopicItemLayout)
 
+        //ConnectionManager einstellen
         val conManager = ConnectionManager()
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
+        //Warten auf das Auslesen der Datenbank
         var list = mutableListOf<HotTopicsData>()
         GlobalScope.launch(Dispatchers.Main) {
-            list = HotTopicDatabase().readDatabase(applicationContext)
-            HotTopicsJSON().writeJSON(list,applicationContext)
+            list = HotTopicDatabase().readHotTopicDatabase(applicationContext)
+            HotTopicsJSON().writeHotTopicJSON(list,applicationContext)
 
             for(data in list){
                 val itemView = createHotTopic(data)
@@ -58,8 +50,9 @@ class HotTopicsActivity : AppCompatActivity() {
                 itemLayout.addView(itemView)
             }
         }
+        //Wenn kein Internet vorhanden Inhalt der JSON Datei nutzen
         if (!conManager.checkConnection(this)){
-            val hottopicJSONarray = HotTopicsJSON().readJSON(applicationContext)
+            val hottopicJSONarray = HotTopicsJSON().readHotTopicJSON(applicationContext)
             for (i in 0 until hottopicJSONarray.length()) {
                 val jsonarr = hottopicJSONarray.getJSONObject(i).getJSONArray("kommentare")
                 val list2 = mutableListOf<HotTopicKommentarData>()
@@ -80,6 +73,7 @@ class HotTopicsActivity : AppCompatActivity() {
             }
         }
 
+        //Klick Eventlistener
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)
             this.finish()
@@ -88,8 +82,8 @@ class HotTopicsActivity : AppCompatActivity() {
             if (input.text.isNotEmpty()) {
                 val id = nextId()
                 val data = HotTopicsData(id,input.text.toString(), mutableListOf())
-                HotTopicDatabase().writeDatabase(data,applicationContext)
-                HotTopicsJSON().addJSON(data,applicationContext)
+                HotTopicDatabase().writeHotTopicDatabase(data,applicationContext)
+                HotTopicsJSON().addHotTopicJSON(data,applicationContext)
                 val itemView = createHotTopic(data)
 
                 itemList[id] = itemView
@@ -102,17 +96,20 @@ class HotTopicsActivity : AppCompatActivity() {
         }
     }
 
+    //HotTopic Item erstellen
     private fun createHotTopic(data:HotTopicsData):View {
+        //Item Items holen
         val viewItem: View = View.inflate(this, R.layout.item_hot_topics, null)
         val textBox: TextView = viewItem.findViewById(R.id.hot_topic_text)
         textBox.text = data.text
-
         val button: ImageButton = viewItem.findViewById(R.id.hot_topic_loeschen)
+
+        //Klick Eventlistener
         button.setOnClickListener {
             itemLayout.removeView(viewItem)
             itemList.remove(data.id)
-            HotTopicDatabase().deleteDatabaseItem(data.id,applicationContext)
-            HotTopicsJSON().deleteJSONItem(data.id,applicationContext)
+            HotTopicDatabase().deleteHotTopicDatabaseItem(data.id,applicationContext)
+            HotTopicsJSON().deleteHotTopicJSONItem(data.id,applicationContext)
         }
 
         viewItem.setOnClickListener {
@@ -122,18 +119,21 @@ class HotTopicsActivity : AppCompatActivity() {
         return viewItem
     }
 
+    //Kommentar Popup
     private fun popUpKommentare(data:HotTopicsData){
         val kommentarPopUp = Dialog(this)
 
         kommentarPopUp.setContentView(R.layout.popup_hottopickommentar)
         kommentarPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        //PopUp Items holen
         val linearLayoutKommentare: LinearLayout = kommentarPopUp.findViewById(R.id.linearlayout_kommentare)
         val popupzurueck: ImageButton = kommentarPopUp.findViewById(R.id.imageButton_hottopic_kommentar_zurueck)
         val popupabbrechen: Button = kommentarPopUp.findViewById(R.id.button_hottopickommentare_abbrechen)
         val popuphinzufuegen: Button = kommentarPopUp.findViewById(R.id.button_hottopickommentare_hinzufuegen)
         val editTextKommentar: EditText = kommentarPopUp.findViewById(R.id.editText_kommentar)
 
+        //Klick Eventlistener
         popupzurueck.setOnClickListener {
             kommentarPopUp.dismiss()
         }
@@ -146,7 +146,7 @@ class HotTopicsActivity : AppCompatActivity() {
             val kommentar = HotTopicKommentarData(id,editTextKommentar.text.toString())
             data.kommentare.add(kommentar)
             HotTopicDatabase().writeKommentar(data.id,kommentar,applicationContext)
-            HotTopicsJSON().writeKommentar(data.id,kommentar,applicationContext)
+            HotTopicsJSON().writeKommentarJSON(data.id,kommentar,applicationContext)
             linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,editTextKommentar.text.toString(),id,data.id))
             editTextKommentar.setText("")
         }
@@ -158,22 +158,26 @@ class HotTopicsActivity : AppCompatActivity() {
         kommentarPopUp.show()
     }
 
+    //Kommentar erstellen
     private fun createKommentar(linearLayout:LinearLayout, text:String, id:Int, topicId:Int):View{
+        //Item Items holen
         val viewItem: View = View.inflate(this, R.layout.item_hottopic_kommentar, null)
         val loeschen:ImageButton = viewItem.findViewById(R.id.button_loeschen_hottopickommentar)
         val kommentartext: TextView = viewItem.findViewById(R.id.itemTextView_hottopic_kommentar)
 
         kommentartext.text = text
 
+        //Klick Eventlistener
         loeschen.setOnClickListener {
-            HotTopicDatabase().deleteDatabaseItemKommentar(topicId,id,applicationContext)
-            HotTopicsJSON().deleteJSONItemKommentar(topicId,id,applicationContext)
+            HotTopicDatabase().deleteKommentar(topicId,id,applicationContext)
+            HotTopicsJSON().deleteKommentarJSON(topicId,id,applicationContext)
             linearLayout.removeView(viewItem)
         }
 
         return viewItem
     }
 
+    //ID für Item bestimmen
     private fun nextId():Int{
         var newId = 0
         for (i in itemList.keys){
@@ -183,6 +187,8 @@ class HotTopicsActivity : AppCompatActivity() {
         }
         return newId
     }
+
+    //ID für Kommentar bestimmen
     private fun nextIdKommentar(data: HotTopicsData):Int{
         var newId = 0
         for (i in data.kommentare){

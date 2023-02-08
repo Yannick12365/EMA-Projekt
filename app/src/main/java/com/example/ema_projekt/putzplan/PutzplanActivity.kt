@@ -3,16 +3,13 @@ package com.example.ema_projekt.putzplan
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
-import com.example.ema_projekt.einkaufsliste.EinkaufslisteData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,19 +27,21 @@ class PutzplanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_putzplan)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        setContentView(R.layout.activity_putzplan)
 
+        //Activity Felder holen
         zurueck = findViewById(R.id.imageButton_putzplan_zurueck)
         layout = findViewById(R.id.putzplan_layout)
         erstellen = findViewById(R.id.putzplan_add)
 
+        //ConnectionManager einstellen
         val conManager = ConnectionManager()
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
+        //Warten auf das Auslesen der Datenbank
         var list = mutableListOf<PutzPlanData>()
         GlobalScope.launch(Dispatchers.Main) {
-            list = PutzPlanDatabase().readDatabase(applicationContext)
+            list = PutzPlanDatabase().readPutzPlanDatabase(applicationContext)
             PutzPlanJSON().writePutzPlanJSON(list,applicationContext)
 
             for (data in list) {
@@ -51,6 +50,7 @@ class PutzplanActivity : AppCompatActivity() {
             }
         }
 
+        //Wenn kein Internet vorhanden Inhalt der JSON Datei nutzen
         if (!conManager.checkConnection(this)){
             val putzJSONarray = PutzPlanJSON().readPutzPlanJSON(applicationContext)
             for (i in 0 until putzJSONarray.length()) {
@@ -67,6 +67,7 @@ class PutzplanActivity : AppCompatActivity() {
             }
         }
 
+        //Klick Eventlistener
         erstellen.setOnClickListener {
             showEventAddPopUpPerson()
         }
@@ -77,18 +78,20 @@ class PutzplanActivity : AppCompatActivity() {
         }
     }
 
+    //PutzPlan Item erstellen PopUp
     private fun showEventAddPopUpPerson() {
         val eventPopUpPerson1 = Dialog(this)
 
         eventPopUpPerson1.setContentView(R.layout.popup_putzplan_neue_person)
         eventPopUpPerson1.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        //PopUp Items holen
         val abbrechen: Button = eventPopUpPerson1.findViewById(R.id.button_vorratskammer_abbrechen)
         val hinzufuegen: Button = eventPopUpPerson1.findViewById(R.id.button_vorratskammer_hinzufuegen)
         val eventText: EditText = eventPopUpPerson1.findViewById(R.id.editText_Neuer_Eintrag)
         val popupzureuck: ImageButton = eventPopUpPerson1.findViewById(R.id.imageButton_putzplanperson_zurueck)
 
-
+        //Klick Eventlistener
         abbrechen.setOnClickListener {
             eventPopUpPerson1.dismiss()
         }
@@ -104,7 +107,7 @@ class PutzplanActivity : AppCompatActivity() {
                 val data = PutzPlanData(id,eventText.text.toString(),"Aufgabe","Montags")
                 dataList.add(data)
                 createPutzPlanEintrag(data)
-                PutzPlanDatabase().writeDatabase(data,applicationContext)
+                PutzPlanDatabase().writePutzPlanDatabase(data,applicationContext)
                 PutzPlanJSON().addPutzPlanJSON(data,applicationContext)
 
                 eventPopUpPerson1.dismiss()
@@ -117,8 +120,10 @@ class PutzplanActivity : AppCompatActivity() {
         eventPopUpPerson1.show()
     }
 
+    //PutzPlan Item erstellen
     private fun createPutzPlanEintrag(data:PutzPlanData){
         val viewItem = View.inflate(this, R.layout.item_putzplan, null)
+        //Item Items holen
         val textViewPerson: TextView = viewItem.findViewById(R.id.putzplan_person)
 
         textViewPerson.text = data.person
@@ -126,31 +131,34 @@ class PutzplanActivity : AppCompatActivity() {
         val textViewAufgabe: TextView = viewItem.findViewById(R.id.putzplan_aufgabe)
         textViewAufgabe.text = data.aufgabe
 
-        val spinner: Spinner = viewItem.findViewById(R.id.putzplan_spinner)      //from https://developer.android.com/develop/ui/views/components/spinner
-        // Create an ArrayAdapter using the string array and a default spinner layout
+        //----------------------------------------------------------
+        //from https://developer.android.com/develop/ui/views/components/spinner
+        //Spinner Code aus dem Internet siehe Link
+        val spinner: Spinner = viewItem.findViewById(R.id.putzplan_spinner)
         ArrayAdapter.createFromResource(
             this,
             R.array.putzplan_spinner_strings,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
             spinner.adapter = adapter
             spinner.setSelection(adapter.getPosition(data.zeitInterval))
         }
+        //----------------------------------------------------------
 
+        //Event um Spinner Auswahlaenderungen abzufangen
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val interval: String = parent?.getItemAtPosition(position).toString()
                 val dataNew = getDataById(data.id)
                 dataNew.zeitInterval = interval
-                PutzPlanDatabase().editDatabaseZeitInterval(dataNew,applicationContext)
+                PutzPlanDatabase().editPutzPlanDatabaseZeitInterval(dataNew,applicationContext)
                 PutzPlanJSON().editZeitIntervalPutzPlanJSONItem(dataNew.id,applicationContext,dataNew.zeitInterval)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        //Klick Eventlistener
         textViewAufgabe.setOnClickListener {
             showEventAddPopUpAufgabe(textViewAufgabe,data.id)
         }
@@ -163,17 +171,19 @@ class PutzplanActivity : AppCompatActivity() {
         layout.addView(viewItem)
     }
 
+    //PopUp zum PutzPlan Item loeschen
     private fun showEventAddPopUpLoeschen(item: View, id:Int) {
-
         val popUpLoeschen = Dialog(this)
 
         popUpLoeschen.setContentView(R.layout.popup_putzplan_person_loeschen)
         popUpLoeschen.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        //PopUp Items holen
         val nein: Button = popUpLoeschen.findViewById(R.id.button_putzplan_loeschen_nein)
         val ja: Button = popUpLoeschen.findViewById(R.id.button_putzplan_loeschen_ja)
         val popupzurucke: ImageButton = popUpLoeschen.findViewById(R.id.imageButton_putzplan_loeschen_zurueck)
 
+        //Klick Eventlistener
         popupzurucke.setOnClickListener {
             popUpLoeschen.dismiss()
         }
@@ -187,24 +197,27 @@ class PutzplanActivity : AppCompatActivity() {
             layout.removeView(item)
             itemList.remove(id)
             dataList.remove(getDataById(id))
-            PutzPlanDatabase().deleteDatabaseItem(id,applicationContext)
+            PutzPlanDatabase().deletePutzPlanDatabaseItem(id,applicationContext)
             PutzPlanJSON().deletePutzPlanJSONItem(id,applicationContext)
         }
 
         popUpLoeschen.show()
     }
 
+    //PopUp zum Aufgabe aendern
     private fun showEventAddPopUpAufgabe(view: TextView, id:Int){
         val popUpAufgabe = Dialog(this)
 
         popUpAufgabe.setContentView(R.layout.popup_putzplan_neue_aufgabe)
         popUpAufgabe.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        //PopUp Items holen
         val abbrechen: Button = popUpAufgabe.findViewById(R.id.button_vorratskammer_abbrechen)
         val hinzufuegen: Button = popUpAufgabe.findViewById(R.id.button_vorratskammer_hinzufuegen)
         val eventText: EditText = popUpAufgabe.findViewById(R.id.editText_Neuer_Eintrag)
         val popupzurueck: ImageButton = popUpAufgabe.findViewById(R.id.imageButton_putzplanaufgabe_neu_zurueck)
 
+        //Klick Eventlistener
         abbrechen.setOnClickListener {
             popUpAufgabe.dismiss()
         }
@@ -218,7 +231,7 @@ class PutzplanActivity : AppCompatActivity() {
                 view.text = eventText.text
                 val data = getDataById(id)
                 data.aufgabe = eventText.text.toString()
-                PutzPlanDatabase().editDatabaseAufgabe(data,applicationContext)
+                PutzPlanDatabase().editPutzPlanDatabaseAufgabe(data,applicationContext)
                 PutzPlanJSON().editAufgabePutzPlanJSONItem(data.id,applicationContext,data.aufgabe)
 
                 popUpAufgabe.dismiss()
@@ -231,7 +244,7 @@ class PutzplanActivity : AppCompatActivity() {
         popUpAufgabe.show()
     }
 
-
+    //ID für Item bestimmen
     private fun nextId():Int{
         var newId = 0
         for (i in itemList.keys){
@@ -242,6 +255,7 @@ class PutzplanActivity : AppCompatActivity() {
         return newId
     }
 
+    //PutzPlaneintrag ueber ID bekommen
     private fun getDataById(id:Int):PutzPlanData{
         for(i in dataList){
             if (id == i.id){

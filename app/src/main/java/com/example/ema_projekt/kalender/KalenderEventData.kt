@@ -22,7 +22,8 @@ data class KalenderEventData(
 class KalenderEventDatabase {
     private val database: DatabaseReference = DatabaseManager().getDatabaseReference()
 
-    fun writeDatabase(data: KalenderEventData, context: Context) {
+    //Kalenderevent in Datenbank eintragen
+    fun writeKalendereventDatabase(data: KalenderEventData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("Kalender").child(data.id.toString()).child("Day")
             .setValue(data.day)
@@ -36,12 +37,14 @@ class KalenderEventDatabase {
             .setValue(data.dateStr)
     }
 
-    fun deleteDatabaseItem(id: Int, context: Context) {
+    //KalenderEvent aus Datenbank entfernen
+    fun deleteKalendereventDatabaseItem(id: Int, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("Kalender").child(id.toString()).removeValue()
     }
 
-    suspend fun readDatabase(context: Context): MutableList<KalenderEventData> {
+    //Kalenderevent aus Datenbank auslesen
+    suspend fun readKalenderEventDatabase(context: Context): MutableList<KalenderEventData> {
         return suspendCoroutine { value ->
             val list = mutableListOf<KalenderEventData>()
             val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
@@ -54,15 +57,7 @@ class KalenderEventDatabase {
                         val text: String = data.child("Text").value.toString()
                         val dateStr: String = data.child("DateStr").value.toString()
 
-                        list.add(
-                            KalenderEventData(
-                                day,
-                                month,
-                                year,
-                                text,
-                                dateStr,
-                                data.key.toString().toInt()
-                            )
+                        list.add(KalenderEventData(day, month, year, text, dateStr, data.key.toString().toInt())
                         )
                     }
                     value.resume(list)
@@ -78,29 +73,36 @@ class KalenderEventDatabase {
         }
     }
 
+    //1 Jahr alte Kalendeevents aus Datenbank entfernen
     suspend fun removeOneYearOldEvents(day: Int, month: Int, year: Int, context: Context) {
-        val listEvents = readDatabase(context)
+        val listEvents = readKalenderEventDatabase(context)
 
         for (event in listEvents) {
             if (event.year <= year - 1) {
                 if (event.month <= month) {
                     if (event.day <= day + 1) {
-                        deleteDatabaseItem(event.id,context)
+                        deleteKalendereventDatabaseItem(event.id,context)
                     }
                 }
             }
         }
     }
 
-    fun editDatabaseEvent(data: KalenderEventData, context: Context){
+    //KalenderEvent Text in Datenbank veraendern
+    fun editKalendereventDatabaseEvent(data: KalenderEventData, context: Context){
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("Kalender").child(data.id.toString()).child("Text").setValue(data.text)
     }
 }
 
 class  KalenderEventJSON{
-    fun writeJSON(data: MutableList<KalenderEventData>, context: Context) {
-        val file = FileWriter("/data/data/" + context.packageName + "/" + "kalenderevent.json")
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion writeKalenderEventJSON von StackOverflow siehe Link
+
+    //JSON Datei Inhalt reinschreiben
+    fun writeKalenderEventJSON(data: MutableList<KalenderEventData>, context: Context) {
+        val file = FileWriter("/data/data/" + context.packageName + "/" + "Kalenderevent.json")
         val arrayJson = JSONArray()
 
         for (i in data) {
@@ -117,9 +119,16 @@ class  KalenderEventJSON{
         file.flush()
         file.close()
     }
-    fun addJSON(data: KalenderEventData, context: Context) {
-        val existingJson = readJSON(context)
-        val file = FileWriter("/data/data/" + context.packageName + "/" + "kalenderevent.json")
+    //---------------------------------------------------------
+
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion addKalenderEventJSON von StackOverflow sieh Link
+
+    //Inhalt in JSON Datei hinzufuegen
+    fun addKalenderEventJSON(data: KalenderEventData, context: Context) {
+        val existingJson = readKalenderEventJSON(context)
+        val file = FileWriter("/data/data/" + context.packageName + "/" + "KalenderEvent.json")
         val arrayJson = JSONArray()
         for (i in 0 until existingJson.length()) {
             arrayJson.put(existingJson[i])
@@ -136,8 +145,15 @@ class  KalenderEventJSON{
         file.flush()
         file.close()
     }
-    fun readJSON(context: Context): JSONArray {
-        val file = File("/data/data/" + context.packageName + "/" + "kalenderevent.json")
+    //---------------------------------------------------------
+
+    //---------------------------------------------------------
+    //https://medium.com/@nayantala259/android-how-to-read-and-write-parse-data-from-json-file-226f821e957a
+    //Code der Funktion readKalenderEventJSON von aus dem Internet siehe Link (AUf der Seite zu finden unter "2. Read Data From JSON FIle :-")
+
+    //JSON Datei Inhalt auslesen
+    fun readKalenderEventJSON(context: Context): JSONArray {
+        val file = File("/data/data/" + context.packageName + "/" + "KalenderEvent.json")
         try {
             val fileReader = FileReader(file)
             val bufferedReader = BufferedReader(fileReader)
@@ -153,8 +169,15 @@ class  KalenderEventJSON{
             return JSONArray()
         }
     }
-    fun editJSONItem(data: KalenderEventData, context: Context) {
-        val jsonArray = readJSON(context)
+    //---------------------------------------------------------
+
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion editKalenderEventJSONItem von StackOverflow sieh Link
+
+    //Kalenderevent Text fuer ein Event in JSON Datei veraendern
+    fun editKalenderEventJSONItem(data: KalenderEventData, context: Context) {
+        val jsonArray = readKalenderEventJSON(context)
         val newJSONArray = JSONArray()
         for (i in 0 until jsonArray.length()) {
             if (jsonArray.getJSONObject(i).getInt("id") == data.id) {
@@ -177,13 +200,20 @@ class  KalenderEventJSON{
                 newJSONArray.put(objJson)
             }
         }
-        val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "kalenderevent.json")
+        val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "KalenderEvent.json")
         fileWrite.write(newJSONArray.toString())
         fileWrite.flush()
         fileWrite.close()
     }
-    fun deleteJSONItem(nr: Int, context: Context) {
-        val jsonArray = readJSON(context)
+    //---------------------------------------------------------
+
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion deleteKalenderEventJSONItem von StackOverflow sieh Link
+
+    //Kalenderevent aus JSON Datei entfernen
+    fun deleteKalenderEventJSONItem(nr: Int, context: Context) {
+        val jsonArray = readKalenderEventJSON(context)
         val newJSONArray = JSONArray()
         for (i in 0 until jsonArray.length()) {
             if (jsonArray.getJSONObject(i).getInt("id") != nr){
@@ -197,34 +227,10 @@ class  KalenderEventJSON{
                 newJSONArray.put(objJson)
             }
         }
-        val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "kalenderevent.json")
+        val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "KalenderEvent.json")
         fileWrite.write(newJSONArray.toString())
         fileWrite.flush()
         fileWrite.close()
     }
-    fun removeOneYearOldEvents(day: Int, month: Int, year: Int ,context: Context){
-        val jsonArray = readJSON(context)
-        val newJSONArray = JSONArray()
-        for (i in 0 until jsonArray.length()) {
-            if (jsonArray.getJSONObject(i).getInt("year") <= year - 1) {
-                if (jsonArray.getJSONObject(i).getInt("month") <= month) {
-                    if (jsonArray.getJSONObject(i).getInt("day") <= day + 1) {
-                        continue
-                    }
-                }
-            }
-            val objJson = JSONObject()
-            objJson.put("day", jsonArray.getJSONObject(i).get("day"))
-            objJson.put("month", jsonArray.getJSONObject(i).get("month"))
-            objJson.put("year", jsonArray.getJSONObject(i).get("year"))
-            objJson.put("text", jsonArray.getJSONObject(i).get("text"))
-            objJson.put("datestr", jsonArray.getJSONObject(i).get("datestr"))
-            objJson.put("id", jsonArray.getJSONObject(i).get("id"))
-            newJSONArray.put(objJson)
-        }
-        val fileWrite = FileWriter("/data/data/" + context.packageName + "/" + "kalenderevent.json")
-        fileWrite.write(newJSONArray.toString())
-        fileWrite.flush()
-        fileWrite.close()
-    }
+    //---------------------------------------------------------
 }

@@ -35,6 +35,7 @@ class WGPlanerActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_wgplaner)
 
+        //Activity Felder holen
         vorratskammer = findViewById(R.id.imageButton2)
         kalender = findViewById(R.id.imageButton3)
         putzplan = findViewById(R.id.imageButton4)
@@ -42,12 +43,14 @@ class WGPlanerActivity : AppCompatActivity() {
         hottopics = findViewById(R.id.imageButton6)
         wgInfo = findViewById(R.id.imageButton7)
 
+        //Listener Für Netzwerk veränderungen erstellen und ConnectionManager einstellen
         conManager = ConnectionManager()
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(conManager, filter)
 
+        //Klick Eventlistener
         vorratskammer.setOnClickListener{
             vorratskammer.setBackgroundResource(R.drawable.vorratskammerklick)
             startActivity(Intent(this, VorratskammerActivity::class.java))
@@ -81,6 +84,7 @@ class WGPlanerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        //Bild mit weißen Hintergrund setzen
         vorratskammer.setBackgroundResource(R.drawable.vorratskammer)
         kalender.setBackgroundResource(R.drawable.kalender)
         putzplan.setBackgroundResource(R.drawable.putzplan)
@@ -93,7 +97,6 @@ class WGPlanerActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        Log.d("DEBUG","TESTTEST")
         unregisterReceiver(conManager)
         super.onDestroy()
     }

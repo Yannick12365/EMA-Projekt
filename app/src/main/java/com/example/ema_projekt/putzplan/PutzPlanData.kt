@@ -25,14 +25,16 @@ data class PutzPlanData(
 class PutzPlanDatabase {
     private val database: DatabaseReference = DatabaseManager().getDatabaseReference()
 
-    fun writeDatabase(data: PutzPlanData, context: Context) {
+    //PutzPlan Eintrag in Datenbank schreiben
+    fun writePutzPlanDatabase(data: PutzPlanData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("PutzPlan").child(data.id.toString()).child("Person").setValue(data.person)
         database.child(wgName).child("PutzPlan").child(data.id.toString()).child("Aufgabe").setValue(data.aufgabe)
         database.child(wgName).child("PutzPlan").child(data.id.toString()).child("ZeitInterval").setValue(data.zeitInterval)
     }
 
-    suspend fun readDatabase(context: Context):MutableList<PutzPlanData>{
+    //PutzPlan Eintraege aus Datenbak auslesen
+    suspend fun readPutzPlanDatabase(context: Context):MutableList<PutzPlanData>{
         return suspendCoroutine { value ->
             val list = mutableListOf<PutzPlanData>()
             val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
@@ -60,27 +62,32 @@ class PutzPlanDatabase {
         }
     }
 
-    fun deleteDatabaseItem(id: Int?, context: Context) {
+    //PutzPlan Eintrag aus Datenbank loeschen
+    fun deletePutzPlanDatabaseItem(id: Int?, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("PutzPlan").child(id.toString()).removeValue()
     }
 
-
-    fun editDatabaseAufgabe(data: PutzPlanData, context: Context){
+    //Aufgabe in PutzPlan Eintrag in Datenbank veraendern
+    fun editPutzPlanDatabaseAufgabe(data: PutzPlanData, context: Context){
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("PutzPlan").child(data.id.toString()).child("Aufgabe").setValue(data.aufgabe)
     }
 
-
-    fun editDatabaseZeitInterval(data: PutzPlanData, context: Context){
+    //ZeitInterval in PutzPlan Eintrag in Datenbank veraendern
+    fun editPutzPlanDatabaseZeitInterval(data: PutzPlanData, context: Context){
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("PutzPlan").child(data.id.toString()).child("ZeitInterval").setValue(data.zeitInterval)
     }
 }
 
 
-class PutzPlanJSON(){
+class PutzPlanJSON{
+    //---------------------------------------------------------
     //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Code der Funktion writePutzPlanJSON von StackOverflow siehe Link
+
+    //JSON Datei Inhalt reinschreiben
     fun writePutzPlanJSON(data: List<PutzPlanData>, context: Context) {
         val file = FileWriter("/data/data/" + context.packageName + "/" + "PutzPlan.json")
 
@@ -99,7 +106,13 @@ class PutzPlanJSON(){
         file.flush()
         file.close()
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion addPutzPlanJSON von StackOverflow sieh Link
+
+    //Inhalt in JSON Datei hinzufuegen
     fun addPutzPlanJSON(data: PutzPlanData, context: Context) {
         val existingJson = readPutzPlanJSON(context)
         val file = FileWriter("/data/data/" + context.packageName + "/" + "PutzPlan.json")
@@ -121,8 +134,13 @@ class PutzPlanJSON(){
         file.flush()
         file.close()
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
     //https://medium.com/@nayantala259/android-how-to-read-and-write-parse-data-from-json-file-226f821e957a
+    //Code der Funktion readPutzPlanJSON von aus dem Internet siehe Link (AUf der Seite zu finden unter "2. Read Data From JSON FIle :-")
+
+    //JSON Datei Inhalt auslesen
     fun readPutzPlanJSON(context: Context): JSONArray {
         val file = File("/data/data/" + context.packageName + "/" + "PutzPlan.json")
         try {
@@ -142,8 +160,13 @@ class PutzPlanJSON(){
             return JSONArray()
         }
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion deletePutzPlanJSONItem von StackOverflow sieh Link
 
+    //Item aus JSON Datei entfernen
     fun deletePutzPlanJSONItem(nr: Int, context: Context) {
         val jsonArray = readPutzPlanJSON(context)
         val newJSONArray = JSONArray()
@@ -166,7 +189,13 @@ class PutzPlanJSON(){
         fileWrite.flush()
         fileWrite.close()
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion editAufgabePutzPlanJSONItem von StackOverflow sieh Link
+
+    //Aufgabe in JSON Item veraendern
     fun editAufgabePutzPlanJSONItem(nr: Int, context: Context, aufgabe:String) {
         val jsonArray = readPutzPlanJSON(context)
         val newJSONArray = JSONArray()
@@ -191,7 +220,13 @@ class PutzPlanJSON(){
         fileWrite.flush()
         fileWrite.close()
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion editZeitIntervalPutzPlanJSONItem von StackOverflow sieh Link
+
+    //ZeitInterval in JSON Item veraendern
     fun editZeitIntervalPutzPlanJSONItem(nr: Int, context: Context, zeitInterval:String) {
         val jsonArray = readPutzPlanJSON(context)
         val newJSONArray = JSONArray()
@@ -216,6 +251,7 @@ class PutzPlanJSON(){
         fileWrite.flush()
         fileWrite.close()
     }
+    //---------------------------------------------------------
 }
 
 

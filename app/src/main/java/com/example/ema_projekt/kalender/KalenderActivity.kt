@@ -17,7 +17,6 @@ import com.example.ema_projekt.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.util.*
@@ -34,6 +33,7 @@ class KalenderActivity : AppCompatActivity() {
 
     private lateinit var eventPopUpShow: Dialog
 
+    //Variablen fuer Kalender
     private val monatList = mutableListOf<TextView>()
     private val showMonatList = mutableListOf<TextView>()
 
@@ -52,6 +52,7 @@ class KalenderActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_kalender)
 
+        //Activity Felder holen
         zurueck = findViewById(R.id.imageButton_hot_topics_zurueck)
         eintragErstellen = findViewById(R.id.button_erstellen)
         gridLayout = findViewById(R.id.dayGrid)
@@ -61,10 +62,12 @@ class KalenderActivity : AppCompatActivity() {
         showEvents = findViewById(R.id.button_ShowEvent)
         linearlayout = findViewById(R.id.linearlayout)
 
+        //ConnectionManager einstellen
         val conManager = ConnectionManager()
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
+        //Kalender Variablen mit Inhalt fuellen
         textViewDayFocus = TextView(this)
 
         val c = Calendar.getInstance()
@@ -85,17 +88,19 @@ class KalenderActivity : AppCompatActivity() {
 
         textViewMonth.text = getMonthByInt(monthShow) + yearShow
 
+        //Warten auf das Auslesen der Datenbank
         var list = mutableListOf<KalenderEventData>()
         GlobalScope.launch(Dispatchers.Main) {
             KalenderEventDatabase().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr,applicationContext)
-            list = KalenderEventDatabase().readDatabase(applicationContext)
-            KalenderEventJSON().writeJSON(list,applicationContext)
+            list = KalenderEventDatabase().readKalenderEventDatabase(applicationContext)
+            KalenderEventJSON().writeKalenderEventJSON(list,applicationContext)
             KalenderEvent().fillEventList(list)
             markEvents()
         }
 
+        //Wenn kein Internet vorhanden Inhalt der JSON Datei nutzen
         if (!conManager.checkConnection(this)){
-            val kalenderJSONarray = KalenderEventJSON().readJSON(applicationContext)
+            val kalenderJSONarray = KalenderEventJSON().readKalenderEventJSON(applicationContext)
             for (i in 0 until kalenderJSONarray.length()) {
                 list.add(
                     KalenderEventData(
@@ -111,12 +116,14 @@ class KalenderActivity : AppCompatActivity() {
             markEvents()
         }
 
+        //Klick Eventlistener
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)
             this.finish()
         }
 
         buttonMonthRight.setOnClickListener {
+            //Naechsten Monat einzeigen
             monthShow+=1
 
             if (monthShow > 12){
@@ -129,6 +136,7 @@ class KalenderActivity : AppCompatActivity() {
         }
 
         buttonMonthLeft.setOnClickListener {
+            //Vorheaerigen Monat anzeigen
             monthShow-=1
 
             if (monthShow < 1){
@@ -140,6 +148,7 @@ class KalenderActivity : AppCompatActivity() {
             showEvents.visibility = View.INVISIBLE
         }
 
+        //Event Eintrag erstellen
         eintragErstellen.setOnClickListener {
             if (textViewDayFocus in showMonatList) {
                 var month:String = monthShow.toString()
@@ -176,12 +185,14 @@ class KalenderActivity : AppCompatActivity() {
         }
     }
 
+    //Events hinzufuegen PopUp
     private fun showEventAddPopUp(event: KalenderEventData){
         val eventPopUp = Dialog(this)
 
         eventPopUp.setContentView(R.layout.popup_add_kalender_event)
         eventPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        //PopUp Items holen
         val zurueckAdd:ImageButton = eventPopUp.findViewById(R.id.imageButton_kalenderevent_zurueck)
         val showDate:TextView = eventPopUp.findViewById(R.id.textView_show_date)
         val abbrechen:Button = eventPopUp.findViewById(R.id.button_kalenderevent_abbrechen)
@@ -190,6 +201,7 @@ class KalenderActivity : AppCompatActivity() {
 
         showDate.text = event.dateStr
 
+        //Klick Eventlistener
         zurueckAdd.setOnClickListener {
             zurueckAdd.setBackgroundResource(R.drawable.zurueckklick)
             eventPopUp.dismiss()
@@ -202,8 +214,8 @@ class KalenderActivity : AppCompatActivity() {
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
                 KalenderEvent().addEvents(event)
-                KalenderEventDatabase().writeDatabase(event,applicationContext)
-                KalenderEventJSON().addJSON(event,applicationContext)
+                KalenderEventDatabase().writeKalendereventDatabase(event,applicationContext)
+                KalenderEventJSON().addKalenderEventJSON(event,applicationContext)
                 markEvents()
                 eventPopUp.dismiss()
             } else{
@@ -219,15 +231,18 @@ class KalenderActivity : AppCompatActivity() {
         eventPopUp.show()
     }
 
+    //Events von einem Tag anzeigen PopUp
     private fun showEventShowPopUp(){
         eventPopUpShow = Dialog(this)
 
         eventPopUpShow.setContentView(R.layout.popup_show_kalender_event)
         eventPopUpShow.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        //PopUp Items holen
         val zureuckShow: ImageButton = eventPopUpShow.findViewById(R.id.imageButton_kalendershowevent_zurueck)
         val linearLayoutEvents: LinearLayout = eventPopUpShow.findViewById(R.id.linearlayoutEvents)
 
+        //Klick Eventlistener
         zureuckShow.setOnClickListener {
             markEvents()
             zureuckShow.setBackgroundResource(R.drawable.zurueckklick)
@@ -244,12 +259,14 @@ class KalenderActivity : AppCompatActivity() {
         eventPopUpShow.show()
     }
 
+    //Event bearbeiten PopUp
     private fun showEventEditPopUp(event: KalenderEventData){
         val eventPopUp = Dialog(this)
 
         eventPopUp.setContentView(R.layout.popup_edit_kalender_event)
         eventPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        //PopUp Items holen
         val zurueckEdit:ImageButton = eventPopUp.findViewById(R.id.imageButton_kalender_edit_event_zurueck)
         val showDate:TextView = eventPopUp.findViewById(R.id.textView_kalender_edit_show_date)
         val abbrechen:Button = eventPopUp.findViewById(R.id.button_kalender_edit_event_abbrechen)
@@ -261,6 +278,7 @@ class KalenderActivity : AppCompatActivity() {
 
         eventText.setText(event.text)
 
+        //Klick Eventlistener
         zurueckEdit.setOnClickListener {
             zurueckEdit.setBackgroundResource(R.drawable.zurueckklick)
             eventPopUp.dismiss()
@@ -271,6 +289,7 @@ class KalenderActivity : AppCompatActivity() {
         }
 
         loeschen.setOnClickListener {
+            //Event loeschen
             KalenderEvent().getEvents().remove(event)
             markEvents()
 
@@ -290,8 +309,8 @@ class KalenderActivity : AppCompatActivity() {
                 }
             }
 
-            KalenderEventDatabase().deleteDatabaseItem(event.id,applicationContext)
-            KalenderEventJSON().deleteJSONItem(event.id,applicationContext)
+            KalenderEventDatabase().deleteKalendereventDatabaseItem(event.id,applicationContext)
+            KalenderEventJSON().deleteKalenderEventJSONItem(event.id,applicationContext)
             KalenderEvent().deleteEventFromList(event.id)
 
             eventPopUp.dismiss()
@@ -299,10 +318,11 @@ class KalenderActivity : AppCompatActivity() {
         }
 
         bestaetigen.setOnClickListener {
+            //Event bearbeiten bestaetigen
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
-                KalenderEventDatabase().editDatabaseEvent(event,applicationContext)
-                KalenderEventJSON().editJSONItem(event,applicationContext)
+                KalenderEventDatabase().editKalendereventDatabaseEvent(event,applicationContext)
+                KalenderEventJSON().editKalenderEventJSONItem(event,applicationContext)
                 eventPopUp.dismiss()
                 eventPopUpShow.dismiss()
             }else{
@@ -314,6 +334,7 @@ class KalenderActivity : AppCompatActivity() {
         eventPopUp.show()
     }
 
+    //Monat wechsel Monat erstellen
     @RequiresApi(Build.VERSION_CODES.O)
     private fun switchMonth(){
         textViewMonth.text = getMonthByInt(monthShow) + yearShow
@@ -328,6 +349,7 @@ class KalenderActivity : AppCompatActivity() {
         createMonth(tagStart,yearMonth.lengthOfMonth()+tagStart-1)
     }
 
+    //Kalender Tage erstellen und anzeigen
     private fun createCalenderDays(){
         for (i in 1..37) {
             val textView = TextView(this)
@@ -360,6 +382,7 @@ class KalenderActivity : AppCompatActivity() {
         }
     }
 
+    //Monatsname bekommen
     private fun getMonthByInt(nr:Int) :String{
         when (nr) {
             1 -> {
@@ -402,6 +425,7 @@ class KalenderActivity : AppCompatActivity() {
         }
     }
 
+    //neuen Monat erstellen
     private fun createMonth(nrStart:Int, nrEnde:Int){
         for (i in nrStart..nrEnde){
             showMonatList.add(monatList[i])
@@ -417,6 +441,7 @@ class KalenderActivity : AppCompatActivity() {
         }
     }
 
+    //alten Monat entfernen
     private fun resetMonth(){
         for (i in monatList){
             i.text = ""
@@ -428,6 +453,7 @@ class KalenderActivity : AppCompatActivity() {
         showMonatList.clear()
     }
 
+    //aktuellen Tag makieren
     private fun markCurrentDay(){
         if (monthShow == aktuellerMonat && yearShow == aktuellesJahr){
             val textviewAktuellerTag: TextView = showMonatList[aktuellerTag]
@@ -435,6 +461,7 @@ class KalenderActivity : AppCompatActivity() {
         }
     }
 
+    //Events makieren
     private fun markEvents(){
         val events = KalenderEvent().getEvents()
 
@@ -445,15 +472,18 @@ class KalenderActivity : AppCompatActivity() {
         }
     }
 
+    //Event anzeigen Item erstellen
     private fun createEventView(linearLayoutEvents: LinearLayout){
         val events = KalenderEvent().getEvents()
 
         for (event in events){
             if (event.month == monthShow && event.year == yearShow && event.day.toString() == textViewDayFocus.text){
+                //Item Items holen
                 val viewItem: View = View.inflate(this, R.layout.item_kalender_event, null)
                 val textView:TextView = viewItem.findViewById(R.id.kalender_event_text)
                 textView.text = "["+event.dateStr+"] "+event.text
 
+                //Klick Eventlistener
                 textView.setOnClickListener {
                     showEventEditPopUp(event)
                 }
@@ -462,6 +492,7 @@ class KalenderActivity : AppCompatActivity() {
         }
     }
 
+    //Pruefen ob Event 1 Jahr alt ist
     private fun checkOneYearOld(event: KalenderEventData): Boolean{
         if (event.year <= aktuellesJahr-1){
             if (event.month <= aktuellerMonat){

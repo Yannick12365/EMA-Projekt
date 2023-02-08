@@ -1,11 +1,8 @@
 package com.example.ema_projekt.hottopics
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import com.example.ema_projekt.DatabaseManager
-import com.example.ema_projekt.einkaufsliste.EinkaufslisteData
-import com.example.ema_projekt.vorratskammer.VorratskammerData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,12 +29,14 @@ data class HotTopicKommentarData(
 class HotTopicDatabase{
     private val database: DatabaseReference = DatabaseManager().getDatabaseReference()
 
-    fun writeDatabase(data: HotTopicsData, context: Context) {
+    //HotTopic in Datenbank schreiben
+    fun writeHotTopicDatabase(data: HotTopicsData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("HotTopic").child(data.id.toString()).child("Text").setValue(data.text)
     }
 
-    suspend fun readDatabase(context: Context):MutableList<HotTopicsData>{
+    //HotTopics aus Datenbank auslesen
+    suspend fun readHotTopicDatabase(context: Context):MutableList<HotTopicsData>{
         return suspendCoroutine { value ->
             val list = mutableListOf<HotTopicsData>()
             val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
@@ -51,53 +50,50 @@ class HotTopicDatabase{
                                 for (kommentar in snapshot.child("HotTopic")
                                     .child(data.key.toString()).child("Kommentare").children) {
                                     kommentarListe.add(
-                                        HotTopicKommentarData(
-                                            kommentar.key.toString().toInt(),
-                                            kommentar.value.toString()
-                                        )
+                                        HotTopicKommentarData(kommentar.key.toString().toInt(), kommentar.value.toString())
                                     )
                                 }
                             }
-
-                            list.add(HotTopicsData(
-                                data.key.toString().toInt(),
-                                data.child("Text").value.toString(),
-                                kommentarListe))
+                            list.add(HotTopicsData(data.key.toString().toInt(), data.child("Text").value.toString(), kommentarListe))
                         }
                         value.resume(list)
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        context, "Ups, da ist etwas schief gelaufen!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(context, "Ups, da ist etwas schief gelaufen!", Toast.LENGTH_SHORT).show()
                 }
             })
         }
     }
 
-    fun deleteDatabaseItem(id: Int, context: Context) {
+    //HotTopic aus Datenbank entfernen
+    fun deleteHotTopicDatabaseItem(id: Int, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("HotTopic").child(id.toString()).removeValue()
     }
 
+    //HotTopic Kommentar zu HotTopic in Datenbak hinzufuegen
     fun writeKommentar(idTopic:Int, data:HotTopicKommentarData, context: Context){
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("HotTopic").child(idTopic.toString()).child("Kommentare").child(data.id.toString()).setValue(data.text)
     }
 
-    fun deleteDatabaseItemKommentar(idTopic:Int,id: Int, context: Context) {
+    //HotTopic Kommentar bei HotTopic in Datenbak entfernen
+    fun deleteKommentar(idTopic:Int, id: Int, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("HotTopic").child(idTopic.toString()).child("Kommentare").child(id.toString()).removeValue()
     }
 }
 
 
-class HotTopicsJSON(){
+class HotTopicsJSON{
+    //---------------------------------------------------------
     //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
-    fun writeJSON(data: List<HotTopicsData>, context: Context) {
+    //Teil zum reinschreiben der Funktion writeHotTopicJSON von StackOverflow siehe Link
+
+    //JSON Datei Inhalt reinschreiben
+    fun writeHotTopicJSON(data: List<HotTopicsData>, context: Context) {
         val file = FileWriter("/data/data/" + context.packageName + "/" + "HotTopics.json")
 
         val arrayJson = JSONArray()
@@ -121,9 +117,15 @@ class HotTopicsJSON(){
         file.flush()
         file.close()
     }
+    //---------------------------------------------------------
 
-    fun addJSON(data: HotTopicsData, context: Context) {
-        val existingJson = readJSON(context)
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion addHotTopicJSON von StackOverflow sieh Link
+
+    //Inhalt in JSON Datei hinzufuegen
+    fun addHotTopicJSON(data: HotTopicsData, context: Context) {
+        val existingJson = readHotTopicJSON(context)
         val file = FileWriter("/data/data/" + context.packageName + "/" + "HotTopics.json")
 
         val arrayJson = JSONArray()
@@ -148,9 +150,14 @@ class HotTopicsJSON(){
         file.flush()
         file.close()
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
     //https://medium.com/@nayantala259/android-how-to-read-and-write-parse-data-from-json-file-226f821e957a
-    fun readJSON(context: Context): JSONArray {
+    //Code der Funktion readHotTopicJSON von aus dem Internet siehe Link (AUf der Seite zu finden unter "2. Read Data From JSON FIle :-")
+
+    //JSON Datei Inhalt auslesen
+    fun readHotTopicJSON(context: Context): JSONArray {
         val file = File("/data/data/" + context.packageName + "/" + "HotTopics.json")
         try {
             val fileReader = FileReader(file)
@@ -169,10 +176,15 @@ class HotTopicsJSON(){
             return JSONArray()
         }
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion deleteHotTopicJSONItem von StackOverflow sieh Link
 
-    fun deleteJSONItem(nr: Int, context: Context) {
-        val jsonArray = readJSON(context)
+    //Item in JSON Datei entfernen
+    fun deleteHotTopicJSONItem(nr: Int, context: Context) {
+        val jsonArray = readHotTopicJSON(context)
         val newJSONArray = JSONArray()
 
         for (i in 0 until jsonArray.length()) {
@@ -191,9 +203,15 @@ class HotTopicsJSON(){
         fileWrite.flush()
         fileWrite.close()
     }
+    //---------------------------------------------------------
 
-    fun writeKommentar(idTopic:Int, data:HotTopicKommentarData, context: Context){
-        val existingJson = readJSON(context)
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion writeKommentarJSON von StackOverflow sieh Link
+
+    //Kommentar zu Item in JSON Datei hinzufuegen
+    fun writeKommentarJSON(idTopic:Int, data:HotTopicKommentarData, context: Context){
+        val existingJson = readHotTopicJSON(context)
         val file = FileWriter("/data/data/" + context.packageName + "/" + "HotTopics.json")
 
         val arrayJson = JSONArray()
@@ -227,9 +245,15 @@ class HotTopicsJSON(){
         file.flush()
         file.close()
     }
+    //---------------------------------------------------------
 
-    fun deleteJSONItemKommentar(idTopic:Int,id: Int, context: Context) {
-        val existingJson = readJSON(context)
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion deleteKommentarJSON von StackOverflow sieh Link
+
+    //Kommentar bei Item in JSON Datei entfernen
+    fun deleteKommentarJSON(idTopic:Int, id: Int, context: Context) {
+        val existingJson = readHotTopicJSON(context)
         val file = FileWriter("/data/data/" + context.packageName + "/" + "HotTopics.json")
 
         val arrayJson = JSONArray()
@@ -267,5 +291,6 @@ class HotTopicsJSON(){
         file.flush()
         file.close()
     }
+    //---------------------------------------------------------
 }
 

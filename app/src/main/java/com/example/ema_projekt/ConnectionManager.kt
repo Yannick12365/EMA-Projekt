@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
-import android.net.Network
 import android.net.NetworkInfo
 import android.view.View
 import android.widget.Button
@@ -21,6 +20,7 @@ class ConnectionManager : BroadcastReceiver() {
         private lateinit var appContext: Context
     }
 
+    //Event das guckt ob es eine Netzwerk Änderung gibt
     override fun onReceive(context: Context?, intent: Intent?) {
         val appContextView:View = (appContext as Activity).findViewById(android.R.id.content)
         val textView:TextView = appContextView.findViewById(R.id.textViewInternetError)
@@ -37,11 +37,13 @@ class ConnectionManager : BroadcastReceiver() {
         }
     }
 
+    //Objekte setzen für einen neue Activity
     fun setOjects(login:Boolean, context: Context){
         loginScreen = login
         appContext = context
     }
 
+    //Keine Internetverbindung Nachricht zeigen/verstecken lassen bei einem Activity wechsel
     fun switchScreen(context: Context){
         val appContext:View = (context as Activity).findViewById(android.R.id.content)
         val textView:TextView = appContext.findViewById(R.id.textViewInternetError)
@@ -53,7 +55,12 @@ class ConnectionManager : BroadcastReceiver() {
         }
     }
 
+
+    //-----------------------------------------------------------------------
     //https://stackoverflow.com/questions/12352893/how-to-check-whether-android-mobile-data-is-on
+    //Code der Funktion checkConnection von StackOverflow siehe Link (mit eigenen kleinen anpassungen)
+
+    //Pruefen ob Handy mit dem Internet verbunden ist
     fun checkConnection(context: Context?):Boolean{
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -65,7 +72,9 @@ class ConnectionManager : BroadcastReceiver() {
         }
         return false
     }
+    //-----------------------------------------------------------------------
 
+    //Kein Internet verfügbar Popup
     private fun createInternetErrorPopUp(context: Context){
         val errorPopUp = Dialog(context)
         errorPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -77,6 +86,7 @@ class ConnectionManager : BroadcastReceiver() {
         errorPopUp.show()
     }
 
+    //Kein Internet verfügbar Popup für Login Screen
      private fun createLoginErrorPopUp(context: Context){
         val errorPopUp = Dialog(context)
         errorPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

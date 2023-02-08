@@ -3,7 +3,6 @@ package com.example.ema_projekt.einkaufsliste
 import android.content.Context
 import android.widget.Toast
 import com.example.ema_projekt.DatabaseManager
-import com.example.ema_projekt.wgplaner.LoginData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.*
 import org.json.JSONArray
@@ -21,12 +20,14 @@ data class EinkaufslisteData(
 class EinkauflisteDataBase {
     private val database: DatabaseReference = DatabaseManager().getDatabaseReference()
 
-    fun writeDatabase(data: EinkaufslisteData, context: Context) {
+    //Einkaufslisten Item in Datenbank schreiben
+    fun writeEinkaufslisteDatabase(data: EinkaufslisteData, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("Einkaufsliste").child(data.itemId.toString()).setValue(data.itemText)
     }
 
-    suspend fun readDatabase(context: Context):MutableList<EinkaufslisteData>{
+    //Einkaufslistenitems aus Datenbank auslesen
+    suspend fun readEinkaufslisteDatabase(context: Context):MutableList<EinkaufslisteData>{
         return suspendCoroutine { value ->
             val list = mutableListOf<EinkaufslisteData>()
             val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
@@ -50,16 +51,21 @@ class EinkauflisteDataBase {
         }
     }
 
-    fun deleteDatabaseItem(id: Int?, context: Context) {
+    //Einkaufslistenitem in Datenbank entfernen
+    fun deleteEinkaufslisteDatabaseItem(id: Int?, context: Context) {
         val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
         database.child(wgName).child("Einkaufsliste").child(id.toString()).removeValue()
     }
 }
 
-class EinkaufslisteJSON(){
+class EinkaufslisteJSON{
+    //---------------------------------------------------------
     //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
-    fun writeJSON(data: List<EinkaufslisteData>, context: Context) {
-        val file = FileWriter("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
+    //Teil zum reinschreiben der Funktion writeEinkaufslisteJSON von StackOverflow siehe Link
+
+    //JSON Datei Inhalt reinschreiben
+    fun writeEinkaufslisteJSON(data: List<EinkaufslisteData>, context: Context) {
+        val file = FileWriter("/data/data/" + context.packageName + "/" + "Einkaufsliste.json")
 
         val arrayJson = JSONArray()
 
@@ -74,10 +80,16 @@ class EinkaufslisteJSON(){
         file.flush()
         file.close()
     }
+    //---------------------------------------------------------
 
-    fun addJSON(data: EinkaufslisteData, context: Context) {
-        val existingJson = readJSON(context)
-        val file = FileWriter("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion addEinkaufslisteJSON von StackOverflow siehe Link
+
+    //JSON Datei Item hinzufuegen
+    fun addEinkaufslisteJSON(data: EinkaufslisteData, context: Context) {
+        val existingJson = readEinkaufslisteJSON(context)
+        val file = FileWriter("/data/data/" + context.packageName + "/" + "Einkaufsliste.json")
 
         val arrayJson = JSONArray()
 
@@ -94,10 +106,15 @@ class EinkaufslisteJSON(){
         file.flush()
         file.close()
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
     //https://medium.com/@nayantala259/android-how-to-read-and-write-parse-data-from-json-file-226f821e957a
-    fun readJSON(context: Context): JSONArray {
-        val file = File("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
+    //Code der Funktion readEinkaufslisteJSON von aus dem Internet siehe Link (AUf der Seite zu finden unter "2. Read Data From JSON FIle :-")
+
+    //JSON Datei Inhalt auslesen
+    fun readEinkaufslisteJSON(context: Context): JSONArray {
+        val file = File("/data/data/" + context.packageName + "/" + "Einkaufsliste.json")
         try {
             val fileReader = FileReader(file)
             val bufferedReader = BufferedReader(fileReader)
@@ -115,10 +132,15 @@ class EinkaufslisteJSON(){
             return JSONArray()
         }
     }
+    //---------------------------------------------------------
 
+    //---------------------------------------------------------
+    //https://stackoverflow.com/questions/14219253/writing-json-file-and-read-that-file-in-android
+    //Teil zum reinschreiben der Funktion deleteEinkaufslisteJSONItem von StackOverflow siehe Link
 
-    fun deleteJSONItem(nr: Int, context: Context) {
-        val jsonArray = readJSON(context)
+    //JSON Datei Item hinzufuegen
+    fun deleteEinkaufslisteJSONItem(nr: Int, context: Context) {
+        val jsonArray = readEinkaufslisteJSON(context)
         val newJSONArray = JSONArray()
 
         for (i in 0 until jsonArray.length()) {
@@ -131,10 +153,11 @@ class EinkaufslisteJSON(){
             }
         }
         val fileWrite =
-            FileWriter("/data/data/" + context.packageName + "/" + "einkaufsliste.json")
+            FileWriter("/data/data/" + context.packageName + "/" + "Einkaufsliste.json")
 
         fileWrite.write(newJSONArray.toString())
         fileWrite.flush()
         fileWrite.close()
     }
+    //---------------------------------------------------------
 }

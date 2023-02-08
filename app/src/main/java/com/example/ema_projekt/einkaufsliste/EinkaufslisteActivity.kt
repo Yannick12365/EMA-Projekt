@@ -1,17 +1,11 @@
 package com.example.ema_projekt.einkaufsliste
 
 import android.app.Dialog
-import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.ConnectivityManager
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.annotation.RequiresApi
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.children
@@ -20,7 +14,6 @@ import com.example.ema_projekt.R
 import com.example.ema_projekt.vorratskammer.VorratskammerData
 import com.example.ema_projekt.vorratskammer.VorratskammerDatabase
 import com.example.ema_projekt.vorratskammer.VorratskammerJSON
-import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,22 +34,24 @@ class EinkaufslisteActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_einkaufsliste)
 
+        //Activity Felder holen
         zurueck = findViewById(R.id.imageButton_einkauf_zurueck)
         erstellen = findViewById(R.id.button)
         einkaufbeenden = findViewById(R.id.button2)
         einkaufItemLinearLayout = findViewById(R.id.einkaufItemLayout)
         editText = findViewById(R.id.editText)
 
-
+        //ConnectionManager einstellen
         val conManager = ConnectionManager()
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
+        //Warten auf das Auslesen der Datenbank
         var list = mutableListOf<EinkaufslisteData>()
         GlobalScope.launch(Dispatchers.Main) {
-            list = EinkauflisteDataBase().readDatabase(applicationContext)
-            vorratList = VorratskammerDatabase().readDatabase(applicationContext).toMutableList()
-            EinkaufslisteJSON().writeJSON(list, applicationContext)
+            list = EinkauflisteDataBase().readEinkaufslisteDatabase(applicationContext)
+            vorratList = VorratskammerDatabase().readVorratskammerDatabase(applicationContext).toMutableList()
+            EinkaufslisteJSON().writeEinkaufslisteJSON(list, applicationContext)
 
             for(data in list){
                 val id = data.itemId
@@ -67,12 +62,13 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 einkaufItemLinearLayout.addView(viewItem)
             }
         }
+        //Wenn kein Internet vorhanden Inhalt der JSON Datei nutzen
         if (!conManager.checkConnection(this)) {
-            val einkaufJSONarray = EinkaufslisteJSON().readJSON(applicationContext)
+            val einkaufJSONarray = EinkaufslisteJSON().readEinkaufslisteJSON(applicationContext)
             for (i in 0 until einkaufJSONarray.length()) {
                 list.add(EinkaufslisteData(einkaufJSONarray.getJSONObject(i).getInt("itemId"),einkaufJSONarray.getJSONObject(i).getString("itemText")))
             }
-            val vorratJSONarray = VorratskammerJSON().readJSON(applicationContext)
+            val vorratJSONarray = VorratskammerJSON().readVorratskammerJSON(applicationContext)
             for (i in 0 until vorratJSONarray.length()) {
                 vorratList.add(VorratskammerData(vorratJSONarray.getJSONObject(i).getString("text"), vorratJSONarray.getJSONObject(i).getInt("id")))
             }
@@ -86,7 +82,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
             }
         }
 
-
+        //Klick Eventlistener
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)
             this.finish()
@@ -100,8 +96,8 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 itemList[id] = itemView
                 einkaufItemLinearLayout.addView(itemView)
 
-                EinkauflisteDataBase().writeDatabase(EinkaufslisteData(id, editText.text.toString()), applicationContext)
-                EinkaufslisteJSON().addJSON(EinkaufslisteData(id, editText.text.toString()), applicationContext)
+                EinkauflisteDataBase().writeEinkaufslisteDatabase(EinkaufslisteData(id, editText.text.toString()), applicationContext)
+                EinkaufslisteJSON().addEinkaufslisteJSON(EinkaufslisteData(id, editText.text.toString()), applicationContext)
 
                 editText.setText("")
             } else{
@@ -135,17 +131,20 @@ class EinkaufslisteActivity : AppCompatActivity() {
         }
     }
 
+    //PopUp zum Einkauf beenden
     private fun einkaufBeendenPopup(items:List<EinkaufslisteData>){
         val einkaufPopUp = Dialog(this)
 
         einkaufPopUp.setContentView(R.layout.popup_einkaufbeendet)
         einkaufPopUp.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        //PopUp Items holen
         val abbrechen: Button = einkaufPopUp.findViewById(R.id.button_einkaufbeenden_abbrechen)
         val bestaetigen: Button = einkaufPopUp.findViewById(R.id.button_einkaufbeenden_bestaetigen)
         val layoutEinkaufItems: LinearLayout = einkaufPopUp.findViewById(R.id.linearLayoutItems)
         val zurueck: ImageButton = einkaufPopUp.findViewById(R.id.imageButton_einkaufbeenden_zurueck)
 
+        //Einkauf Item erstellen
         for (i in items){
             val viewItem:View = View.inflate(this, R.layout.item_einkaufsliste_beendet,null)
             val checkBox:CheckBox = viewItem.findViewById(R.id.checkBoxEinkaufItemBeendet)
@@ -154,6 +153,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
             layoutEinkaufItems.addView(viewItem)
         }
 
+        //Klick Eventlistener
         abbrechen.setOnClickListener {
             einkaufPopUp.dismiss()
         }
@@ -161,10 +161,11 @@ class EinkaufslisteActivity : AppCompatActivity() {
         bestaetigen.setOnClickListener{
             for(i in items) {
                 itemList.remove(i.itemId)
-                EinkauflisteDataBase().deleteDatabaseItem(i.itemId, applicationContext)
-                EinkaufslisteJSON().deleteJSONItem(i.itemId, applicationContext)
+                EinkauflisteDataBase().deleteEinkaufslisteDatabaseItem(i.itemId, applicationContext)
+                EinkaufslisteJSON().deleteEinkaufslisteJSONItem(i.itemId, applicationContext)
             }
 
+            //Ausgewaehlte Items in Vorratskammer einfuegen
             for(view in layoutEinkaufItems.children.toList()){
                 val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItemBeendet)
                 if (checkbox.isChecked) {
@@ -176,13 +177,14 @@ class EinkaufslisteActivity : AppCompatActivity() {
                         }
                     }
                     val vorratItem = VorratskammerData(checkbox.text.toString(), newId)
-                    VorratskammerDatabase().writeDatabase(vorratItem, applicationContext)
-                    VorratskammerJSON().addJSON(vorratItem, applicationContext)
+                    VorratskammerDatabase().writeVorratskammerDatabase(vorratItem, applicationContext)
+                    VorratskammerJSON().addVorratskammerJSON(vorratItem, applicationContext)
 
                     vorratList.add(vorratItem)
                 }
             }
 
+            //Ausgewaehlte Items aus Einkaufsliste entfernen
             for (view:View in einkaufItemLinearLayout.children.toList()) {
                 for(view2:View in layoutEinkaufItems.children.toList()){
                     val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItem)
@@ -203,12 +205,15 @@ class EinkaufslisteActivity : AppCompatActivity() {
         einkaufPopUp.show()
     }
 
+    //Einkaufitem erstellen
     private fun createEinkaufItem(text: String):View{
+        //Item Items holen
         val viewItem:View = View.inflate(this, R.layout.item_einkaufsliste,null)
         val checkBox:CheckBox = viewItem.findViewById(R.id.checkBoxEinkaufItem)
         checkBox.text = text
-
         val button:ImageButton = viewItem.findViewById(R.id.einkaufItem_loeschen)
+
+        //Klick Eventlistener
         button.setOnClickListener {
             var id: Int = -1
             for (i in itemList.keys) {
@@ -219,12 +224,13 @@ class EinkaufslisteActivity : AppCompatActivity() {
             }
             einkaufItemLinearLayout.removeView(viewItem)
             itemList.remove(id)
-            EinkauflisteDataBase().deleteDatabaseItem(id, applicationContext)
-            EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
+            EinkauflisteDataBase().deleteEinkaufslisteDatabaseItem(id, applicationContext)
+            EinkaufslisteJSON().deleteEinkaufslisteJSONItem(id, applicationContext)
         }
         return viewItem
     }
 
+    //ID für Item bestimmen
     private fun nextId():Int{
         var newId = 0
         for (i in itemList.keys){

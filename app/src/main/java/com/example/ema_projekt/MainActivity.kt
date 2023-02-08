@@ -1,22 +1,18 @@
 package com.example.ema_projekt
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.wgplaner.LoginData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
@@ -50,25 +46,21 @@ class MainActivity : AppCompatActivity() {
         existingLogin()
 
         loginbutton.setOnClickListener {
-            var wgName: String = editTextName.text.toString()
-            var wgToken: String = editTextToken.text.toString()
+            val wgName: String = editTextName.text.toString()
+            val wgToken: String = editTextToken.text.toString()
 
-            wgName = wgName.replace(" ","")
-            wgToken = wgToken.replace(" ","")
-
+            //Pruefen ob Eingaben zu einer WG gehoeren
             if (editTextName.text.isNotEmpty() && editTextToken.text.isNotEmpty()) {
                 database.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         if (dataSnapshot.hasChild(wgName)) {
+                            //Einlogen wenn Eingaben zu einer WG gehoeren
                             if (dataSnapshot.child(wgName).child("token").value.toString() == wgToken) {
                                 editTextName.setText("")
                                 editTextToken.setText("")
-                                LoginDataSettingsJSON().writeLoginDataJSON(LoginData(wgName,
-                                    wgToken),
-                                    applicationContext)
+                                LoginDataSettingsJSON().writeLoginDataJSON(LoginData(wgName, wgToken), applicationContext)
                                 unregisterReceiver(conManager)
-                                startActivity(Intent(this@MainActivity,
-                                    WGPlanerActivity::class.java))
+                                startActivity(Intent(this@MainActivity, WGPlanerActivity::class.java))
                             } else {
                                 Toast.makeText(applicationContext, "Angegebener Token ist falsch!",
                                     Toast.LENGTH_SHORT).show()
@@ -92,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Popup zum WG erstellen
     private fun showWGErstellPopUp(){
         val popup = Dialog(this)
 
@@ -112,10 +105,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         bestaetigen.setOnClickListener {
+            //Eingaben pruefen
             if (!textfield.text.toString().contains(" ")){
                 if (textfield.text.toString().isNotEmpty()) {
                     val wgname = textfield.text.toString().lowercase()
 
+                    //Neue WG in Datenbank einfügen wenn Name noch nicht existiert
                     database.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             if (!dataSnapshot.hasChild(wgname)) {
@@ -155,6 +150,7 @@ class MainActivity : AppCompatActivity() {
         popup.show()
     }
 
+    //Pruefen ob User Mitglied einer WG ist wenn ja automatisch einlogen
     private fun existingLogin(){
         val loginData = LoginDataSettingsJSON().readLoginDataJSON(applicationContext)
         if (loginData.wgName.isNotEmpty() && loginData.wgToken.isNotEmpty()){
