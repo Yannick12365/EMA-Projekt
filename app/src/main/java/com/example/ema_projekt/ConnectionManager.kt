@@ -8,10 +8,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
-import android.util.Log
+import android.net.Network
+import android.net.NetworkInfo
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+
 
 class ConnectionManager : BroadcastReceiver() {
     companion object {
@@ -51,12 +53,14 @@ class ConnectionManager : BroadcastReceiver() {
         }
     }
 
-    //https://stackoverflow.com/questions/5474089/how-to-check-currently-internet-connection-is-available-or-not-in-android
+    //https://stackoverflow.com/questions/12352893/how-to-check-whether-android-mobile-data-is-on
     fun checkConnection(context: Context?):Boolean{
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
 
-        if (networkInfo != null && networkInfo.isConnected){
+        val activeNetworkMobile: NetworkInfo? = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+        val activeNetworkWifi: NetworkInfo? = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+
+        if (activeNetworkMobile != null && activeNetworkMobile.isConnected || activeNetworkWifi != null && activeNetworkWifi.isConnected){
             return true
         }
         return false

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
+import com.example.ema_projekt.einkaufsliste.EinkaufslisteData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,8 +40,27 @@ class PutzplanActivity : AppCompatActivity() {
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
+        var list = mutableListOf<PutzPlanData>()
         GlobalScope.launch(Dispatchers.Main) {
-            val list = PutzPlanDatabase().readDatabase(applicationContext)
+            list = PutzPlanDatabase().readDatabase(applicationContext)
+            PutzPlanJSON().writePutzPlanJSON(list,applicationContext)
+
+            for (data in list) {
+                dataList.add(data)
+                createPutzPlanEintrag(data)
+            }
+        }
+
+        if (!conManager.checkConnection(this)){
+            val putzJSONarray = PutzPlanJSON().readPutzPlanJSON(applicationContext)
+            for (i in 0 until putzJSONarray.length()) {
+                list.add(PutzPlanData(
+                    putzJSONarray.getJSONObject(i).getInt("id"),
+                    putzJSONarray.getJSONObject(i).getString("person"),
+                    putzJSONarray.getJSONObject(i).getString("aufgabe"),
+                    putzJSONarray.getJSONObject(i).getString("zeitInterval"))
+                )
+            }
             for (data in list) {
                 dataList.add(data)
                 createPutzPlanEintrag(data)
@@ -85,6 +105,7 @@ class PutzplanActivity : AppCompatActivity() {
                 dataList.add(data)
                 createPutzPlanEintrag(data)
                 PutzPlanDatabase().writeDatabase(data,applicationContext)
+                PutzPlanJSON().addPutzPlanJSON(data,applicationContext)
 
                 eventPopUpPerson1.dismiss()
             } else {
@@ -125,6 +146,7 @@ class PutzplanActivity : AppCompatActivity() {
                 val dataNew = getDataById(data.id)
                 dataNew.zeitInterval = interval
                 PutzPlanDatabase().editDatabaseZeitInterval(dataNew,applicationContext)
+                PutzPlanJSON().editZeitIntervalPutzPlanJSONItem(dataNew.id,applicationContext,dataNew.zeitInterval)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -166,6 +188,7 @@ class PutzplanActivity : AppCompatActivity() {
             itemList.remove(id)
             dataList.remove(getDataById(id))
             PutzPlanDatabase().deleteDatabaseItem(id,applicationContext)
+            PutzPlanJSON().deletePutzPlanJSONItem(id,applicationContext)
         }
 
         popUpLoeschen.show()
@@ -196,6 +219,7 @@ class PutzplanActivity : AppCompatActivity() {
                 val data = getDataById(id)
                 data.aufgabe = eventText.text.toString()
                 PutzPlanDatabase().editDatabaseAufgabe(data,applicationContext)
+                PutzPlanJSON().editAufgabePutzPlanJSONItem(data.id,applicationContext,data.aufgabe)
 
                 popUpAufgabe.dismiss()
             } else {

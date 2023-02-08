@@ -35,7 +35,6 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private val itemList = mutableMapOf<Int,View>()
     private var vorratList = mutableListOf<VorratskammerData>()
 
-    private lateinit var conManager:ConnectionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +48,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
         editText = findViewById(R.id.editText)
 
 
-        conManager = ConnectionManager()
+        val conManager = ConnectionManager()
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
@@ -57,6 +56,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             list = EinkauflisteDataBase().readDatabase(applicationContext)
             vorratList = VorratskammerDatabase().readDatabase(applicationContext).toMutableList()
+            EinkaufslisteJSON().writeJSON(list, applicationContext)
 
             for(data in list){
                 val id = data.itemId
@@ -67,9 +67,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 einkaufItemLinearLayout.addView(viewItem)
             }
         }
-        if (conManager.checkConnection(this@EinkaufslisteActivity)) {
-            EinkaufslisteJSON().writeJSON(list, applicationContext)
-        } else {
+        if (!conManager.checkConnection(this)) {
             val einkaufJSONarray = EinkaufslisteJSON().readJSON(applicationContext)
             for (i in 0 until einkaufJSONarray.length()) {
                 list.add(EinkaufslisteData(einkaufJSONarray.getJSONObject(i).getInt("itemId"),einkaufJSONarray.getJSONObject(i).getString("itemText")))
@@ -179,6 +177,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                     }
                     val vorratItem = VorratskammerData(checkbox.text.toString(), newId)
                     VorratskammerDatabase().writeDatabase(vorratItem, applicationContext)
+                    VorratskammerJSON().addJSON(vorratItem, applicationContext)
 
                     vorratList.add(vorratItem)
                 }
