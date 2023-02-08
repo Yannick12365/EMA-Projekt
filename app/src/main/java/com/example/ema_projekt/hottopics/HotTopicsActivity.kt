@@ -1,10 +1,12 @@
 package com.example.ema_projekt.hottopics
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -14,10 +16,14 @@ import androidx.core.view.children
 import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
 import com.example.ema_projekt.einkaufsliste.EinkauflisteDataBase
+import com.example.ema_projekt.einkaufsliste.EinkaufslisteData
 import com.example.ema_projekt.vorratskammer.VorratskammerDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.*
 
 class HotTopicsActivity : AppCompatActivity() {
     private lateinit var zurueck: ImageButton
@@ -41,8 +47,32 @@ class HotTopicsActivity : AppCompatActivity() {
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
+        var list = mutableListOf<HotTopicsData>()
         GlobalScope.launch(Dispatchers.Main) {
-            val list = HotTopicDatabase().readDatabase(applicationContext)
+            list = HotTopicDatabase().readDatabase(applicationContext)
+            HotTopicsJSON().writeJSON(list,applicationContext)
+
+            for(data in list){
+                val itemView = createHotTopic(data)
+                itemList[data.id] = itemView
+                itemLayout.addView(itemView)
+            }
+        }
+        if (!conManager.checkConnection(this)){
+            val hottopicJSONarray = HotTopicsJSON().readJSON(applicationContext)
+            for (i in 0 until hottopicJSONarray.length()) {
+                val jsonarr = hottopicJSONarray.getJSONObject(i).getJSONArray("kommentare")
+                val list2 = mutableListOf<HotTopicKommentarData>()
+                for (j in 0 until jsonarr.length()) {
+                    list2.add(HotTopicKommentarData(
+                        jsonarr.getJSONObject(j).getInt("id"),
+                        jsonarr.getJSONObject(j).getString("text")))
+                }
+                list.add(HotTopicsData(
+                    hottopicJSONarray.getJSONObject(i).getInt("id"),
+                    hottopicJSONarray.getJSONObject(i).getString("text"),
+                    list2))
+            }
             for(data in list){
                 val itemView = createHotTopic(data)
                 itemList[data.id] = itemView
@@ -59,6 +89,7 @@ class HotTopicsActivity : AppCompatActivity() {
                 val id = nextId()
                 val data = HotTopicsData(id,input.text.toString(), mutableListOf())
                 HotTopicDatabase().writeDatabase(data,applicationContext)
+                HotTopicsJSON().addJSON(data,applicationContext)
                 val itemView = createHotTopic(data)
 
                 itemList[id] = itemView
@@ -81,6 +112,7 @@ class HotTopicsActivity : AppCompatActivity() {
             itemLayout.removeView(viewItem)
             itemList.remove(data.id)
             HotTopicDatabase().deleteDatabaseItem(data.id,applicationContext)
+            HotTopicsJSON().deleteJSONItem(data.id,applicationContext)
         }
 
         viewItem.setOnClickListener {
@@ -114,6 +146,7 @@ class HotTopicsActivity : AppCompatActivity() {
             val kommentar = HotTopicKommentarData(id,editTextKommentar.text.toString())
             data.kommentare.add(kommentar)
             HotTopicDatabase().writeKommentar(data.id,kommentar,applicationContext)
+            HotTopicsJSON().writeKommentar(data.id,kommentar,applicationContext)
             linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,editTextKommentar.text.toString(),id,data.id))
             editTextKommentar.setText("")
         }
@@ -134,6 +167,7 @@ class HotTopicsActivity : AppCompatActivity() {
 
         loeschen.setOnClickListener {
             HotTopicDatabase().deleteDatabaseItemKommentar(topicId,id,applicationContext)
+            HotTopicsJSON().deleteJSONItemKommentar(topicId,id,applicationContext)
             linearLayout.removeView(viewItem)
         }
 
@@ -159,3 +193,4 @@ class HotTopicsActivity : AppCompatActivity() {
         return newId
     }
 }
+
