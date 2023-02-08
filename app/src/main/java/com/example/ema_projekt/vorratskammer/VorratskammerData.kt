@@ -1,8 +1,10 @@
 package com.example.ema_projekt.vorratskammer
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.example.ema_projekt.DatabaseManager
+import com.example.ema_projekt.einkaufsliste.EinkaufslisteData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import com.google.firebase.database.*
 import org.json.JSONArray
@@ -25,7 +27,7 @@ class VorratskammerDatabase(){
             .child(data.id.toString()).setValue(data.text)
     }
 
-    suspend fun readDatabase(context: Context):List<VorratskammerData>{
+    suspend fun readDatabase(context: Context):MutableList<VorratskammerData>{
         return suspendCoroutine { value ->
             val list = mutableListOf<VorratskammerData>()
             val wgName = LoginDataSettingsJSON().readLoginDataJSON(context).wgName
@@ -62,7 +64,6 @@ class VorratskammerJSON(){
         val file = FileWriter("/data/data/" + context.packageName + "/" + "Vorratskammer.json")
 
         val arrayJson = JSONArray()
-
         for (i in data){
             val objJson = JSONObject()
             objJson.put("id", i.id)

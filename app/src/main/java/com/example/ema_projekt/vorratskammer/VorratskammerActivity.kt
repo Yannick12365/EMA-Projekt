@@ -7,12 +7,16 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
+import com.example.ema_projekt.putzplan.PutzPlanData
+import com.example.ema_projekt.putzplan.PutzPlanDatabase
+import com.example.ema_projekt.putzplan.PutzPlanJSON
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,6 +43,30 @@ class VorratskammerActivity : AppCompatActivity() {
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
+        var list = mutableListOf<VorratskammerData>()
+        GlobalScope.launch(Dispatchers.Main) {
+            list = VorratskammerDatabase().readDatabase(applicationContext)
+            VorratskammerJSON().writeJSON(list,applicationContext)
+
+            for (data in list) {
+                createEinkaufItem(data.text,data.id)
+            }
+        }
+        if (!conManager.checkConnection(this)){
+            val vorratJSONarray = VorratskammerJSON().readJSON(applicationContext)
+            for (i in 0 until vorratJSONarray.length()) {
+                list.add(
+                    VorratskammerData(
+                        vorratJSONarray.getJSONObject(i).getString("text"),
+                        vorratJSONarray.getJSONObject(i).getInt("id"),
+                        )
+                )
+            }
+            for (data in list) {
+                createEinkaufItem(data.text,data.id)
+            }
+        }
+
         erstellen.setOnClickListener{
            showEventAddPopUp()
         }
@@ -48,12 +76,6 @@ class VorratskammerActivity : AppCompatActivity() {
             this.finish()
         }
 
-        GlobalScope.launch(Dispatchers.Main){
-            val list = VorratskammerDatabase().readDatabase(applicationContext)
-            for(item in list){
-                createEinkaufItem(item.text,item.id)
-            }
-        }
     }
    private fun showEventAddPopUp(){
         val eventPopUp = Dialog(this)
@@ -77,6 +99,7 @@ class VorratskammerActivity : AppCompatActivity() {
         hinzufuegen.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
                 createEinkaufItem(eventText.text.toString(),nextId())
+                VorratskammerJSON().addJSON(VorratskammerData(eventText.text.toString(),nextId()),applicationContext)
 
                 eventPopUp.dismiss()
             } else{
@@ -98,6 +121,7 @@ class VorratskammerActivity : AppCompatActivity() {
 
         button.setOnClickListener{
             VorratskammerDatabase().deleteDatabaseItem(vorratItem.id, applicationContext)
+            VorratskammerJSON().deleteJSONItem(vorratItem.id,applicationContext)
             layout.removeView(viewItem)
             itemList.remove(vorratItem.id)
         }

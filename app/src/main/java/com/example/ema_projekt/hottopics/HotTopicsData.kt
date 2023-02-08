@@ -233,7 +233,6 @@ class HotTopicsJSON(){
         val file = FileWriter("/data/data/" + context.packageName + "/" + "HotTopics.json")
 
         val arrayJson = JSONArray()
-        Log.d("DEBUG",id.toString())
 
         for (i in 0 until existingJson.length()) {
             if (existingJson.getJSONObject(i).get("id") == idTopic) {
@@ -246,7 +245,6 @@ class HotTopicsJSON(){
                 val kommentare = JSONArray()
 
                 for(j in 0 until arr.length()){
-                    Log.d("DEBUG",arr.getJSONObject(j).get("id").toString())
                     if (arr.getJSONObject(j).getInt("id") != id){
                         kommentare.put(arr.getJSONObject(j))
                     }

@@ -42,7 +42,7 @@
     <string name="wg_info_verlassen">WG verlassen</string>
     <string name="wg_info_text">WG Info Text</string>
 
-    <string name="internet_error_text">ACHTUNG!\n\nDu hast keine Internetverbindung mehr. Alle Änderungen die jetzt gemacht werden, werden nicht gespeichert wenn die App geschlossen wird!</string>
+    <string name="internet_error_text">ACHTUNG!\n\nDu hast keine Internetverbindung mehr. Alle Änderungen die jetzt gemacht werden, werden nicht gespeichert! Außerdem könnten nicht alle Daten auf dem aktuellsten stand sein!</string>
     <string name="internet_login_error_text">ACHTUNG!\n\nDu hast keine Internetverbindung. Um eine WG zu erstellen oder einer beizutreten benötigst du eine!</string>
     <string name="putzplan_nameperson">Name der Person</string>
     <string name="nein">Nein</string>
