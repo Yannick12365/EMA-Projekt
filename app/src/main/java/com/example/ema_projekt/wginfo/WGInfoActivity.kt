@@ -51,9 +51,13 @@ class WGInfoActivity : AppCompatActivity() {
         textViewToken.text = "WG Token = " + LoginDataSettingsJSON().readLoginDataJSON(applicationContext).wgToken
 
         GlobalScope.launch(Dispatchers.Main) {
-            textViewwginfo.text = WGInfoData().readDatabase(applicationContext)
+            val text = WGInfoData().readDatabase(applicationContext)
+            textViewwginfo.text = text
+            WGInfoJSON().writeJSON(text,applicationContext)
         }
-
+        if (!conManager.checkConnection(this)){
+            textViewwginfo.text = WGInfoJSON().readJSON(applicationContext)
+        }
 
         wgverlassenButton.setOnClickListener {
             LoginDataSettingsJSON().writeLoginDataJSON(LoginData("", ""), applicationContext)
@@ -96,6 +100,7 @@ class WGInfoActivity : AppCompatActivity() {
         bestaetigen.setOnClickListener {
             textViewwginfo.text = editText.text
             WGInfoData().writeDatabase(editText.text.toString(),applicationContext)
+            WGInfoJSON().writeJSON(editText.text.toString(),applicationContext)
             popup.dismiss()
         }
 
