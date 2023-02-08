@@ -52,7 +52,7 @@ class ConnectionManager : BroadcastReceiver() {
     }
 
     //https://stackoverflow.com/questions/5474089/how-to-check-currently-internet-connection-is-available-or-not-in-android
-    private fun checkConnection(context: Context?):Boolean{
+    fun checkConnection(context: Context?):Boolean{
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
 

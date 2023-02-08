@@ -11,9 +11,7 @@ class DatabaseManager {
     }
 
     fun setUpDatabase(){
-        Firebase.database.setPersistenceEnabled(true)
         database = FirebaseDatabase.getInstance("https://ema-projekt-e036e-default-rtdb.europe-west1.firebasedatabase.app/").reference
-        database.keepSynced(true)
     }
 
     fun getDatabaseReference():DatabaseReference{

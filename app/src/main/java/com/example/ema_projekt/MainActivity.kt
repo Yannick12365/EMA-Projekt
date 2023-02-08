@@ -158,7 +158,6 @@ class MainActivity : AppCompatActivity() {
     private fun existingLogin(){
         val loginData = LoginDataSettingsJSON().readLoginDataJSON(applicationContext)
         if (loginData.wgName.isNotEmpty() && loginData.wgToken.isNotEmpty()){
-            unregisterReceiver(conManager)
             startActivity(Intent(this, WGPlanerActivity::class.java))
         } else {
             conManager.setOjects(true, this)

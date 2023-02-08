@@ -19,6 +19,7 @@ import com.example.ema_projekt.ConnectionManager
 import com.example.ema_projekt.R
 import com.example.ema_projekt.vorratskammer.VorratskammerData
 import com.example.ema_projekt.vorratskammer.VorratskammerDatabase
+import com.example.ema_projekt.vorratskammer.VorratskammerJSON
 import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,6 +35,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private val itemList = mutableMapOf<Int,View>()
     private var vorratList = mutableListOf<VorratskammerData>()
 
+    private lateinit var conManager:ConnectionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +49,15 @@ class EinkaufslisteActivity : AppCompatActivity() {
         editText = findViewById(R.id.editText)
 
 
-        val conManager = ConnectionManager()
+        conManager = ConnectionManager()
         conManager.setOjects(false, this)
         conManager.switchScreen(this)
 
+        var list = mutableListOf<EinkaufslisteData>()
         GlobalScope.launch(Dispatchers.Main) {
-            val list = EinkauflisteDataBase().readDatabase(applicationContext)
+            list = EinkauflisteDataBase().readDatabase(applicationContext)
+            vorratList = VorratskammerDatabase().readDatabase(applicationContext).toMutableList()
+
             for(data in list){
                 val id = data.itemId
                 val text = data.itemText
@@ -61,8 +66,28 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 itemList[id] = viewItem
                 einkaufItemLinearLayout.addView(viewItem)
             }
-            vorratList = VorratskammerDatabase().readDatabase(applicationContext).toMutableList()
         }
+        if (conManager.checkConnection(this@EinkaufslisteActivity)) {
+            EinkaufslisteJSON().writeJSON(list, applicationContext)
+        } else {
+            val einkaufJSONarray = EinkaufslisteJSON().readJSON(applicationContext)
+            for (i in 0 until einkaufJSONarray.length()) {
+                list.add(EinkaufslisteData(einkaufJSONarray.getJSONObject(i).getInt("itemId"),einkaufJSONarray.getJSONObject(i).getString("itemText")))
+            }
+            val vorratJSONarray = VorratskammerJSON().readJSON(applicationContext)
+            for (i in 0 until vorratJSONarray.length()) {
+                vorratList.add(VorratskammerData(vorratJSONarray.getJSONObject(i).getString("text"), vorratJSONarray.getJSONObject(i).getInt("id")))
+            }
+            for(data in list){
+                val id = data.itemId
+                val text = data.itemText
+
+                val viewItem = createEinkaufItem(text)
+                itemList[id] = viewItem
+                einkaufItemLinearLayout.addView(viewItem)
+            }
+        }
+
 
         zurueck.setOnClickListener {
             zurueck.setBackgroundResource(R.drawable.zurueckklick)
@@ -77,7 +102,9 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 itemList[id] = itemView
                 einkaufItemLinearLayout.addView(itemView)
 
-                EinkauflisteDataBase().writeDatabase(EinkaufslisteData(id, editText.text.toString()),applicationContext)
+                EinkauflisteDataBase().writeDatabase(EinkaufslisteData(id, editText.text.toString()), applicationContext)
+                EinkaufslisteJSON().addJSON(EinkaufslisteData(id, editText.text.toString()), applicationContext)
+
                 editText.setText("")
             } else{
                 Toast.makeText(applicationContext, "Gebe einen Text ein!", Toast.LENGTH_SHORT).show()
@@ -137,6 +164,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
             for(i in items) {
                 itemList.remove(i.itemId)
                 EinkauflisteDataBase().deleteDatabaseItem(i.itemId, applicationContext)
+                EinkaufslisteJSON().deleteJSONItem(i.itemId, applicationContext)
             }
 
             for(view in layoutEinkaufItems.children.toList()){
@@ -150,8 +178,8 @@ class EinkaufslisteActivity : AppCompatActivity() {
                         }
                     }
                     val vorratItem = VorratskammerData(checkbox.text.toString(), newId)
+                    VorratskammerDatabase().writeDatabase(vorratItem, applicationContext)
 
-                    VorratskammerDatabase().writeDatabase(vorratItem,applicationContext)
                     vorratList.add(vorratItem)
                 }
             }
@@ -193,6 +221,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
             einkaufItemLinearLayout.removeView(viewItem)
             itemList.remove(id)
             EinkauflisteDataBase().deleteDatabaseItem(id, applicationContext)
+            EinkaufslisteJSON().deleteJSONItem(id, applicationContext)
         }
         return viewItem
     }
