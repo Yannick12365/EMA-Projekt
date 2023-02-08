@@ -85,9 +85,29 @@ class KalenderActivity : AppCompatActivity() {
 
         textViewMonth.text = getMonthByInt(monthShow) + yearShow
 
+        var list = mutableListOf<KalenderEventData>()
         GlobalScope.launch(Dispatchers.Main) {
             KalenderEventDatabase().removeOneYearOldEvents(aktuellerTag,aktuellerMonat, aktuellesJahr,applicationContext)
-            KalenderEvent().fillEventList(KalenderEventDatabase().readDatabase(applicationContext))
+            list = KalenderEventDatabase().readDatabase(applicationContext)
+            KalenderEventJSON().writeJSON(list,applicationContext)
+            KalenderEvent().fillEventList(list)
+            markEvents()
+        }
+
+        if (!conManager.checkConnection(this)){
+            val kalenderJSONarray = KalenderEventJSON().readJSON(applicationContext)
+            for (i in 0 until kalenderJSONarray.length()) {
+                list.add(
+                    KalenderEventData(
+                    kalenderJSONarray.getJSONObject(i).getInt("day"),
+                        kalenderJSONarray.getJSONObject(i).getInt("month"),
+                        kalenderJSONarray.getJSONObject(i).getInt("year"),
+                        kalenderJSONarray.getJSONObject(i).getString("text"),
+                        kalenderJSONarray.getJSONObject(i).getString("datestr"),
+                        kalenderJSONarray.getJSONObject(i).getInt("id")
+                ))
+            }
+            KalenderEvent().fillEventList(list)
             markEvents()
         }
 
@@ -183,6 +203,7 @@ class KalenderActivity : AppCompatActivity() {
                 event.text = eventText.text.toString()
                 KalenderEvent().addEvents(event)
                 KalenderEventDatabase().writeDatabase(event,applicationContext)
+                KalenderEventJSON().addJSON(event,applicationContext)
                 markEvents()
                 eventPopUp.dismiss()
             } else{
@@ -270,6 +291,7 @@ class KalenderActivity : AppCompatActivity() {
             }
 
             KalenderEventDatabase().deleteDatabaseItem(event.id,applicationContext)
+            KalenderEventJSON().deleteJSONItem(event.id,applicationContext)
             KalenderEvent().deleteEventFromList(event.id)
 
             eventPopUp.dismiss()
@@ -280,6 +302,7 @@ class KalenderActivity : AppCompatActivity() {
             if (eventText.text.isNotEmpty()) {
                 event.text = eventText.text.toString()
                 KalenderEventDatabase().editDatabaseEvent(event,applicationContext)
+                KalenderEventJSON().editJSONItem(event,applicationContext)
                 eventPopUp.dismiss()
                 eventPopUpShow.dismiss()
             }else{
