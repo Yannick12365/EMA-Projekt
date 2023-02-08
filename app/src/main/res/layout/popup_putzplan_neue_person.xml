@@ -112,7 +112,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button_vorratskammer_abbrechen"
+                    android:id="@+id/button_putzplan_person_abbrechen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -127,7 +127,7 @@
                     app:backgroundTint="@null" />
 
                 <Button
-                    android:id="@+id/button_vorratskammer_hinzufuegen"
+                    android:id="@+id/button_putzplan_person_hinzufügen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
