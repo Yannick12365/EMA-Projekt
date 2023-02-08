@@ -86,8 +86,8 @@ class PutzplanActivity : AppCompatActivity() {
         eventPopUpPerson1.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         //PopUp Items holen
-        val abbrechen: Button = eventPopUpPerson1.findViewById(R.id.button_vorratskammer_abbrechen)
-        val hinzufuegen: Button = eventPopUpPerson1.findViewById(R.id.button_vorratskammer_hinzufuegen)
+        val abbrechen: Button = eventPopUpPerson1.findViewById(R.id.button_putzplan_person_abbrechen)
+        val hinzufuegen: Button = eventPopUpPerson1.findViewById(R.id.button_putzplan_person_hinzufügen)
         val eventText: EditText = eventPopUpPerson1.findViewById(R.id.editText_Neuer_Eintrag)
         val popupzureuck: ImageButton = eventPopUpPerson1.findViewById(R.id.imageButton_putzplanperson_zurueck)
 
@@ -212,8 +212,8 @@ class PutzplanActivity : AppCompatActivity() {
         popUpAufgabe.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         //PopUp Items holen
-        val abbrechen: Button = popUpAufgabe.findViewById(R.id.button_vorratskammer_abbrechen)
-        val hinzufuegen: Button = popUpAufgabe.findViewById(R.id.button_vorratskammer_hinzufuegen)
+        val abbrechen: Button = popUpAufgabe.findViewById(R.id.button_putzplan_abbrechen)
+        val aufgabeÄndern: Button = popUpAufgabe.findViewById(R.id.button_putzplan_ändern)
         val eventText: EditText = popUpAufgabe.findViewById(R.id.editText_Neuer_Eintrag)
         val popupzurueck: ImageButton = popUpAufgabe.findViewById(R.id.imageButton_putzplanaufgabe_neu_zurueck)
 
@@ -226,7 +226,7 @@ class PutzplanActivity : AppCompatActivity() {
             popUpAufgabe.dismiss()
         }
 
-        hinzufuegen.setOnClickListener {
+        aufgabeÄndern.setOnClickListener {
             if (eventText.text.isNotEmpty()) {
                 view.text = eventText.text
                 val data = getDataById(id)
