@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         popup.show()
     }
 
-    //Pruefen ob User Mitglied einer WG ist wenn ja automatisch einlogen
+    //Pruefen ob User Mitglied einer WG ist wenn ja automatisch einloggen
     private fun existingLogin(){
         val loginData = LoginDataSettingsJSON().readLoginDataJSON(applicationContext)
         if (loginData.wgName.isNotEmpty() && loginData.wgToken.isNotEmpty()){
