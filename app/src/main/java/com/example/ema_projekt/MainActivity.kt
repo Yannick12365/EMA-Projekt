@@ -84,6 +84,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        conManager.setOjects(true, this)
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(conManager, filter)
+    }
+
     //Popup zum WG erstellen
     private fun showWGErstellPopUp(){
         val popup = Dialog(this)
@@ -161,4 +169,5 @@ class MainActivity : AppCompatActivity() {
             registerReceiver(conManager, filter)
         }
     }
+
 }
