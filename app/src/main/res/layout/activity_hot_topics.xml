@@ -81,10 +81,11 @@
                     android:paddingBottom="5dp">
 
                     <EditText
-                        android:id="@+id/editText"
+                        android:id="@+id/editText_was_steht_an"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
+                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="5dp"
                         android:ems="10"
                         android:fontFamily="sans-serif"
@@ -94,12 +95,13 @@
                         android:minHeight="48dp"
                         android:textSize="25sp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/button_hot_topics_hinzufügen"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="10dp"

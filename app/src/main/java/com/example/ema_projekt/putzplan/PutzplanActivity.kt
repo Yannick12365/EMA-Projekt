@@ -88,7 +88,7 @@ class PutzplanActivity : AppCompatActivity() {
         //PopUp Items holen
         val abbrechen: Button = eventPopUpPerson1.findViewById(R.id.button_putzplan_person_abbrechen)
         val hinzufuegen: Button = eventPopUpPerson1.findViewById(R.id.button_putzplan_person_hinzufügen)
-        val eventText: EditText = eventPopUpPerson1.findViewById(R.id.editText_Neuer_Eintrag)
+        val eventText: EditText = eventPopUpPerson1.findViewById(R.id.editText_Neuer_Eintrag_Putzplan_Add_Person)
         val popupzureuck: ImageButton = eventPopUpPerson1.findViewById(R.id.imageButton_putzplanperson_zurueck)
 
         //Klick Eventlistener
@@ -214,7 +214,7 @@ class PutzplanActivity : AppCompatActivity() {
         //PopUp Items holen
         val abbrechen: Button = popUpAufgabe.findViewById(R.id.button_putzplan_abbrechen)
         val aufgabeÄndern: Button = popUpAufgabe.findViewById(R.id.button_putzplan_ändern)
-        val eventText: EditText = popUpAufgabe.findViewById(R.id.editText_Neuer_Eintrag)
+        val eventText: EditText = popUpAufgabe.findViewById(R.id.editText_Neue_Aufgabe_Putzplan)
         val popupzurueck: ImageButton = popUpAufgabe.findViewById(R.id.imageButton_putzplanaufgabe_neu_zurueck)
 
         //Klick Eventlistener

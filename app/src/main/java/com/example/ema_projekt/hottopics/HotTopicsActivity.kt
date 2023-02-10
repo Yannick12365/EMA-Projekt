@@ -29,8 +29,8 @@ class HotTopicsActivity : AppCompatActivity() {
 
         //Activity Felder holen
         zurueck = findViewById(R.id.imageButton_hot_topics_zurueck)
-        hinzufuegen = findViewById(R.id.button)
-        input = findViewById(R.id.editText)
+        hinzufuegen = findViewById(R.id.button_hot_topics_hinzufügen)
+        input = findViewById(R.id.editText_was_steht_an)
         itemLayout = findViewById(R.id.hotTopicItemLayout)
 
         //ConnectionManager einstellen

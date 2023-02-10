@@ -82,7 +82,7 @@
                 android:background="@drawable/standart_item_background">
 
                 <EditText
-                    android:id="@+id/editText_Neuer_Eintrag"
+                    android:id="@+id/editText_Neue_Aufgabe_Putzplan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -90,13 +90,13 @@
                     android:fontFamily="sans-serif-black"
                     android:hint="Neue Aufgabe"
                     android:inputType="textMultiLine"
+                    android:maxLength="20"
                     android:maxLines="5"
                     android:minHeight="48dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:scrollbars="vertical"
                     android:textSize="25sp"
-                    android:maxLength="20"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"

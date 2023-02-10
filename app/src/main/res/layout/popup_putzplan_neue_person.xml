@@ -85,7 +85,7 @@
                 android:background="@drawable/standart_item_background">
 
                 <EditText
-                    android:id="@+id/editText_Neuer_Eintrag"
+                    android:id="@+id/editText_Neuer_Eintrag_Putzplan_Add_Person"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
