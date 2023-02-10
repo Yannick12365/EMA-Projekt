@@ -65,7 +65,7 @@
                     android:gravity="center">
 
                     <ImageButton
-                        android:id="@+id/imageButton2"
+                        android:id="@+id/imageButton_vorratskammer"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
                         android:layout_marginEnd="10dp"
@@ -73,7 +73,7 @@
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <ImageButton
-                        android:id="@+id/imageButton3"
+                        android:id="@+id/imageButton_kalender"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
                         android:layout_marginStart="10dp"
@@ -88,7 +88,7 @@
                     android:gravity="center">
 
                     <ImageButton
-                        android:id="@+id/imageButton4"
+                        android:id="@+id/imageButton_putzplan"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
                         android:layout_marginEnd="10dp"
@@ -96,7 +96,7 @@
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <ImageButton
-                        android:id="@+id/imageButton5"
+                        android:id="@+id/imageButton_einkaufsliste"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
                         android:layout_marginStart="10dp"
@@ -111,7 +111,7 @@
                     android:gravity="center">
 
                     <ImageButton
-                        android:id="@+id/imageButton6"
+                        android:id="@+id/imageButton_hottopics"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
                         android:layout_marginEnd="10dp"
@@ -119,7 +119,7 @@
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <ImageButton
-                        android:id="@+id/imageButton7"
+                        android:id="@+id/imageButto_wginfo"
                         android:layout_width="150dp"
                         android:layout_height="180dp"
                         android:layout_marginStart="10dp"

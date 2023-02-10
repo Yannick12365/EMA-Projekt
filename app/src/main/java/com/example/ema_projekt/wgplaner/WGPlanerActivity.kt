@@ -3,11 +3,8 @@ package com.example.ema_projekt.wgplaner
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.ema_projekt.ConnectionManager
@@ -36,12 +33,12 @@ class WGPlanerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_wgplaner)
 
         //Activity Felder holen
-        vorratskammer = findViewById(R.id.imageButton2)
-        kalender = findViewById(R.id.imageButton3)
-        putzplan = findViewById(R.id.imageButton4)
-        einkaufsliste = findViewById(R.id.imageButton5)
-        hottopics = findViewById(R.id.imageButton6)
-        wgInfo = findViewById(R.id.imageButton7)
+        vorratskammer = findViewById(R.id.imageButton_vorratskammer)
+        kalender = findViewById(R.id.imageButton_kalender)
+        putzplan = findViewById(R.id.imageButton_putzplan)
+        einkaufsliste = findViewById(R.id.imageButton_einkaufsliste)
+        hottopics = findViewById(R.id.imageButton_hottopics)
+        wgInfo = findViewById(R.id.imageButto_wginfo)
 
         //Listener Für Netzwerk veränderungen erstellen und ConnectionManager einstellen
         conManager = ConnectionManager()
