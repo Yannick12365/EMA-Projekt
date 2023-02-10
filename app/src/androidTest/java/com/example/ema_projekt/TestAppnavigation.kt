@@ -1,16 +1,15 @@
 package com.example.ema_projekt
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.ema_projekt.wginfo.WGInfoActivity
 import com.example.ema_projekt.wgplaner.WGPlanerActivity
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -24,12 +23,23 @@ class TestAppnavigation {
     }
 
     @Test
-    fun checkLogin() {
+    fun checkRightLogin() {
         ActivityScenario.launch(MainActivity::class.java)
         onView(withId(R.id.wgnameinput)).perform(typeText("test"))
         onView(withId(R.id.wgtokeninput)).perform(typeText("test"))
         onView(withId(R.id.button_einloggen)).perform(click())
+        onView(withId(R.id.imageButton_vorratskammer)).check(matches(isDisplayed()))
     }
+
+    @Test
+    fun checkWrongLogin() {
+        ActivityScenario.launch(MainActivity::class.java)
+        onView(withId(R.id.wgnameinput)).perform(typeText(" "))
+        onView(withId(R.id.wgtokeninput)).perform(typeText(" "))
+        onView(withId(R.id.button_einloggen)).perform(click())
+        onView(withId(R.id.wgnameinput)).check(matches(isDisplayed()))
+    }
+
     @Test
     fun checkClickVorratskammer() {
         ActivityScenario.launch(WGPlanerActivity::class.java)
@@ -74,5 +84,6 @@ class TestAppnavigation {
     fun checkWGVerlassen() {
         ActivityScenario.launch(WGInfoActivity::class.java)
         onView(withId(R.id.button_wgverlassen)).perform(click())
+        onView(withId(R.id.wgnameinput)).check(matches(isDisplayed()))
     }
 }
