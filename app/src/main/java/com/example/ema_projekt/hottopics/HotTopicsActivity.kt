@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -136,6 +137,7 @@ class HotTopicsActivity : AppCompatActivity() {
         //Klick Eventlistener
         popupzurueck.setOnClickListener {
             kommentarPopUp.dismiss()
+            Log.d("Debug",data.kommentare.toString())
         }
         popupabbrechen.setOnClickListener {
             kommentarPopUp.dismiss()
@@ -147,19 +149,19 @@ class HotTopicsActivity : AppCompatActivity() {
             data.kommentare.add(kommentar)
             HotTopicDatabase().writeKommentar(data.id,kommentar,applicationContext)
             HotTopicsJSON().writeKommentarJSON(data.id,kommentar,applicationContext)
-            linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,editTextKommentar.text.toString(),id,data.id))
+            linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,editTextKommentar.text.toString(),id,data))
             editTextKommentar.setText("")
         }
 
         for (i in data.kommentare){
-            linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,i.text,i.id,data.id))
+            linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,i.text,i.id,data))
         }
 
         kommentarPopUp.show()
     }
 
     //Kommentar erstellen
-    private fun createKommentar(linearLayout:LinearLayout, text:String, id:Int, topicId:Int):View{
+    private fun createKommentar(linearLayout:LinearLayout, text:String, id:Int, topic:HotTopicsData):View{
         //Item Items holen
         val viewItem: View = View.inflate(this, R.layout.item_hottopic_kommentar, null)
         val loeschen:ImageButton = viewItem.findViewById(R.id.button_loeschen_hottopickommentar)
@@ -169,9 +171,15 @@ class HotTopicsActivity : AppCompatActivity() {
 
         //Klick Eventlistener
         loeschen.setOnClickListener {
-            HotTopicDatabase().deleteKommentar(topicId,id,applicationContext)
-            HotTopicsJSON().deleteKommentarJSON(topicId,id,applicationContext)
+            HotTopicDatabase().deleteKommentar(topic.id,id,applicationContext)
+            HotTopicsJSON().deleteKommentarJSON(topic.id,id,applicationContext)
             linearLayout.removeView(viewItem)
+
+            for (kommentar in topic.kommentare){
+                if (kommentar.id == id){
+                    topic.kommentare.remove(kommentar)
+                }
+            }
         }
 
         return viewItem
