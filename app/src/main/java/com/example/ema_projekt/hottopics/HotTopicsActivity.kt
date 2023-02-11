@@ -137,20 +137,24 @@ class HotTopicsActivity : AppCompatActivity() {
         //Klick Eventlistener
         popupzurueck.setOnClickListener {
             kommentarPopUp.dismiss()
-            Log.d("Debug",data.kommentare.toString())
         }
         popupabbrechen.setOnClickListener {
             kommentarPopUp.dismiss()
         }
 
         popuphinzufuegen.setOnClickListener {
-            val id:Int = nextIdKommentar(data)
-            val kommentar = HotTopicKommentarData(id,editTextKommentar.text.toString())
-            data.kommentare.add(kommentar)
-            HotTopicDatabase().writeKommentar(data.id,kommentar,applicationContext)
-            HotTopicsJSON().writeKommentarJSON(data.id,kommentar,applicationContext)
-            linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare,editTextKommentar.text.toString(),id,data))
-            editTextKommentar.setText("")
+            if (editTextKommentar.text.isNotEmpty()) {
+                val id: Int = nextIdKommentar(data)
+                val kommentar = HotTopicKommentarData(id, editTextKommentar.text.toString())
+                data.kommentare.add(kommentar)
+                HotTopicDatabase().writeKommentar(data.id, kommentar, applicationContext)
+                HotTopicsJSON().writeKommentarJSON(data.id, kommentar, applicationContext)
+                linearLayoutKommentare.addView(createKommentar(linearLayoutKommentare, editTextKommentar.text.toString(), id, data))
+                editTextKommentar.setText("")
+            } else {
+                Toast.makeText(applicationContext, "Gebe einen Kommentar Text ein!",
+                    Toast.LENGTH_SHORT).show()
+            }
         }
 
         for (i in data.kommentare){
