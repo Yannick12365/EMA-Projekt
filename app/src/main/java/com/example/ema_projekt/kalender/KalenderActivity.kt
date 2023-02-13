@@ -360,6 +360,7 @@ class KalenderActivity : AppCompatActivity() {
             textView.width = 135
             textView.height = 135
             textView.visibility = View.INVISIBLE
+            textView.id = i
 
             textView.setOnClickListener {
                 if (textView != textViewDayFocus) {
