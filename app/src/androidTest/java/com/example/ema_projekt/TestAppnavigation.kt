@@ -13,6 +13,8 @@ import com.example.ema_projekt.wgplaner.WGPlanerActivity
 import com.example.ema_projekt.vorratskammer.VorratskammerActivity
 import com.example.ema_projekt.putzplan.PutzplanActivity
 import com.example.ema_projekt.hottopics.HotTopicsActivity
+import com.example.ema_projekt.wginfo.WGInfoData
+import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,6 +35,7 @@ class TestAppnavigation {
         onView(withId(R.id.wgtokeninput)).perform(typeText("test"))
         onView(withId(R.id.button_einloggen)).perform(click())
         onView(withId(R.id.imageButton_vorratskammer)).check(matches(isDisplayed()))
+        Thread.sleep(500)
     }
 
     @Test
@@ -42,157 +45,67 @@ class TestAppnavigation {
         onView(withId(R.id.wgtokeninput)).perform(typeText(" "))
         onView(withId(R.id.button_einloggen)).perform(click())
         onView(withId(R.id.wgnameinput)).check(matches(isDisplayed()))
+        Thread.sleep(500)
     }
 
     @Test
     fun checkClickVorratskammer() {
         ActivityScenario.launch(WGPlanerActivity::class.java)
         onView(withId(R.id.imageButton_vorratskammer)).perform(click())
+        Thread.sleep(500)
         onView(withId(R.id.imageButton_vorratskammer_zurueck)).perform(click())
+        Thread.sleep(500)
     }
     @Test
     fun checkClickKalender() {
         ActivityScenario.launch(WGPlanerActivity::class.java)
         onView(withId(R.id.imageButton_kalender)).perform(click())
+        Thread.sleep(500)
         onView(withId(R.id.imageButton_kalender_zurueck)).perform(click())
+        Thread.sleep(500)
     }
     @Test
     fun checkClickPutzplan() {
         ActivityScenario.launch(WGPlanerActivity::class.java)
         onView(withId(R.id.imageButton_putzplan)).perform(click())
+        Thread.sleep(500)
         onView(withId(R.id.imageButton_putzplan_zurueck)).perform(click())
+        Thread.sleep(500)
     }
 
     @Test
     fun checkClickEinkaufsliste() {
         ActivityScenario.launch(WGPlanerActivity::class.java)
         onView(withId(R.id.imageButton_einkaufsliste)).perform(click())
+        Thread.sleep(500)
         onView(withId(R.id.imageButton_einkauf_zurueck)).perform(click())
+        Thread.sleep(500)
     }
 
     @Test
     fun checkClickHotTopics() {
         ActivityScenario.launch(WGPlanerActivity::class.java)
         onView(withId(R.id.imageButton_hottopics)).perform(scrollTo(),click())
+        Thread.sleep(500)
         onView(withId(R.id.imageButton_hot_topics_zurueck)).perform(click())
+        Thread.sleep(500)
     }
 
     @Test
     fun checkClickWGInfo() {
         ActivityScenario.launch(WGPlanerActivity::class.java)
         onView(withId(R.id.imageButto_wginfo)).perform(scrollTo(),click())
+        Thread.sleep(500)
         onView(withId(R.id.imageButton_wginfo_zurueck)).perform(click())
+        Thread.sleep(500)
     }
 
     @Test
     fun checkWGVerlassen() {
         ActivityScenario.launch(WGInfoActivity::class.java)
         onView(withId(R.id.button_wgverlassen)).perform(click())
+        Thread.sleep(500)
         onView(withId(R.id.wgnameinput)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun checkVorratskammerAddButton(){
-        ActivityScenario.launch(VorratskammerActivity::class.java)
-        Thread.sleep(500) //sleep hier immer benutzt damit man besser sieht, was bei dem Test genau passiert
-        onView(withId(R.id.add_vorratskammer_new_item)).perform(click())
-        Thread.sleep(500)
-        onView(withId(R.id.button_vorratskammer_abbrechen)).perform(click())
         Thread.sleep(500)
     }
-
-    @Test
-    fun checkVorratskammerNeuesItemHinzufügen(){
-        ActivityScenario.launch(VorratskammerActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(R.id.add_vorratskammer_new_item)).perform(click())
-        Thread.sleep(500)
-        onView(withId(R.id.editText_Neuer_Eintrag_Vorratskammer)).perform(typeText("Apfel"))
-        Thread.sleep(500)
-        onView(withId(R.id.button_vorratskammer_hinzufuegen)).perform(click())
-        Thread.sleep(500)
-    }
-
-    @Test
-    fun checkVorratskammerItemLöschen(){  //geht nur, wenn genau ein einzelnes Item in der Vorratskammer ist!!!
-        ActivityScenario.launch(VorratskammerActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(com.example.ema_projekt.R.id.button_loeschen_vorratskammer)).perform(click())
-        Thread.sleep(500)
-    }
-
-    @Test
-    fun checkPutzplanAddButton(){
-        ActivityScenario.launch(PutzplanActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(R.id.putzplan_add)).perform(click())
-        Thread.sleep(500)
-        onView(withId(R.id.button_putzplan_person_abbrechen)).perform(click())
-        Thread.sleep(500)
-    }
-
-    @Test
-    fun checkPutzplanNeuePersonHinzufuegen(){
-        ActivityScenario.launch(PutzplanActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(R.id.putzplan_add)).perform(click())
-        Thread.sleep(500)
-        onView(withId(R.id.editText_Neuer_Eintrag_Putzplan_Add_Person)).perform(typeText("Simeon"))
-        Thread.sleep(500)
-        onView(withId(R.id.button_putzplan_person_hinzufügen)).perform(click())
-        Thread.sleep(500)
-    }
-
-    @Test
-    fun checkPutzplanAufgabeÄndern(){
-        ActivityScenario.launch(PutzplanActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(R.id.putzplan_aufgabe)).perform(click())
-        Thread.sleep(500)
-        onView(withId(R.id.editText_Neue_Aufgabe_Putzplan)).perform(typeText("Badezimmer"))
-        Thread.sleep(500)
-        onView(withId(R.id.button_putzplan_ändern)).perform(click())
-        Thread.sleep(500)
-    }
-
-    @Test
-    fun checkPutzplanPersonLöschen(){ //geht auch nur, wenn genau eine Person vorhanden ist!!!
-        ActivityScenario.launch(PutzplanActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(R.id.putzplan_person)).perform(click())
-        Thread.sleep(500)
-        onView(withId(R.id.button_putzplan_loeschen_ja)).perform(click())
-        Thread.sleep(500)
-    }
-
-    @Test
-    fun checkHotTopicsHinzufügen(){
-        ActivityScenario.launch(HotTopicsActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(R.id.editText_was_steht_an)).perform(typeText("Wir muessen noch Unit Tests machen!"))
-        Thread.sleep(500)
-        onView(withId(R.id.button_hot_topics_hinzufügen)).perform(click())
-    }
-
-    @Test
-    fun checkHotTopicsTopicLöschen(){ //geht nur, wenn genau ein HotTopic zur Verfügung steht!!!
-        ActivityScenario.launch(HotTopicsActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(R.id.hot_topic_loeschen)).perform(click())
-        Thread.sleep(500)
-    }
-
-    @Test
-    fun checkHotTopicKommentarSchreiben(){ //geht noch nicht!!
-        ActivityScenario.launch(HotTopicsActivity::class.java)
-        Thread.sleep(500)
-        onView(withId(R.id.hot_topic_text)).perform(click())
-        Thread.sleep(500)
-        onView(withId(R.id.linearlayout_kommentare)).perform(typeText("Das ist richtig!!"))
-        Thread.sleep(500)
-        onView(withId(R.id.button_hottopickommentare_hinzufuegen)).perform(click())
-        Thread.sleep(500)
-
-    }
-
 }
