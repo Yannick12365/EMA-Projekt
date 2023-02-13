@@ -36,7 +36,7 @@ class KalenderTest {
         Thread.sleep(500)
         onView(withId(10)).perform(click())
         Thread.sleep(500)
-        onView(withId(R.id.button_erstellen)).perform(click())
+        onView(withId(R.id.button_event_erstellen)).perform(click())
         Thread.sleep(500)
         onView(withId(R.id.editText_eventtext)).perform(typeText("Unit Event"))
         Thread.sleep(500)

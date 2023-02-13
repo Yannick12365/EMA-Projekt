@@ -260,7 +260,7 @@
                         app:backgroundTint="@null" />
 
                     <Button
-                        android:id="@+id/button_erstellen"
+                        android:id="@+id/button_event_erstellen"
                         android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"

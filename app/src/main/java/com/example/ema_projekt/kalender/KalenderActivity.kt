@@ -54,7 +54,7 @@ class KalenderActivity : AppCompatActivity() {
 
         //Activity Felder holen
         zurueck = findViewById(R.id.imageButton_kalender_zurueck)
-        eintragErstellen = findViewById(R.id.button_erstellen)
+        eintragErstellen = findViewById(R.id.button_event_erstellen)
         gridLayout = findViewById(R.id.dayGrid)
         textViewMonth = findViewById(R.id.textViewShowMonth)
         buttonMonthLeft = findViewById(R.id.buttonChangeMonthLeft)

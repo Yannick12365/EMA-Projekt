@@ -24,9 +24,9 @@ class EinkaufslisteTest {
     @Test
     fun itemErstellenTest(){
         ActivityScenario.launch(EinkaufslisteActivity::class.java)
-        onView(withId(R.id.editText)).perform(typeText("Einkauf Unit"))
+        onView(withId(R.id.editText_einkaufitem)).perform(typeText("Einkauf Unit"))
         Thread.sleep(500)
-        onView(withId(R.id.button)).perform(click())
+        onView(withId(R.id.button_einkauf_erstellen)).perform(click())
         Thread.sleep(500)
     }
 
@@ -42,7 +42,7 @@ class EinkaufslisteTest {
         ActivityScenario.launch(EinkaufslisteActivity::class.java)
         onView(withText("Einkauf Unit")).perform(click())
         Thread.sleep(500)
-        onView(withId(R.id.button2)).perform(click())
+        onView(withId(R.id.button_einkauf_beenden)).perform(click())
         Thread.sleep(500)
         onView(withText("Einkauf Unit")).perform(click())
         Thread.sleep(500)

@@ -36,10 +36,10 @@ class EinkaufslisteActivity : AppCompatActivity() {
 
         //Activity Felder holen
         zurueck = findViewById(R.id.imageButton_einkauf_zurueck)
-        erstellen = findViewById(R.id.button)
-        einkaufbeenden = findViewById(R.id.button2)
+        erstellen = findViewById(R.id.button_einkauf_erstellen)
+        einkaufbeenden = findViewById(R.id.button_einkauf_beenden)
         einkaufItemLinearLayout = findViewById(R.id.einkaufItemLayout)
-        editText = findViewById(R.id.editText)
+        editText = findViewById(R.id.editText_einkaufitem)
 
         //ConnectionManager einstellen
         val conManager = ConnectionManager()
