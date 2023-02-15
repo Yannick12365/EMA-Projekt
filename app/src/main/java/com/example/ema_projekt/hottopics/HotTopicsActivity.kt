@@ -180,10 +180,12 @@ class HotTopicsActivity : AppCompatActivity() {
             HotTopicDatabase().deleteKommentar(topic.id,id,applicationContext)
             HotTopicsJSON().deleteKommentarJSON(topic.id,id,applicationContext)
             linearLayout.removeView(viewItem)
+            topic.kommentare
 
             for (kommentar in topic.kommentare){
                 if (kommentar.id == id){
                     topic.kommentare.remove(kommentar)
+                    break
                 }
             }
         }
