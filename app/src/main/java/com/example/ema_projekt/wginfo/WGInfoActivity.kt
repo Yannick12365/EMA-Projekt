@@ -12,6 +12,7 @@ import com.example.ema_projekt.MainActivity
 import com.example.ema_projekt.R
 import com.example.ema_projekt.wgplaner.LoginData
 import com.example.ema_projekt.wgplaner.LoginDataSettingsJSON
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class WGInfoActivity : AppCompatActivity() {
     private lateinit var buttonhinzufuegen:Button
     private lateinit var buttonbearbeiten:Button
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wginfo)

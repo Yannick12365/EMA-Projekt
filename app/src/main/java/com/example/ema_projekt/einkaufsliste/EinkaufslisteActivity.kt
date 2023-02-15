@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.example.ema_projekt.R
 import com.example.ema_projekt.vorratskammer.VorratskammerData
 import com.example.ema_projekt.vorratskammer.VorratskammerDatabase
 import com.example.ema_projekt.vorratskammer.VorratskammerJSON
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,6 +31,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
     private var vorratList = mutableListOf<VorratskammerData>()
 
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -50,7 +53,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
         var list = mutableListOf<EinkaufslisteData>()
         GlobalScope.launch(Dispatchers.Main) {
             list = EinkauflisteDataBase().readEinkaufslisteDatabase(applicationContext)
-            vorratList = VorratskammerDatabase().readVorratskammerDatabase(applicationContext).toMutableList()
+
             EinkaufslisteJSON().writeEinkaufslisteJSON(list, applicationContext)
 
             for(data in list){
@@ -61,6 +64,9 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 itemList[id] = viewItem
                 einkaufItemLinearLayout.addView(viewItem)
             }
+        }
+        GlobalScope.launch(Dispatchers.Main) {
+            vorratList = VorratskammerDatabase().readVorratskammerDatabase(applicationContext).toMutableList()
         }
         //Wenn kein Internet vorhanden Inhalt der JSON Datei nutzen
         if (!conManager.checkConnection(this)) {
@@ -170,7 +176,7 @@ class EinkaufslisteActivity : AppCompatActivity() {
                 val checkbox: CheckBox = view.findViewById(R.id.checkBoxEinkaufItemBeendet)
                 if (checkbox.isChecked) {
 
-                    var newId = 0
+                    var newId = -1
                     for (i in vorratList){
                         if (i.id >= newId){
                             newId = i.id+1
